@@ -20,6 +20,21 @@ const rows = comparisonOrder
   .sort((a, b) => a.result.fee - b.result.fee);
 
 const related = getRelatedTools(meta.related);
+const compareRows = comparisonOrder
+  .map((id) => processors.find((p) => p.id === id))
+  .filter(Boolean)
+  .map((p) => {
+    const rate = p!.rates.find((r) => r.id === p!.defaultRateId) ?? p!.rates[0];
+    return {
+      name: p!.name,
+      slug: p!.slug,
+      label: rate.label,
+      percent: rate.percent,
+      fixed: rate.fixed,
+      currency: rate.currency,
+    };
+  });
+const compareRowsJson = JSON.stringify(compareRows);
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -67,7 +82,7 @@ const jsonLd = [
   <Disclaimer />
 
   <section class="hero-tool" aria-label="Interactive comparison">
-    <div id="compare-app" data-compare-app></div>
+    <div id="compare-app" data-compare-app data-rows={compareRowsJson}></div>
   </section>
 
   <AdSlot />
@@ -165,10 +180,15 @@ const jsonLd = [
 </BaseLayout>
 
 <script>
-  import { processors, comparisonOrder } from '../../data/fees.ts';
-  import { calculateForward } from '../../lib/fees/calculate.ts';
-
-  function money(n: number, currency: string) {
+  function round2(n) {
+    return Math.round((n + Number.EPSILON) * 100) / 100;
+  }
+  function forward(charge, percent, fixed) {
+    const fee = round2(charge * percent + fixed);
+    const net = round2(charge - fee);
+    return { fee, net, rate: charge === 0 ? 0 : fee / charge };
+  }
+  function money(n, currency) {
     try {
       return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(n);
     } catch {
@@ -176,16 +196,9 @@ const jsonLd = [
     }
   }
 
-  const root = document.querySelector<HTMLElement>('[data-compare-app]');
+  const root = document.querySelector('[data-compare-app]');
   if (root) {
-    const defaults = comparisonOrder
-      .map((id) => processors.find((p) => p.id === id))
-      .filter(Boolean)
-      .map((p) => {
-        const rate = p!.rates.find((r) => r.id === p!.defaultRateId) ?? p!.rates[0];
-        return { id: p!.id, name: p!.name, slug: p!.slug, rate };
-      });
-
+    const defaults = JSON.parse(root.dataset.rows || '[]');
     root.innerHTML = `
       <label class="field">
         <span class="field__label">Compare amount</span>
@@ -198,24 +211,24 @@ const jsonLd = [
         </table>
       </div>`;
 
-    const input = root.querySelector<HTMLInputElement>('[data-amount]')!;
-    const body = root.querySelector<HTMLElement>('[data-body]')!;
+    const input = root.querySelector('[data-amount]');
+    const body = root.querySelector('[data-body]');
 
     const render = () => {
       const amount = Number(input.value) || 0;
       const rows = defaults
         .map((d) => {
-          const r = calculateForward(amount, d.rate);
+          const r = forward(amount, d.percent, d.fixed);
           return { ...d, r };
         })
         .sort((a, b) => a.r.fee - b.r.fee);
       body.innerHTML = rows
         .map(
           (row) => `<tr>
-          <td><a href="/tools/${row.slug}/">${row.name}</a><div class="muted">${row.rate.label}</div></td>
-          <td>${money(row.r.fee, row.rate.currency)}</td>
-          <td>${money(row.r.net, row.rate.currency)}</td>
-          <td>${(row.r.effectiveRate * 100).toFixed(2)}%</td>
+          <td><a href="/tools/${row.slug}/">${row.name}</a><div class="muted">${row.label}</div></td>
+          <td>${money(row.r.fee, row.currency)}</td>
+          <td>${money(row.r.net, row.currency)}</td>
+          <td>${(row.r.rate * 100).toFixed(2)}%</td>
         </tr>`,
         )
         .join('');

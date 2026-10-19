@@ -1,0 +1,9 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Payment Processor Fee Calculators",
+    "url": "https://feecalculator.example/payment-processors/",
+    "description": "Card and checkout fees for Stripe, PayPal, Square and Shopify Payments."
+  }
+]

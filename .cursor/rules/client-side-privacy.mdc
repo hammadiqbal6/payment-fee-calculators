@@ -1,0 +1,6 @@
+---
+description: Client-side only calculator privacy
+globs: src/**/*
+---
+- No server upload of amounts; no analytics on typed values
+- Document privacy in /privacy/

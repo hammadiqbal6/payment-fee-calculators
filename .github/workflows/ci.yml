@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, 'cursor/**']
+
+jobs:
+  build-test-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - run: npm run audit
+      - run: npx playwright install chromium --with-deps
+      - run: npm run proof
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs-proof
+          path: docs/proof/

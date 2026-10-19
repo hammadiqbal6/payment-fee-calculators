@@ -6,6 +6,7 @@ import AdSlot from '@/components/AdSlot.astro';
 import Disclaimer from '@/components/Disclaimer.astro';
 import { processors } from '@/data/fees';
 import { toolContent } from '@/data/toolContent';
+import { toolDepth } from '@/data/toolDepth';
 import { getToolMeta, getRelatedTools } from '@/lib/tools';
 import { siteConfig } from '@/config/site';
 import { FEE_DATA_UPDATED, FEE_DATA_VERSION } from '@/data/fees';
@@ -154,6 +155,15 @@ const jsonLd = [
   <ul>
     {content.mistakes.map((m) => <li>{m}</li>)}
   </ul>
+
+  {
+    toolDepth[processor.id]?.sections.map((section) => (
+      <>
+        <h2>{section.h2}</h2>
+        <p>{section.body}</p>
+      </>
+    ))
+  }
 
   <h2>FAQ</h2>
   <div class="faq">

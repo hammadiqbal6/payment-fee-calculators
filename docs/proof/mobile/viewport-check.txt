@@ -1,0 +1,12 @@
+Generated: 2026-10-19T06:37:45.071Z
+
+home @ 360px: horizontal scroll PASS
+hub-payment-processors @ 360px: horizontal scroll PASS
+tool-stripe @ 360px: horizontal scroll PASS
+tool-paypal @ 360px: horizontal scroll PASS
+tool-square @ 360px: horizontal scroll PASS
+home @ 768px: horizontal scroll PASS
+hub-payment-processors @ 768px: horizontal scroll PASS
+tool-stripe @ 768px: horizontal scroll PASS
+tool-paypal @ 768px: horizontal scroll PASS
+tool-square @ 768px: horizontal scroll PASS

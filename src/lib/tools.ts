@@ -25,7 +25,7 @@ const keywordMap: Record<string, { title: string; description: string; primaryKe
   paypal: {
     title: 'PayPal Fee Calculator (G&S, F&F, International)',
     description:
-      'Free PayPal fee calculator for Goods & Services, Friends & Family, international, UK, AUD, India and micropayments. See fees and how much to charge to receive X.',
+      'PayPal fee calculator for Goods & Services, Friends & Family, international, UK, AUD, India and micropayments. Forward and reverse fees.',
     primaryKeyword: 'paypal fee calculator',
     h1: 'PayPal Fee Calculator',
     related: ['stripe', 'venmo', 'square', 'comparison'],

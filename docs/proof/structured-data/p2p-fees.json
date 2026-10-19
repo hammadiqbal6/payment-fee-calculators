@@ -1,0 +1,8 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "P2P & Instant Pay Fee Calculators",
+    "url": "https://feecalculator.example/p2p-fees/"
+  }
+]

@@ -1,0 +1,7 @@
+---
+description: Performance and JS budgets
+globs: src/**/*
+---
+- Mobile Lighthouse performance >= 95; initial JS <= 50KB gzip per page
+- Prefer inline island scripts over heavy client bundles
+- Reserve fixed-height ad slots
