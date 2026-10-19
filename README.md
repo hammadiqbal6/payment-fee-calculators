@@ -8,7 +8,7 @@ Free, client-side calculators for **Stripe**, **PayPal**, **Square**, **Venmo**,
 flowchart LR
   A[fees.ts] --> B[Astro pages]
   B --> C[dist static HTML]
-  C --> D[Cloudflare Pages / Vercel / Netlify]
+  C --> D[Cloudflare Workers static assets]
 ```
 
 ## Tool list
