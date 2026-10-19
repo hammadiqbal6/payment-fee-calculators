@@ -125,7 +125,7 @@ These are read when Astro builds. On Cloudflare Pages / Vercel / Netlify, add th
 | `PUBLIC_SITE_URL` | **Yes** | Canonical origin, **no trailing slash** (e.g. `https://feecalc.example`) |
 | `PUBLIC_SITE_NAME` | Yes | Full site name (titles, schema) |
 | `PUBLIC_SITE_SHORT_NAME` | Yes | Short brand in header |
-| `PUBLIC_CONTACT_EMAIL` | Yes | Contact page + footer |
+| `PUBLIC_CONTACT_EMAIL` | Optional | Contact page, footer, privacy/terms, JSON-LD; default `hammadiqbal117@gmail.com` |
 | `PUBLIC_AUTHOR_NAME` | Recommended | Author/reviewer byline |
 | `PUBLIC_TWITTER_HANDLE` | Optional | Twitter card `@handle` (without `@`) |
 | `PUBLIC_ADSENSE_PUBLISHER_ID` | Later | e.g. `ca-pub-XXXXXXXXXXXXXXXX` — leave empty until AdSense approved |
@@ -150,9 +150,9 @@ Sitemap: https://YOUR_DOMAIN/sitemap-index.xml
 
 The file already allows Googlebot, Bingbot, and common AI answer crawlers. Training bots (GPTBot, etc.) are documented in comments—change only if you have a policy decision.
 
-#### `public/llms.txt` (optional)
+#### `llms.txt` (optional)
 
-Update `Website:` and `Contact:` to your real domain and email. Google does not use `llms.txt` for ranking; it is optional for other tools.
+Generated at build time from `src/pages/llms.txt.ts` using `siteConfig` (`Website` from `PUBLIC_SITE_URL`, `Contact` from `PUBLIC_CONTACT_EMAIL` / default `hammadiqbal117@gmail.com`). Google does not use `llms.txt` for ranking; it is optional for other tools.
 
 #### `public/ads.txt`
 
@@ -261,7 +261,7 @@ In **Settings → Environment variables**, add at minimum for **Production**:
 PUBLIC_SITE_URL=https://your-domain.com
 PUBLIC_SITE_NAME=Your Brand Name
 PUBLIC_SITE_SHORT_NAME=YourBrand
-PUBLIC_CONTACT_EMAIL=hello@your-domain.com
+PUBLIC_CONTACT_EMAIL=hammadiqbal117@gmail.com
 PUBLIC_GSC_VERIFICATION=your_google_verification_token
 ```
 
@@ -561,7 +561,7 @@ Copy this into your issue tracker and check off on launch day.
 - [ ] `PUBLIC_SITE_URL` set to production `https://` URL (no trailing slash)
 - [ ] Contact email and author name set
 - [ ] `public/robots.txt` sitemap URL updated to production domain
-- [ ] `public/llms.txt` and `public/ads.txt` reviewed (ads.txt when AdSense ready)
+- [ ] `/llms.txt` contact email correct; `public/ads.txt` reviewed (ads.txt when AdSense ready)
 - [ ] IndexNow key file matches `PUBLIC_INDEXNOW_KEY` (if using IndexNow)
 - [ ] `npm run check` passes locally
 
