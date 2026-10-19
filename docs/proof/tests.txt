@@ -8,8 +8,8 @@
 
  Test Files  1 passed (1)
       Tests  104 passed (104)
-   Start at  06:37:46
-   Duration  170ms (transform 55%, tests 26%, import 16%, worker 4%)
+   Start at  06:50:52
+   Duration  132ms (tests 45%, import 30%, transform 17%, worker 7%)
 
 (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
   - `__dirname` (vitest.config.ts:7:25). Use `import.meta.dirname` instead

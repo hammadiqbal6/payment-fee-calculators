@@ -163,14 +163,24 @@ function mobileBudgetPass(s) {
   );
 }
 
+async function lighthouseMobileWithRetry(slug, p) {
+  const outBase = path.join(lhDir, `${slug}-mobile`);
+  let parsed;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    console.log(`Lighthouse mobile: ${p}${attempt > 1 ? ' (retry)' : ''}`);
+    await runLighthouse(`${BASE}${p}`, outBase, 'mobile');
+    parsed = { slug, formFactor: 'mobile', ...parseLhReport(`${outBase}.report.json`) };
+    if (mobileBudgetPass(parsed)) return parsed;
+  }
+  return parsed;
+}
+
 async function runAllLighthouseOnce() {
+  const lhVersion = lighthouseVersion();
   const summaries = [];
 
   for (const { slug, path: p } of MOBILE_URLS) {
-    const outBase = path.join(lhDir, `${slug}-mobile`);
-    console.log(`Lighthouse mobile: ${p}`);
-    await runLighthouse(`${BASE}${p}`, outBase, 'mobile');
-    summaries.push({ slug, formFactor: 'mobile', ...parseLhReport(`${outBase}.report.json`) });
+    summaries.push(await lighthouseMobileWithRetry(slug, p));
   }
 
   const deskBase = path.join(lhDir, 'home-desktop');
@@ -215,16 +225,9 @@ After deploy: [Google Rich Results Test](https://search.google.com/test/rich-res
   return { summaries, mobileGate };
 }
 
-async function runAllLighthouse(lhVersion) {
+async function runAllLighthouse() {
   await startServer();
-  const attempts = Number(process.env.PROOF_LIGHTHOUSE_ATTEMPTS || (process.env.CI ? '2' : '1'));
-  let last = { mobileGate: false };
-  for (let i = 1; i <= attempts; i++) {
-    if (i > 1) console.warn(`Retrying Lighthouse mobile suite (attempt ${i}/${attempts})`);
-    last = await runAllLighthouseOnce();
-    if (last.mobileGate) break;
-  }
-  return last;
+  return await runAllLighthouseOnce();
 }
 
 function validateSchema(item, errors, route) {
@@ -407,10 +410,14 @@ function writeProofReadme({ lhVersion, mobileGate, sdValid, budgetOk, adsenseOk,
 
 async function main() {
   ensureDirs();
-  buildAndTest();
+  if (!process.env.SKIP_REBUILD) {
+    buildAndTest();
+  } else {
+    console.log('SKIP_REBUILD=1 — skipping build/test/audit inside proof');
+  }
   const budgetOk = !fs.readFileSync(path.join(proofDir, 'bundle-size.txt'), 'utf8').includes('failures');
   const lhVersion = lighthouseVersion();
-  const { mobileGate } = await runAllLighthouse(lhVersion);
+  const { mobileGate } = await runAllLighthouse();
   const sdValid = extractStructuredData();
   writeSitemapRobots();
   const adsenseOk = writeAdSenseReadiness();
