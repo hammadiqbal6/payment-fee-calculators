@@ -72,11 +72,11 @@ npm run dev            # http://localhost:4321
 
 All owner placeholders live in **`src/config/site.ts`** (overridable via `PUBLIC_*` env vars). See `.env.example`.
 
-| Value | Purpose |
-|-------|---------|
-| `siteUrl` | Canonical domain |
+| Value / env | Purpose |
+|-------------|---------|
+| `siteUrl` (`PUBLIC_SITE_URL`) | Canonical origin (Workers Builds should set this) |
 | `adsensePublisherId` | Empty = ads disabled |
-| `ga4MeasurementId` | Analytics |
+| `ga4MeasurementId` (`PUBLIC_GA4_MEASUREMENT_ID`) | GA4; empty = no analytics |
 | `googleSiteVerification` | Search Console |
 | `indexNowKey` | Bing IndexNow (`public/<key>.txt`) |
 
