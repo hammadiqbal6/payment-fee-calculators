@@ -1,0 +1,297 @@
+---
+import type { ProcessorSchedule } from '@/data/fees';
+
+interface Props {
+  processor: ProcessorSchedule;
+  embed?: boolean;
+}
+
+const { processor, embed = false } = Astro.props;
+const ratesJson = JSON.stringify(
+  processor.rates.map((r) => ({
+    id: r.id,
+    label: r.label,
+    percent: r.percent,
+    fixed: r.fixed,
+    currency: r.currency,
+    notes: r.notes ?? '',
+  })),
+);
+const defaultRate = processor.defaultRateId;
+---
+
+<div
+  class:list={['fee-calc', embed && 'fee-calc--embed']}
+  data-fee-calc
+  data-default-rate={defaultRate}
+  data-rates={ratesJson}
+>
+  <div class="fee-calc__modes" role="tablist" aria-label="Calculation mode">
+    <button type="button" class="fee-calc__mode is-active" data-mode="forward" role="tab" aria-selected="true">
+      Fee on amount
+    </button>
+    <button type="button" class="fee-calc__mode" data-mode="reverse" role="tab" aria-selected="false">
+      Charge to receive X
+    </button>
+  </div>
+
+  <form class="fee-calc__form" data-form>
+    <label class="field">
+      <span class="field__label">Fee schedule</span>
+      <select name="rate" data-rate class="field__input" aria-describedby={`rate-help-${processor.id}`}>
+        {processor.rates.map((r) => (
+          <option value={r.id} selected={r.id === defaultRate}>
+            {r.label} ({(r.percent * 100).toFixed(2)}% + {r.fixed.toFixed(2)} {r.currency})
+          </option>
+        ))}
+      </select>
+      <span class="field__help" id={`rate-help-${processor.id}`} data-rate-help></span>
+    </label>
+
+    <label class="field" data-amount-wrap>
+      <span class="field__label" data-amount-label>Charge amount</span>
+      <input
+        class="field__input"
+        type="number"
+        name="amount"
+        data-amount
+        inputmode="decimal"
+        min="0"
+        step="0.01"
+        value="100"
+        required
+        autocomplete="off"
+      />
+    </label>
+
+    <div class="fee-calc__actions">
+      <button type="submit" class="btn btn--primary">Calculate</button>
+      <button type="button" class="btn btn--secondary" data-share>Copy share link</button>
+    </div>
+  </form>
+
+  <div class="fee-calc__results" data-results aria-live="polite">
+    <div class="result-grid">
+      <div>
+        <div class="result-label">Fee</div>
+        <div class="result-value" data-out-fee>—</div>
+      </div>
+      <div>
+        <div class="result-label">You receive (net)</div>
+        <div class="result-value" data-out-net>—</div>
+      </div>
+      <div>
+        <div class="result-label">Customer pays</div>
+        <div class="result-value" data-out-charge>—</div>
+      </div>
+      <div>
+        <div class="result-label">Effective rate</div>
+        <div class="result-value" data-out-rate>—</div>
+      </div>
+    </div>
+    <p class="result-note" data-out-note></p>
+  </div>
+</div>
+
+<style>
+  .fee-calc {
+    display: grid;
+    gap: 1rem;
+  }
+  .fee-calc__modes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .fee-calc__mode {
+    min-height: 48px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-bg);
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--color-ink);
+  }
+  .fee-calc__mode.is-active {
+    background: var(--color-brand);
+    border-color: var(--color-brand);
+    color: #fff;
+  }
+  .fee-calc__form {
+    display: grid;
+    gap: 0.85rem;
+  }
+  .field {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .field__label {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .field__input {
+    min-height: 48px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.65rem 0.75rem;
+    font-size: 1rem;
+    background: #fff;
+    width: 100%;
+  }
+  .field__help {
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+  }
+  .fee-calc__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .result-label {
+    font-size: 0.8rem;
+    color: var(--color-ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .result-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-brand);
+    font-variant-numeric: tabular-nums;
+  }
+  .result-note {
+    margin: 0.75rem 0 0;
+    font-size: 0.9rem;
+    color: var(--color-ink-muted);
+  }
+  .fee-calc--embed .fee-calc__actions .btn--secondary {
+    display: none;
+  }
+</style>
+
+<script>
+  function round2(n: number) {
+    return Math.round((n + Number.EPSILON) * 100) / 100;
+  }
+
+  function forward(charge: number, percent: number, fixed: number) {
+    const fee = round2(charge * percent + fixed);
+    const net = round2(charge - fee);
+    return { charge: round2(charge), fee, net, rate: charge === 0 ? 0 : fee / charge };
+  }
+
+  function reverse(desiredNet: number, percent: number, fixed: number) {
+    const charge = round2((desiredNet + fixed) / (1 - percent));
+    let result = forward(charge, percent, fixed);
+    if (result.net < desiredNet) {
+      result = forward(round2(charge + 0.01), percent, fixed);
+    }
+    return result;
+  }
+
+  function money(amount: number, currency: string) {
+    try {
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
+    } catch {
+      return `${currency} ${amount.toFixed(2)}`;
+    }
+  }
+
+  function initCalc(root: HTMLElement) {
+    type Rate = { id: string; label: string; percent: number; fixed: number; currency: string; notes: string };
+    const rates: Rate[] = JSON.parse(root.dataset.rates || '[]');
+    const rateSelect = root.querySelector<HTMLSelectElement>('[data-rate]')!;
+    const amountInput = root.querySelector<HTMLInputElement>('[data-amount]')!;
+    const amountLabel = root.querySelector<HTMLElement>('[data-amount-label]')!;
+    const rateHelp = root.querySelector<HTMLElement>('[data-rate-help]')!;
+    const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+    const modeButtons = root.querySelectorAll<HTMLButtonElement>('[data-mode]');
+    let mode: 'forward' | 'reverse' = 'forward';
+
+    function currentRate() {
+      return rates.find((r) => r.id === rateSelect.value) || rates[0];
+    }
+
+    function updateHelp() {
+      const r = currentRate();
+      rateHelp.textContent = r.notes || `${(r.percent * 100).toFixed(2)}% + ${r.fixed.toFixed(2)} ${r.currency}`;
+    }
+
+    function setMode(next: 'forward' | 'reverse') {
+      mode = next;
+      modeButtons.forEach((btn) => {
+        const active = btn.dataset.mode === next;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      amountLabel.textContent = next === 'forward' ? 'Charge amount' : 'Amount you want to receive';
+      calculate();
+    }
+
+    function calculate() {
+      const r = currentRate();
+      const amount = Number(amountInput.value);
+      if (!Number.isFinite(amount) || amount < 0) return;
+      const result = mode === 'forward' ? forward(amount, r.percent, r.fixed) : reverse(amount, r.percent, r.fixed);
+      root.querySelector<HTMLElement>('[data-out-fee]')!.textContent = money(result.fee, r.currency);
+      root.querySelector<HTMLElement>('[data-out-net]')!.textContent = money(result.net, r.currency);
+      root.querySelector<HTMLElement>('[data-out-charge]')!.textContent = money(result.charge, r.currency);
+      root.querySelector<HTMLElement>('[data-out-rate]')!.textContent = `${(result.rate * 100).toFixed(2)}%`;
+      root.querySelector<HTMLElement>('[data-out-note]')!.textContent =
+        mode === 'forward'
+          ? `On a ${money(result.charge, r.currency)} charge, fees are ${money(result.fee, r.currency)} and you keep ${money(result.net, r.currency)}.`
+          : `To receive about ${money(amount, r.currency)}, charge ${money(result.charge, r.currency)} (fee ${money(result.fee, r.currency)}).`;
+    }
+
+    modeButtons.forEach((btn) => btn.addEventListener('click', () => setMode(btn.dataset.mode as 'forward' | 'reverse')));
+    rateSelect.addEventListener('change', () => {
+      updateHelp();
+      calculate();
+    });
+    amountInput.addEventListener('input', calculate);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      calculate();
+    });
+
+    const shareBtn = root.querySelector<HTMLButtonElement>('[data-share]');
+    shareBtn?.addEventListener('click', async () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set('mode', mode);
+      url.searchParams.set('rate', rateSelect.value);
+      url.searchParams.set('amount', amountInput.value);
+      // keep canonical clean in mind; share URL can include state
+      try {
+        await navigator.clipboard.writeText(url.toString());
+        shareBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          shareBtn.textContent = 'Copy share link';
+        }, 1500);
+      } catch {
+        window.prompt('Copy this link:', url.toString());
+      }
+    });
+
+    // Restore from query string
+    const params = new URLSearchParams(window.location.search);
+    const qMode = params.get('mode');
+    const qRate = params.get('rate');
+    const qAmount = params.get('amount');
+    if (qRate && rates.some((r) => r.id === qRate)) rateSelect.value = qRate;
+    if (qAmount && Number(qAmount) >= 0) amountInput.value = qAmount;
+    updateHelp();
+    if (qMode === 'reverse' || qMode === 'forward') setMode(qMode);
+    else calculate();
+  }
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>('[data-fee-calc]').forEach(initCalc);
+  }
+  boot();
+  document.addEventListener('astro:page-load', boot);
+</script>

@@ -1,0 +1,4 @@
+# Cloudflare Pages / Netlify style redirects
+# Canonical host redirects are configured at the DNS/host level (see docs/DEPLOYMENT.md)
+
+/sitemap.xml /sitemap-index.xml 301

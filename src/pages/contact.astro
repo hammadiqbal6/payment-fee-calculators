@@ -1,0 +1,63 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+---
+
+<BaseLayout
+  title="Contact"
+  description={`Contact ${siteConfig.siteName} about fee corrections, partnerships, or privacy questions.`}
+  canonicalPath="/contact/"
+>
+  <h1>Contact</h1>
+  <p class="answer-first">
+    Email us at <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>. For fee corrections, include
+    the processor, country, screenshot or URL, and the date you observed the rate.
+  </p>
+  <h2>What to include</h2>
+  <ul>
+    <li>Tool page URL</li>
+    <li>Expected vs displayed fee</li>
+    <li>Link to the official pricing page</li>
+  </ul>
+  <p>We do not provide personalized financial, tax, or legal advice.</p>
+  <!-- Static form-ready markup for hosts that add a form backend later -->
+  <form class="contact-form" action={`mailto:${siteConfig.contactEmail}`} method="post" enctype="text/plain">
+    <label class="field">
+      <span class="field__label">Your email</span>
+      <input class="field__input" type="email" name="email" required autocomplete="email" />
+    </label>
+    <label class="field">
+      <span class="field__label">Message</span>
+      <textarea class="field__input" name="message" rows="5" required></textarea>
+    </label>
+    <button class="btn btn--primary" type="submit">Send via email</button>
+  </form>
+</BaseLayout>
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: 0.85rem;
+    max-width: 480px;
+    margin-top: 1rem;
+  }
+  .field {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .field__label {
+    font-weight: 600;
+  }
+  .field__input {
+    min-height: 48px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.65rem 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    width: 100%;
+  }
+  textarea.field__input {
+    min-height: 140px;
+  }
+</style>

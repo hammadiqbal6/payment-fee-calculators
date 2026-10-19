@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+---
+
+<BaseLayout
+  title="Authors & reviewers"
+  description="Editorial contacts who maintain FeeCalc Tools fee schedules and calculator explainers."
+  canonicalPath="/authors/"
+>
+  <h1>Authors & reviewers</h1>
+  <p class="answer-first">
+    {siteConfig.authorName} maintains fee schedules, calculator copy, and verification dates for {siteConfig.siteName}.
+    Replace this placeholder bio with the owner’s real name and credentials before launch.
+  </p>
+  <h2>{siteConfig.authorName}</h2>
+  <p>
+    Role: editor & fee data maintainer. Focus: payment processor pricing pages, creator platform fee policies, and clear
+    worked examples for freelancers and small businesses.
+  </p>
+  <p>Contact: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a></p>
+  <p>Related: <a href="/methodology/">methodology</a> · <a href="/about/">about</a></p>
+</BaseLayout>

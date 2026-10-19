@@ -1,0 +1,205 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FeeCalculator from '@/components/FeeCalculator.astro';
+import RateTable from '@/components/RateTable.astro';
+import AdSlot from '@/components/AdSlot.astro';
+import Disclaimer from '@/components/Disclaimer.astro';
+import { processors } from '@/data/fees';
+import { toolContent } from '@/data/toolContent';
+import { getToolMeta, getRelatedTools } from '@/lib/tools';
+import { siteConfig } from '@/config/site';
+import { FEE_DATA_UPDATED, FEE_DATA_VERSION } from '@/data/fees';
+import { calculateForward, calculateReverse, formatMoney } from '@/lib/fees/calculate';
+
+export function getStaticPaths() {
+  return processors.map((p) => ({
+    params: { slug: p.slug },
+    props: { processor: p },
+  }));
+}
+
+const { processor } = Astro.props;
+const meta = getToolMeta(processor);
+const content = toolContent[processor.id];
+const related = getRelatedTools(meta.related);
+const defaultRate = processor.rates.find((r) => r.id === processor.defaultRateId) ?? processor.rates[0];
+const sampleForward = calculateForward(100, defaultRate);
+const sampleReverse = calculateReverse(100, defaultRate);
+const modified = FEE_DATA_UPDATED;
+const published = '2026-10-19';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: meta.h1,
+    url: new URL(meta.path, siteConfig.siteUrl).toString(),
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Any',
+    browserRequirements: 'Requires JavaScript',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    description: meta.description,
+    dateModified: modified,
+    author: {
+      '@type': 'Organization',
+      name: siteConfig.siteName,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.siteUrl + '/' },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Tools',
+        item: siteConfig.siteUrl + '/payment-processors/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: meta.h1,
+        item: new URL(meta.path, siteConfig.siteUrl).toString(),
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonicalPath={meta.path}
+  modified={modified}
+  published={published}
+  jsonLd={jsonLd}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a> <span aria-hidden="true">/</span>
+    <a href="/payment-processors/">Tools</a> <span aria-hidden="true">/</span>
+    <span>{processor.name}</span>
+  </nav>
+
+  <h1>{meta.h1}</h1>
+  <p class="lead">{processor.description}</p>
+
+  <div class="meta-row">
+    <span>Last updated: <time datetime={modified}>{modified}</time></span>
+    <span>Fee data version: {FEE_DATA_VERSION}</span>
+    <span>Author: <a href="/authors/">{siteConfig.authorName}</a></span>
+  </div>
+
+  <Disclaimer />
+
+  <section class="hero-tool" aria-label="Calculator">
+    <FeeCalculator processor={processor} />
+  </section>
+
+  <AdSlot slot={`${processor.id}-top`} />
+
+  <p class="answer-first">{content.answerFirst}</p>
+
+  <div class="takeaways">
+    <h2>Key takeaways</h2>
+    <ul>
+      <li>
+        Default schedule (<strong>{defaultRate.label}</strong>): {(defaultRate.percent * 100).toFixed(2)}% +{' '}
+        {defaultRate.fixed.toFixed(2)} {defaultRate.currency}
+      </li>
+      <li>
+        On {formatMoney(100, defaultRate.currency)} charged: fee {formatMoney(sampleForward.fee, defaultRate.currency)},
+        net {formatMoney(sampleForward.net, defaultRate.currency)}
+      </li>
+      <li>
+        To receive {formatMoney(100, defaultRate.currency)}: charge about{' '}
+        {formatMoney(sampleReverse.charge, defaultRate.currency)}
+      </li>
+    </ul>
+  </div>
+
+  <h2>How to use this {processor.name} fee calculator</h2>
+  <ol>
+    {content.howItWorks.map((step) => <li>{step}</li>)}
+  </ol>
+
+  <h2>Fee formula</h2>
+  <p>{content.formula}</p>
+
+  <h2>{content.workedExample.title}</h2>
+  <p>{content.workedExample.body}</p>
+
+  <h2>{processor.name} fee schedules we track</h2>
+  <RateTable processor={processor} />
+
+  {
+    content.extraSections?.map((section) => (
+      <>
+        <h2>{section.h2}</h2>
+        <p>{section.body}</p>
+      </>
+    ))
+  }
+
+  <h2>Tips for pricing with {processor.name}</h2>
+  <ul>
+    {content.tips.map((t) => <li>{t}</li>)}
+  </ul>
+
+  <h2>Common mistakes</h2>
+  <ul>
+    {content.mistakes.map((m) => <li>{m}</li>)}
+  </ul>
+
+  <h2>FAQ</h2>
+  <div class="faq">
+    {
+      content.faqs.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
+
+  <h2>Embed this calculator</h2>
+  <p>
+    Add an iframe to your site (please keep the credit link). Example:
+  </p>
+  <pre><code>&lt;iframe src="{siteConfig.siteUrl}/embed/{processor.slug}/" title="{meta.h1}" loading="lazy" style="width:100%;max-width:420px;height:520px;border:1px solid #d5e0da;border-radius:10px;"&gt;&lt;/iframe&gt;
+&lt;p&gt;Calculator by &lt;a href="{siteConfig.siteUrl}{meta.path}"&gt;{siteConfig.shortName}&lt;/a&gt;&lt;/p&gt;</code></pre>
+
+  <h2>Related tools</h2>
+  <div class="related">
+    {related.map((t) => <a href={t.path}>{t.h1}</a>)}
+    <a href="/guides/">Fee guides & explainers</a>
+  </div>
+
+  <AdSlot slot={`${processor.id}-bottom`} format="rectangle" />
+
+  <section class="author-box">
+    <p>
+      <strong>Reviewed by:</strong> <a href="/authors/">{siteConfig.authorName}</a> · Methodology:{' '}
+      <a href="/methodology/">how we verify fees</a>
+    </p>
+    <p>
+      <strong>Sources:</strong> official pricing pages linked in the table above (last verified dates per row). See also{' '}
+      <a href="/docs-fee-update/">fee update process</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  pre {
+    overflow-x: auto;
+    background: #e8f0ec;
+    padding: 0.85rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+</style>

@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+---
+
+<BaseLayout
+  title="Terms of Use"
+  description={`Terms of use for ${siteConfig.siteName} fee calculators. Not financial advice; verify provider rates.`}
+  canonicalPath="/terms/"
+>
+  <h1>Terms of Use</h1>
+  <p><em>Last updated: 2026-10-19</em></p>
+  <p class="answer-first">
+    By using {siteConfig.siteName}, you agree that calculators are educational estimates only — not financial, tax, or
+    legal advice — and that you will verify fees on each provider’s official site before making decisions.
+  </p>
+  <h2>License</h2>
+  <p>
+    You may use the calculators for personal or internal business planning. You may embed widgets if you keep the credit
+    link. You may not scrape the site to build a competing thin copy, misrepresent affiliation with payment brands, or
+    use the service for unlawful activity.
+  </p>
+  <h2>No warranties</h2>
+  <p>
+    Fee schedules change. We provide data “as is” with last-verified dates but no guarantee of completeness or fitness
+    for a particular purpose. Providers may offer custom pricing that differs from public list rates.
+  </p>
+  <h2>Limitation of liability</h2>
+  <p>
+    To the fullest extent permitted by law, {siteConfig.siteName} is not liable for lost profits, pricing mistakes, or
+    damages arising from reliance on calculator outputs.
+  </p>
+  <h2>Contact</h2>
+  <p><a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a></p>
+</BaseLayout>

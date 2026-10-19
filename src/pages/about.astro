@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+---
+
+<BaseLayout
+  title={`About ${siteConfig.siteName}`}
+  description={`About ${siteConfig.siteName}: free, client-side payment and creator fee calculators with dated schedules and transparent methodology.`}
+  canonicalPath="/about/"
+>
+  <h1>About {siteConfig.siteName}</h1>
+  <p class="answer-first">
+    {siteConfig.siteName} builds free fee calculators for payment processors and creator platforms. Every tool runs in
+    your browser, cites official pricing pages, and shows when we last verified each rate.
+  </p>
+  <p>
+    We started this site because fee pages are scattered, regional rates differ, and “what should I charge to receive X?”
+    is still harder than it should be. Our edge is freshness: a single versioned fee data file, public last-verified
+    dates, and a documented update process.
+  </p>
+  <h2>What we offer</h2>
+  <ul>
+    <li>Forward and reverse calculators for major processors and creator platforms</li>
+    <li>A comparison view across default schedules</li>
+    <li>Guides on pricing after fees and processor tradeoffs</li>
+    <li>Embeddable widgets with credit links</li>
+  </ul>
+  <h2>Independence</h2>
+  <p>
+    We are not affiliated with Stripe, PayPal, Square, Venmo, Block, Early Warning (Zelle), Patreon, Ko-fi, Buy Me a
+    Coffee, Gumroad, Shopify, or Wise. Brand names are trademarks of their owners.
+  </p>
+  <p>Contact: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a></p>
+  <p>See also <a href="/authors/">authors</a> and <a href="/methodology/">methodology</a>.</p>
+</BaseLayout>

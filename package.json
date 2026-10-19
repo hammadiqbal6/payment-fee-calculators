@@ -1,0 +1,30 @@
+{
+  "name": "payment-fee-calculators",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "audit": "node scripts/audit/run-all.mjs",
+    "audit:seo": "node scripts/audit/seo.mjs",
+    "audit:adsense": "node scripts/audit/adsense.mjs",
+    "audit:budget": "node scripts/audit/budget.mjs",
+    "audit:links": "node scripts/audit/links.mjs",
+    "lhci": "lhci autorun",
+    "check": "npm run build && npm run test && npm run audit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@types/node": "^26.6.5",
+    "astro": "^5.18.2",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
+  }
+}

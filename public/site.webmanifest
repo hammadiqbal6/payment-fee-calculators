@@ -1,0 +1,17 @@
+{
+  "name": "FeeCalc Tools",
+  "short_name": "FeeCalc",
+  "description": "Free payment processor and creator fee calculators",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f6f4",
+  "theme_color": "#0b3d2e",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { hubCategories, getRelatedTools } from '@/lib/tools';
+import { siteConfig } from '@/config/site';
+
+const hub = hubCategories[0];
+const tools = getRelatedTools([...hub.toolIds]);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: hub.title,
+  url: siteConfig.siteUrl + hub.path,
+  description: hub.description,
+};
+---
+
+<BaseLayout
+  title="Payment Processor Fee Calculators Hub"
+  description="Hub for Stripe, PayPal, Square and Shopify Payments fee calculators with reverse pricing and dated fee tables."
+  canonicalPath={hub.path}
+  jsonLd={jsonLd}
+>
+  <nav class="breadcrumbs"><a href="/">Home</a> <span>/</span> <span>Payment processors</span></nav>
+  <h1>{hub.title}</h1>
+  <p class="answer-first">
+    Card processors charge a percent plus a fixed fee per successful payment. Start with Stripe or PayPal if you sell
+    online, Square for in-person, and Shopify Payments if your store already runs on Shopify.
+  </p>
+  <p class="lead">{hub.description}</p>
+  <div class="tool-grid">
+    {
+      tools.map((t) => (
+        <a class="card-link" href={t.path}>
+          <h2>{t.h1}</h2>
+          <p>{t.description}</p>
+        </a>
+      ))
+    }
+  </div>
+  <p>Also see the <a href="/tools/compare-payment-fees/">full comparison calculator</a> and <a href="/creator-fees/">creator platforms</a>.</p>
+</BaseLayout>

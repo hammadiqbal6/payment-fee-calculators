@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The page you requested is not available. Browse fee calculators for Stripe, PayPal, Square and more."
+  canonicalPath="/404/"
+  noindex
+>
+  <h1>Page not found</h1>
+  <p>That URL does not exist. Try one of these tools:</p>
+  <div class="related">
+    <a href="/tools/stripe-fee-calculator/">Stripe fee calculator</a>
+    <a href="/tools/paypal-fee-calculator/">PayPal fee calculator</a>
+    <a href="/tools/compare-payment-fees/">Compare payment fees</a>
+    <a href="/">Home</a>
+  </div>
+</BaseLayout>

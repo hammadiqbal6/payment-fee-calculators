@@ -1,0 +1,37 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { hubCategories, getRelatedTools } from '@/lib/tools';
+import { siteConfig } from '@/config/site';
+
+const hub = hubCategories[1];
+const tools = getRelatedTools([...hub.toolIds]);
+---
+
+<BaseLayout
+  title="P2P & Instant Pay Fee Calculators"
+  description="Venmo, Cash App, Zelle and Wise transfer fee calculators for sellers and freelancers."
+  canonicalPath={hub.path}
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: hub.title,
+    url: siteConfig.siteUrl + hub.path,
+  }}
+>
+  <nav class="breadcrumbs"><a href="/">Home</a> <span>/</span> <span>P2P fees</span></nav>
+  <h1>{hub.title}</h1>
+  <p class="answer-first">
+    Peer-to-peer apps are often free for personal transfers, but business profiles, goods & services, and instant
+    deposits add percent fees. Zelle is usually $0 at the bank; Wise charges transparent FX transfer fees.
+  </p>
+  <div class="tool-grid">
+    {
+      tools.map((t) => (
+        <a class="card-link" href={t.path}>
+          <h2>{t.h1}</h2>
+          <p>{t.description}</p>
+        </a>
+      ))
+    }
+  </div>
+</BaseLayout>

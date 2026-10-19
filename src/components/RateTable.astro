@@ -1,0 +1,70 @@
+---
+import type { ProcessorSchedule } from '@/data/fees';
+import { formatPercent } from '@/lib/fees/calculate';
+
+interface Props {
+  processor: ProcessorSchedule;
+}
+const { processor } = Astro.props;
+---
+
+<div class="table-wrap">
+  <table>
+    <caption>
+      {processor.name} fee schedules (data version shown on page; verify on source links)
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Schedule</th>
+        <th scope="col">Percent</th>
+        <th scope="col">Fixed</th>
+        <th scope="col">Currency</th>
+        <th scope="col">Last verified</th>
+        <th scope="col">Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        processor.rates.map((r) => (
+          <tr>
+            <td>
+              {r.label}
+              {r.notes && <div class="muted">{r.notes}</div>}
+            </td>
+            <td>{formatPercent(r.percent)}</td>
+            <td>
+              {r.fixed.toFixed(2)} {r.currency}
+            </td>
+            <td>{r.currency}</td>
+            <td>
+              <time datetime={r.lastVerified}>{r.lastVerified}</time>
+            </td>
+            <td>
+              <a href={r.sourceUrl} rel="noopener noreferrer" target="_blank">
+                Official page
+              </a>
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .table-wrap {
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+  }
+  caption {
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-brand);
+  }
+  .muted {
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+    margin-top: 0.25rem;
+  }
+</style>

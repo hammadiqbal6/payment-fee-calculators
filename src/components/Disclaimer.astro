@@ -1,0 +1,15 @@
+---
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
+<p class="disclaimer" role="note">
+  <strong>Not financial advice.</strong>
+  {
+    compact
+      ? ' Fee schedules change. Verify current rates on the provider’s official pricing page before making decisions.'
+      : ' These calculators use published fee schedules we last verified on the dates shown. Providers change rates, add regional variants, and apply custom pricing. Always confirm on the official provider site before setting prices or filing taxes. This site is not affiliated with Stripe, PayPal, Square, Venmo, Cash App, Zelle, Patreon, Ko-fi, Buy Me a Coffee, Gumroad, Shopify, or Wise.'
+  }
+</p>
