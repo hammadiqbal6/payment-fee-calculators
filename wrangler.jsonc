@@ -1,6 +1,7 @@
 /**
  * Pure static-assets Worker (no Astro Cloudflare adapter, no bindings).
- * Workers Builds: npm run build → npx wrangler deploy
+ * Workers Builds: npm run build → npx wrangler deploy && node scripts/indexnow.mjs
+ * (IndexNow ping must run after deploy so public/<key>.txt is live.)
  */
 {
   "$schema": "./node_modules/wrangler/config-schema.json",

@@ -18,7 +18,10 @@
     "lhci": "lhci autorun",
     "proof": "node scripts/proof/run.mjs",
     "proof:verify": "node scripts/proof/verify.mjs",
-    "check": "npm run build && npm run test && npm run audit && npm run proof:verify"
+    "check": "npm run build && npm run test && npm run audit && npm run proof:verify",
+    "deploy": "npx wrangler deploy",
+    "indexnow": "node scripts/indexnow.mjs",
+    "deploy:indexnow": "npm run deploy && node scripts/indexnow.mjs"
   },
   "engines": {
     "node": ">=20"

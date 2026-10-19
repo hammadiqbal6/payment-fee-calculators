@@ -30,7 +30,7 @@ Governing playbook: `docs/SEO-PLAYBOOK.md`. Keyword map: `docs/KEYWORD-MAP.md`.
 
 1. Import from GSC or verify separately.
 2. Submit same sitemap.
-3. Configure **IndexNow** key (`PUBLIC_INDEXNOW_KEY` + `scripts/indexnow/post.mjs`).
+3. **IndexNow** is wired: key at `public/cded36863aa6be8ac5bf690ab6889910.txt`; after deploy run `npm run indexnow` (or `deploy:indexnow`).
 
 ### GA4
 
@@ -95,8 +95,11 @@ Governing playbook: `docs/SEO-PLAYBOOK.md`. Keyword map: `docs/KEYWORD-MAP.md`.
 
 ## IndexNow
 
-Not used by Google. Run after material updates:
+Not used by Google. After deploy (key file must be live), submit all sitemap URLs:
 
 ```bash
-PUBLIC_SITE_URL=https://yoursite.com PUBLIC_INDEXNOW_KEY=... node scripts/indexnow/post.mjs /tools/stripe-fee-calculator/
+npm run indexnow
+# or dry-run: node scripts/indexnow.mjs --dry-run
 ```
+
+Workers Builds deploy command: `npx wrangler deploy && node scripts/indexnow.mjs`. Skip with `INDEXNOW_DISABLE=1`. For individual paths: `node scripts/indexnow/post.mjs /tools/stripe-fee-calculator/`.

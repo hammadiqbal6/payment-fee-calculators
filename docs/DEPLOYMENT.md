@@ -164,15 +164,18 @@ google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
 
 #### IndexNow key file
 
-1. Generate a random 32-character hex key (or use `PUBLIC_INDEXNOW_KEY` in `.env`).
-2. Ensure a file exists at `public/<YOUR_KEY>.txt` containing **only** that key (this repo ships a placeholder `public/00000000000000000000000000000000.txt`—replace for production).
-3. Set `PUBLIC_INDEXNOW_KEY` to the same value.
-
-Submit URLs after deploy:
+1. Key file is committed at `public/cded36863aa6be8ac5bf690ab6889910.txt` (IndexNow keys are public by design).
+2. Optional override: `INDEXNOW_KEY` (script) or `PUBLIC_INDEXNOW_KEY` (site config) — must match the filename/contents.
+3. After the key file is **live** on the site, ping IndexNow from the built sitemap (do **not** run this inside `build`):
 
 ```bash
-PUBLIC_SITE_URL=https://YOUR_DOMAIN PUBLIC_INDEXNOW_KEY=yourkey node scripts/indexnow/post.mjs /tools/stripe-fee-calculator/
+npm run build
+npx wrangler deploy && node scripts/indexnow.mjs
+# or: npm run deploy:indexnow
+# dry-run (no POST): node scripts/indexnow.mjs --dry-run
 ```
+
+Set Workers Builds deploy command to `npx wrangler deploy && node scripts/indexnow.mjs` so the ping runs only after assets are published. Skip with `INDEXNOW_DISABLE=1`. For a handful of paths only, `scripts/indexnow/post.mjs` still works.
 
 ### Consent / CMP (EEA, UK, Switzerland)
 
@@ -398,13 +401,17 @@ Indexing is not guaranteed; sitemap + internal links help.
 
 ### IndexNow (Bing and partners—not Google)
 
-After deploy and DNS live:
+After deploy (key file must already be live at `https://<host>/<key>.txt`):
 
 ```bash
-export PUBLIC_SITE_URL=https://your-domain.com
-export PUBLIC_INDEXNOW_KEY=your_32_char_hex_key
-node scripts/indexnow/post.mjs / /tools/stripe-fee-calculator/ /tools/paypal-fee-calculator/
+# Preferred: submit every URL from dist/ sitemaps (safe; exits 0 on errors)
+node scripts/indexnow.mjs
+
+# Or single paths:
+node scripts/indexnow/post.mjs / /tools/stripe-fee-calculator/
 ```
+
+Uses `PUBLIC_SITE_URL` for host/`keyLocation`. Override key with `INDEXNOW_KEY`. Disable with `INDEXNOW_DISABLE=1`.
 
 ### Rich Results Test (production)
 
@@ -541,7 +548,7 @@ git push origin main
 | AdSense “site not ready” | Thin pages or missing policy pages | Run `npm run audit:adsense`; read `docs/ADSENSE.md` |
 | Lighthouse/CLS worse after ads | No reserved slot height | Keep `AdSlot` min-heights; avoid injecting dynamic iframes above calculator |
 | `npm run proof` fails Playwright | Chromium not installed | `npx playwright install chromium` |
-| IndexNow errors | Key file missing at `https://domain/<key>.txt` | Match `PUBLIC_INDEXNOW_KEY` and `public/<key>.txt` |
+| IndexNow errors | Key file missing at `https://domain/<key>.txt` | Deploy first so `public/<key>.txt` is live; then run `node scripts/indexnow.mjs` |
 | Crawlers blocked | Cloudflare Bot Fight / WAF | Allowlisted bots or relax rules for SEO |
 
 ### Get help from logs

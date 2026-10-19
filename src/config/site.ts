@@ -50,8 +50,8 @@ export const siteConfig = {
   ga4MeasurementId: envWithLegacy('PUBLIC_GA4_MEASUREMENT_ID', 'PUBLIC_GA4_ID', ''),
   googleSiteVerification: env('PUBLIC_GSC_VERIFICATION', ''),
   bingSiteVerification: env('PUBLIC_BING_VERIFICATION', ''),
-  /** Documented placeholder all-zeros key until a real IndexNow key is configured */
-  indexNowKey: env('PUBLIC_INDEXNOW_KEY', '00000000000000000000000000000000'),
+  /** IndexNow key; must match public/<key>.txt (committed; public by design) */
+  indexNowKey: env('PUBLIC_INDEXNOW_KEY', 'cded36863aa6be8ac5bf690ab6889910'),
   defaultOgImage: '/og-default.png',
   foundedYear: 2026,
   themeColor: '#0b3d2e',
