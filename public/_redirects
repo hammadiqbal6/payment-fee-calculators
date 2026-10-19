@@ -1,4 +1,4 @@
-# Cloudflare Pages / Netlify style redirects
-# Canonical host redirects are configured at the DNS/host level (see docs/DEPLOYMENT.md)
+# Workers static assets / Pages / Netlify style redirects
+# Host-level www↔apex redirects stay at DNS/CDN (see docs/DEPLOYMENT.md)
 
 /sitemap.xml /sitemap-index.xml 301

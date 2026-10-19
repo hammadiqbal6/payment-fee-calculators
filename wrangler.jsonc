@@ -1,0 +1,17 @@
+/**
+ * Pure static-assets Worker (no Astro Cloudflare adapter, no bindings).
+ * Workers Builds: npm run build → npx wrangler deploy
+ */
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "payment-fee-calculators",
+  // Current date at config authoring; bump when adopting new runtime APIs
+  "compatibility_date": "2026-10-19",
+  "assets": {
+    "directory": "./dist",
+    // Astro SSG with src/pages/404.astro → dist/404.html
+    "not_found_handling": "404-page",
+    // Matches astro.config trailingSlash: 'always'
+    "html_handling": "force-trailing-slash"
+  }
+}

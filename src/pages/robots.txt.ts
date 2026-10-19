@@ -1,4 +1,8 @@
-# FeeCalc Tools robots.txt
+import type { APIRoute } from 'astro';
+import { siteConfig } from '@/config/site';
+
+export const GET: APIRoute = () => {
+  const body = `# ${siteConfig.siteName} robots.txt
 # Allow search and AI-answer crawlers. Training crawlers: currently allowed;
 # flip to Disallow if you prefer not to contribute to model training.
 # Google Search is unaffected by GPTBot / Google-Extended / ClaudeBot / CCBot choices.
@@ -41,4 +45,10 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://feecalculator.example/sitemap-index.xml
+Sitemap: ${siteConfig.siteUrl}/sitemap-index.xml
+`;
+
+  return new Response(body, {
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+  });
+};

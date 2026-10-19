@@ -4,7 +4,9 @@
  * Usage:
  *   PUBLIC_SITE_URL=https://yoursite.com PUBLIC_INDEXNOW_KEY=your32hex node scripts/indexnow/post.mjs /tools/stripe-fee-calculator/
  */
-const site = process.env.PUBLIC_SITE_URL || 'https://feecalculator.example';
+const site =
+  process.env.PUBLIC_SITE_URL ||
+  'https://payment-fee-calculators.hammadiqbal117.workers.dev';
 const key = process.env.PUBLIC_INDEXNOW_KEY || '00000000000000000000000000000000';
 const paths = process.argv.slice(2);
 if (!paths.length) {
