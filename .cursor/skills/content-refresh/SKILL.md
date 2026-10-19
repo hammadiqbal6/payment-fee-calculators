@@ -11,9 +11,10 @@ Apply when working on this repository's fee calculators, SEO, or AdSense readine
 ## Steps
 1. Read `AGENTS.md` and `docs/SEO-PLAYBOOK.md`.
 2. Run `npm run build` and relevant audit (`npm run audit`).
-3. For fee changes: edit `src/data/fees.ts`, follow `docs/FEE-UPDATE.md`, run `npm test`.
-4. Update `docs/KEYWORD-MAP.md` if adding URLs.
-5. Commit with clear message; update `PROGRESS.md` on long builds.
+3. For fee/rate changes: follow `docs/FEE-UPDATE.md` — edit `src/data/fees.ts` (`lastVerified`, `sourceUrl`, bump `FEE_DATA_VERSION`), update affected guide examples, run `npm test`.
+4. Regenerate evidence: `npx playwright install chromium && npm run proof` → commit `docs/proof/`.
+5. Update `docs/KEYWORD-MAP.md` if adding URLs.
+6. Commit with clear message; update `PROGRESS.md` on long builds.
 
 ## Repo paths
 - Fees: `src/data/fees.ts`
