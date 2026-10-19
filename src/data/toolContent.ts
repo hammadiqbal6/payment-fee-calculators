@@ -123,6 +123,16 @@ export const toolContent: Record<string, ToolContent> = {
       'Comparing only online rates when most of your volume is in person.',
       'Forgetting chargeback or dispute costs outside the base rate.',
     ],
+    extraSections: [
+      {
+        h2: 'Online vs in-person Square fees',
+        body: 'Online and invoice payments usually cost more than tap/chip/swipe because card-not-present risk is higher. If most of your volume is in a cafe or market stall, model the in-person schedule. If you email invoices, use the online schedule. Keyed entry (typing card numbers) is typically the most expensive card-present style rate — avoid it when a chip reader works.',
+      },
+      {
+        h2: 'When Square beats shipping customers to PayPal',
+        body: 'Square shines when hardware, POS, and online invoices live in one dashboard. Fee-wise, US online Square often mirrors other 2.9% + $0.30 processors, so choose on product fit. Run identical order amounts through our Square, Stripe, and PayPal calculators before you migrate a stack.',
+      },
+    ],
     faqs: [
       {
         q: 'What is Square’s online fee?',
@@ -154,6 +164,16 @@ export const toolContent: Record<string, ToolContent> = {
     mistakes: [
       'Treating personal Venmo as a card processor with buyer protection.',
       'Ignoring payout/instant transfer costs when quoting customers.',
+    ],
+    extraSections: [
+      {
+        h2: 'Business Profile vs personal Venmo',
+        body: 'Personal Venmo is built for friends. Selling goods on personal payments can violate policies and leaves you without seller tools. Business Profiles add a published per-payment fee in exchange for a more appropriate seller surface. If you need formal purchase protection workflows, compare Venmo G&S availability with PayPal Goods & Services.',
+      },
+      {
+        h2: 'Instant transfer stacking',
+        body: 'Accepting a Business payment and then instantly depositing to a debit card applies two fee layers. Price the acceptance fee first, then decide whether instant transfer is worth its percent. Many sellers keep standard deposits for routine payouts and only instant-transfer emergencies.',
+      },
     ],
     faqs: [
       {
@@ -187,6 +207,16 @@ export const toolContent: Record<string, ToolContent> = {
       'Mixing personal P2P assumptions with Business fee schedules.',
       'Forgetting instant deposit fees when calculating take-home pay.',
     ],
+    extraSections: [
+      {
+        h2: 'Cash App for Business basics',
+        body: 'Cash App for Business is aimed at accepting customer payments with a business account feature set. The common published processing percentage is straightforward (no fixed cents on that schedule in our dataset), which can look attractive on small tickets compared with 2.9% + $0.30 style pricing — still verify your account’s live rate.',
+      },
+      {
+        h2: 'Deposits and cash-out',
+        body: 'Standard deposits to a linked bank are typically free. Instant deposits trade speed for a percent fee. If your business depends on same-day cash, include that cost in project quotes or accept a slightly higher list price.',
+      },
+    ],
     faqs: [
       {
         q: 'What is the Cash App Business fee?',
@@ -218,6 +248,16 @@ export const toolContent: Record<string, ToolContent> = {
     mistakes: [
       'Assuming Zelle offers the same dispute rights as credit cards.',
       'Sending large amounts without checking bank limits and scams guidance.',
+    ],
+    extraSections: [
+      {
+        h2: 'What Zelle is (and is not)',
+        body: 'Zelle moves money between enrolled bank accounts, usually without a network fee. It is not a full merchant acquirer: you do not get the same chargeback flow as a Visa/Mastercard checkout. That makes it suitable for trusted counterparts and a poor fit for selling to strangers without another contract layer.',
+      },
+      {
+        h2: 'Bank limits and credit funding',
+        body: 'Banks set send limits that can change with history and channel (app vs web). Rare credit-card funding paths may look like cash advances. Our optional credit-funded schedule is a cautionary estimate — your issuer’s rules control.',
+      },
     ],
     faqs: [
       {
@@ -314,6 +354,16 @@ export const toolContent: Record<string, ToolContent> = {
     mistakes: [
       'Quoting supporters a gross goal without fee drag.',
       'Ignoring regional processing differences.',
+    ],
+    extraSections: [
+      {
+        h2: 'Support buttons vs memberships',
+        body: 'One-off “coffee” tips and recurring memberships behave differently at scale. Memberships multiply small percent differences across months. Use the calculator on your average tip and on your monthly membership ARPU before you promise net funding goals publicly.',
+      },
+      {
+        h2: 'Compare adjacent platforms',
+        body: 'If you are choosing between Buy Me a Coffee, Ko-fi, and Patreon, line up the same $5 and $10 examples in each tool. Feature fit (shop, memberships, posts) may matter more than a half-point of fees, but you should know the fee gap explicitly.',
+      },
     ],
     faqs: [
       {
