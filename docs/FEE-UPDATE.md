@@ -45,7 +45,7 @@ npm run audit     # SEO word counts, links, AdSense pages
 ## 5. SEO / indexing
 
 - Update `<lastmod>` via build (sitemap integration uses build date; for surgical updates, rebuild after content change).
-- Optional: run `scripts/indexnow/post.mjs` with changed URLs (Bing/Yandex — not Google).
+- Optional: `npm run indexnow` after deploy (submits all sitemap URLs to Bing/Yandex — not Google), or `scripts/indexnow/post.mjs` for specific paths.
 
 ## 6. Communicate
 
