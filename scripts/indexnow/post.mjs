@@ -7,7 +7,7 @@
 const site =
   process.env.PUBLIC_SITE_URL ||
   'https://payment-fee-calculators.hammadiqbal117.workers.dev';
-const key = process.env.PUBLIC_INDEXNOW_KEY || '00000000000000000000000000000000';
+const key = process.env.PUBLIC_INDEXNOW_KEY || 'cded36863aa6be8ac5bf690ab6889910';
 const paths = process.argv.slice(2);
 if (!paths.length) {
   console.error('Pass one or more paths, e.g. /tools/stripe-fee-calculator/');
