@@ -1,9 +1,9 @@
 /**
  * SINGLE owner config file.
- * Replace placeholder values before launch. Prefer env vars in CI/hosting when set.
+ * Prefer env vars in CI/hosting when set (Cloudflare Workers Builds).
  *
  * Build-time: Astro inlines `import.meta.env.PUBLIC_*` from the environment
- * (and `.env`). Cloudflare Workers Builds must set these as build env vars.
+ * (and `.env`). See `.env.example` for every variable the code reads.
  */
 
 const DEFAULT_SITE_URL =
@@ -27,19 +27,25 @@ const envWithLegacy = (primary: string, legacy: string, fallback: string) => {
 };
 
 const siteUrl = env('PUBLIC_SITE_URL', DEFAULT_SITE_URL).replace(/\/$/, '');
+const siteName = env('PUBLIC_SITE_NAME', 'FeeCalc Tools');
+const contactEmail = env('PUBLIC_CONTACT_EMAIL', 'hammadiqbal117@gmail.com');
+
+const defaultAuthorName = `${siteName} Team`;
+const defaultAuthorBio = `${siteName} is built and maintained by an independent developer and small team. Fee schedules are taken from each payment processor’s published pricing pages and reviewed regularly. For questions or corrections, contact ${contactEmail}.`;
 
 export const siteConfig = {
   /** Canonical site origin — no trailing slash */
   siteUrl,
-  siteName: env('PUBLIC_SITE_NAME', 'FeeCalc Tools'),
+  siteName,
   shortName: env('PUBLIC_SITE_SHORT_NAME', 'FeeCalc'),
   tagline: 'Free payment processor & creator fee calculators',
   description:
     'Calculate Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify Payments and Wise fees. Forward and reverse calculators with dated fee schedules.',
   locale: 'en_US',
   language: 'en',
-  contactEmail: env('PUBLIC_CONTACT_EMAIL', 'hammadiqbal117@gmail.com'),
-  authorName: env('PUBLIC_AUTHOR_NAME', 'FeeCalc Editorial'),
+  contactEmail,
+  authorName: env('PUBLIC_AUTHOR_NAME', defaultAuthorName),
+  authorBio: env('PUBLIC_AUTHOR_BIO', defaultAuthorBio),
   authorUrl: '/about/',
   twitterHandle: env('PUBLIC_TWITTER_HANDLE', ''),
   /** Leave empty to keep AdSense disabled */
@@ -47,8 +53,15 @@ export const siteConfig = {
   /** Enable Auto ads only after approval + CMP for EEA/UK/CH */
   adsenseAutoAds: false,
   /** GA4 measurement ID; empty → no analytics scripts */
-  ga4MeasurementId: envWithLegacy('PUBLIC_GA4_MEASUREMENT_ID', 'PUBLIC_GA4_ID', ''),
-  googleSiteVerification: env('PUBLIC_GSC_VERIFICATION', ''),
+  ga4MeasurementId: envWithLegacy(
+    'PUBLIC_GA4_MEASUREMENT_ID',
+    'PUBLIC_GA4_ID',
+    'G-QG36XZRHPK',
+  ),
+  googleSiteVerification: env(
+    'PUBLIC_GSC_VERIFICATION',
+    '0-q_NxhBgfgCm4WOLfbe9VrHrjbLzaxh8SXsbo2Q-UU',
+  ),
   bingSiteVerification: env('PUBLIC_BING_VERIFICATION', ''),
   /** IndexNow key; must match public/<key>.txt (committed; public by design) */
   indexNowKey: env('PUBLIC_INDEXNOW_KEY', 'cded36863aa6be8ac5bf690ab6889910'),

@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly PUBLIC_SITE_SHORT_NAME?: string;
   readonly PUBLIC_CONTACT_EMAIL?: string;
   readonly PUBLIC_AUTHOR_NAME?: string;
+  readonly PUBLIC_AUTHOR_BIO?: string;
   readonly PUBLIC_TWITTER_HANDLE?: string;
   readonly PUBLIC_ADSENSE_PUBLISHER_ID?: string;
   /** Preferred GA4 measurement ID (`G-XXXXXXXX`) */
