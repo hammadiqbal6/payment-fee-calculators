@@ -38,7 +38,7 @@ export const siteConfig = {
     'Calculate Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify Payments and Wise fees. Forward and reverse calculators with dated fee schedules.',
   locale: 'en_US',
   language: 'en',
-  contactEmail: env('PUBLIC_CONTACT_EMAIL', `hello@${new URL(siteUrl).hostname}`),
+  contactEmail: env('PUBLIC_CONTACT_EMAIL', 'hammadiqbal117@gmail.com'),
   authorName: env('PUBLIC_AUTHOR_NAME', 'FeeCalc Editorial'),
   authorUrl: '/about/',
   twitterHandle: env('PUBLIC_TWITTER_HANDLE', ''),

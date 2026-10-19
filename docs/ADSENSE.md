@@ -38,4 +38,4 @@ Run `npm run audit:adsense` before applying.
 
 ## Privacy requirements
 
-`src/pages/privacy.astro` includes AdSense/third-party cookie language and opt-out links (`google.com/settings/ads`, `aboutads.info`). Update contact email before launch.
+`src/pages/privacy.astro` includes AdSense/third-party cookie language and opt-out links (`google.com/settings/ads`, `aboutads.info`). Contact email defaults to `hammadiqbal117@gmail.com` via `siteConfig.contactEmail` (override with `PUBLIC_CONTACT_EMAIL`).
