@@ -1,0 +1,8 @@
+---
+description: On-page SEO rules for Astro pages
+globs: src/pages/**/*.astro
+---
+- One H1, unique title <60 chars, meta description <155
+- Self-referencing canonical via BaseLayout
+- Primary keyword in title and first paragraph (answer-first)
+- BreadcrumbList + page-appropriate JSON-LD

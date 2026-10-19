@@ -1,0 +1,20 @@
+
+> payment-fee-calculators@1.0.0 audit
+> node scripts/audit/run-all.mjs
+
+
+=== SEO audit ===
+SEO audit OK (12 tool pages checked)
+
+=== AdSense readiness ===
+AdSense readiness audit OK
+
+=== JS budget ===
+JS budget OK (10 bundles, each <= 50 KB gzip)
+
+=== Internal links ===
+Link audit OK (30 pages, no orphans)
+
+All audits passed.
+
+exit: 0

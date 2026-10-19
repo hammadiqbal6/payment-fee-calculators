@@ -1,0 +1,6 @@
+---
+description: Financial disclaimer requirements
+globs: src/pages/tools/**/*
+---
+- Include Disclaimer component; not financial advice
+- Encourage verifying rates on provider sites

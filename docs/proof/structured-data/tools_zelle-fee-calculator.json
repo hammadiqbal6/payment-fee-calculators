@@ -1,0 +1,46 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Zelle Fees Calculator & Notes",
+    "url": "https://feecalculator.example/tools/zelle-fee-calculator/",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Zelle is usually free through banks. See typical zero-fee transfers, credit-card caveats, send limits notes, and compare with Venmo and Cash App.",
+    "dateModified": "2026-10-19",
+    "author": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://feecalculator.example/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Tools",
+        "item": "https://feecalculator.example/payment-processors/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Zelle Fees Calculator & Notes",
+        "item": "https://feecalculator.example/tools/zelle-fee-calculator/"
+      }
+    ]
+  }
+]

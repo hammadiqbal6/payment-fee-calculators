@@ -1,0 +1,164 @@
+{
+  "generated": "2026-10-19T06:50:50.376Z",
+  "typesSeen": [
+    "CollectionPage",
+    "Article",
+    "BreadcrumbList",
+    "WebSite",
+    "Organization",
+    "WebApplication"
+  ],
+  "pages": [
+    {
+      "route": "/about/",
+      "blocks": 0,
+      "errors": []
+    },
+    {
+      "route": "/authors/",
+      "blocks": 0,
+      "errors": []
+    },
+    {
+      "route": "/contact/",
+      "blocks": 0,
+      "errors": []
+    },
+    {
+      "route": "/creator-fees/",
+      "blocks": 1,
+      "errors": []
+    },
+    {
+      "route": "/docs-fee-update/",
+      "blocks": 0,
+      "errors": []
+    },
+    {
+      "route": "/guides/how-much-to-charge-to-receive-100/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/guides/how-to-price-after-fees/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/guides/",
+      "blocks": 0,
+      "errors": []
+    },
+    {
+      "route": "/guides/patreon-vs-kofi-vs-bmac/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/guides/stripe-vs-paypal-fees/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/guides/what-does-ebay-not-cover/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/methodology/",
+      "blocks": 0,
+      "errors": []
+    },
+    {
+      "route": "/p2p-fees/",
+      "blocks": 1,
+      "errors": []
+    },
+    {
+      "route": "/payment-processors/",
+      "blocks": 1,
+      "errors": []
+    },
+    {
+      "route": "/privacy/",
+      "blocks": 0,
+      "errors": []
+    },
+    {
+      "route": "/terms/",
+      "blocks": 0,
+      "errors": []
+    },
+    {
+      "route": "/tools/buy-me-a-coffee-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/cash-app-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/compare-payment-fees/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/gumroad-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/kofi-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/patreon-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/paypal-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/shopify-payments-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/square-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/stripe-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/venmo-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/wise-transfer-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    },
+    {
+      "route": "/tools/zelle-fee-calculator/",
+      "blocks": 2,
+      "errors": []
+    }
+  ],
+  "valid": true
+}

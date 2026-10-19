@@ -1,0 +1,5 @@
+
+> payment-fee-calculators@1.0.0 audit:budget
+> node scripts/audit/budget.mjs
+
+JS budget OK (10 bundles, each <= 50 KB gzip)

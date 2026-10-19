@@ -1,0 +1,46 @@
+---
+import FeeCalculator from '@/components/FeeCalculator.astro';
+import Disclaimer from '@/components/Disclaimer.astro';
+import { processors } from '@/data/fees';
+import { siteConfig } from '@/config/site';
+import '@/styles/global.css';
+
+export function getStaticPaths() {
+  return processors.map((p) => ({
+    params: { slug: p.slug },
+    props: { processor: p },
+  }));
+}
+
+const { processor } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,follow" />
+    <title>{processor.name} fee calculator embed | {siteConfig.shortName}</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0.75rem;
+        background: #fff;
+        font-family: var(--font-sans);
+      }
+      .credit {
+        font-size: 0.8rem;
+        margin-top: 0.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <FeeCalculator processor={processor} embed />
+    <Disclaimer compact />
+    <p class="credit">
+      <a href={`${siteConfig.siteUrl}/tools/${processor.slug}/`} target="_blank" rel="noopener"
+        >{processor.name} fee calculator</a
+      > by {siteConfig.shortName}
+    </p>
+  </body>
+</html>

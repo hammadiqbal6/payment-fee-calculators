@@ -1,0 +1,22 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "FeeCalc Tools",
+    "url": "https://feecalculator.example",
+    "description": "Calculate Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify Payments and Wise fees. Forward and reverse calculators with dated fee schedules.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools",
+      "url": "https://feecalculator.example"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "FeeCalc Tools",
+    "url": "https://feecalculator.example",
+    "email": "hello@feecalculator.example",
+    "foundingDate": "2026"
+  }
+]

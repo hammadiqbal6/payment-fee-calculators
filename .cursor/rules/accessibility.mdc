@@ -1,0 +1,6 @@
+---
+description: Accessibility baseline
+globs: src/**/*
+---
+- Labels on inputs; 48px tap targets; 16px+ body text
+- aria-live on calculator results; keyboard-usable controls

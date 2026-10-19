@@ -1,0 +1,264 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AdSlot from '@/components/AdSlot.astro';
+import Disclaimer from '@/components/Disclaimer.astro';
+import { processors, comparisonOrder, FEE_DATA_UPDATED, FEE_DATA_VERSION } from '@/data/fees';
+import { calculateForward, formatMoney, formatPercent } from '@/lib/fees/calculate';
+import { comparisonTool, getRelatedTools } from '@/lib/tools';
+import { siteConfig } from '@/config/site';
+
+const meta = comparisonTool;
+const amount = 100;
+const rows = comparisonOrder
+  .map((id) => processors.find((p) => p.id === id))
+  .filter(Boolean)
+  .map((p) => {
+    const rate = p!.rates.find((r) => r.id === p!.defaultRateId) ?? p!.rates[0];
+    const result = calculateForward(amount, rate);
+    return { processor: p!, rate, result };
+  })
+  .sort((a, b) => a.result.fee - b.result.fee);
+
+const related = getRelatedTools(meta.related);
+const compareRows = comparisonOrder
+  .map((id) => processors.find((p) => p.id === id))
+  .filter(Boolean)
+  .map((p) => {
+    const rate = p!.rates.find((r) => r.id === p!.defaultRateId) ?? p!.rates[0];
+    return {
+      name: p!.name,
+      slug: p!.slug,
+      label: rate.label,
+      percent: rate.percent,
+      fixed: rate.fixed,
+      currency: rate.currency,
+    };
+  });
+const compareRowsJson = JSON.stringify(compareRows);
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: meta.h1,
+    url: new URL(meta.path, siteConfig.siteUrl).toString(),
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: meta.description,
+    dateModified: FEE_DATA_UPDATED,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.siteUrl + '/' },
+      { '@type': 'ListItem', position: 2, name: meta.h1, item: new URL(meta.path, siteConfig.siteUrl).toString() },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonicalPath={meta.path}
+  modified={FEE_DATA_UPDATED}
+  published="2026-10-19"
+  jsonLd={jsonLd}
+  wide
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a> <span>/</span> <span>Compare</span>
+  </nav>
+  <h1>{meta.h1}</h1>
+  <p class="lead">
+    Side-by-side default schedules on a ${amount} charge. Lower fee is not always better — consider protections, payout
+    speed, and regional availability.
+  </p>
+  <div class="meta-row">
+    <span>Last updated: <time datetime={FEE_DATA_UPDATED}>{FEE_DATA_UPDATED}</time></span>
+    <span>Data version: {FEE_DATA_VERSION}</span>
+  </div>
+  <Disclaimer />
+
+  <section class="hero-tool" aria-label="Interactive comparison">
+    <div id="compare-app" data-compare-app data-rows={compareRowsJson}></div>
+  </section>
+
+  <AdSlot />
+
+  <p class="answer-first">
+    On a $100 charge using each product’s default schedule in our dated dataset, in-person or P2P options can look
+    cheapest, while creator platforms with platform commissions cost more. Use the interactive table to change the amount
+    and sort by fee or net.
+  </p>
+
+  <h2>Static comparison at ${amount}</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Processor</th>
+          <th>Default schedule</th>
+          <th>Rate</th>
+          <th>Fee</th>
+          <th>Net</th>
+          <th>Tool</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map(({ processor, rate, result }) => (
+            <tr>
+              <td>{processor.name}</td>
+              <td>{rate.label}</td>
+              <td>
+                {formatPercent(rate.percent)} + {rate.fixed.toFixed(2)} {rate.currency}
+              </td>
+              <td>{formatMoney(result.fee, rate.currency)}</td>
+              <td>{formatMoney(result.net, rate.currency)}</td>
+              <td>
+                <a href={`/tools/${processor.slug}/`}>Open calculator</a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2>How to compare payment processors fairly</h2>
+  <ol>
+    <li>Match the same country and channel (online vs in-person vs P2P).</li>
+    <li>Include platform commissions for creator tools (Patreon, Ko-fi, Gumroad).</li>
+    <li>Price with reverse mode so your net margin survives fees.</li>
+    <li>Verify live rates — custom Stripe/PayPal pricing can beat published list rates.</li>
+  </ol>
+
+  <h2>FAQ</h2>
+  <div class="faq">
+    <details>
+      <summary>Which payment processor has the lowest fees?</summary>
+      <p>
+        It depends on average order value, country, and whether you need chargebacks protection. Zelle is often $0 but is
+        not a full merchant stack. Compare with your real volume on this page, then open each calculator.
+      </p>
+    </details>
+    <details>
+      <summary>Should creators use Gumroad or Stripe?</summary>
+      <p>
+        Gumroad bundles storefront features with a higher take rate. Stripe is usually cheaper per payment if you already
+        have a storefront. Run both calculators on your price point.
+      </p>
+    </details>
+  </div>
+
+  
+  <h2>Reading the comparison table</h2>
+  <p>
+    The interactive table sorts by fee for the amount you enter using each product’s default schedule in our dated dataset.
+    Defaults favor common US online or business rates where applicable. Switch into each calculator to model UK/EU/AUD schedules,
+    in-person Square rates, or Patreon plan differences.
+  </p>
+  <p>
+    Creator platforms will look “expensive” next to raw card processors because they include platform commissions for hosting,
+    memberships, or storefront features. That is expected — compare Gumroad to Stripe only when you are willing to build the
+    storefront yourself.
+  </p>
+  <h2>Suggested comparison workflow</h2>
+  <ul>
+    <li>Enter your average order value (not only $100).</li>
+    <li>Note the cheapest three, then open each tool and switch to your real country/channel.</li>
+    <li>Run reverse mode for your margin floor.</li>
+    <li>Factor disputes, payout speed, and customer conversion before switching providers.</li>
+  </ul>
+
+  <h2>Related tools</h2>
+  <div class="related">
+    {related.map((t) => <a href={t.path}>{t.h1}</a>)}
+  </div>
+</BaseLayout>
+
+<script>
+  function round2(n) {
+    return Math.round((n + Number.EPSILON) * 100) / 100;
+  }
+  function forward(charge, percent, fixed) {
+    const fee = round2(charge * percent + fixed);
+    const net = round2(charge - fee);
+    return { fee, net, rate: charge === 0 ? 0 : fee / charge };
+  }
+  function money(n, currency) {
+    try {
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(n);
+    } catch {
+      return `${n.toFixed(2)} ${currency}`;
+    }
+  }
+
+  const root = document.querySelector('[data-compare-app]');
+  if (root) {
+    const defaults = JSON.parse(root.dataset.rows || '[]');
+    root.innerHTML = `
+      <label class="field">
+        <span class="field__label">Compare amount</span>
+        <input class="field__input" type="number" min="0" step="0.01" value="100" inputmode="decimal" data-amount />
+      </label>
+      <div class="table-wrap" style="margin-top:1rem">
+        <table>
+          <thead><tr><th>Processor</th><th>Fee</th><th>Net</th><th>Effective</th></tr></thead>
+          <tbody data-body></tbody>
+        </table>
+      </div>`;
+
+    const input = root.querySelector('[data-amount]');
+    const body = root.querySelector('[data-body]');
+
+    const render = () => {
+      const amount = Number(input.value) || 0;
+      const rows = defaults
+        .map((d) => {
+          const r = forward(amount, d.percent, d.fixed);
+          return { ...d, r };
+        })
+        .sort((a, b) => a.r.fee - b.r.fee);
+      body.innerHTML = rows
+        .map(
+          (row) => `<tr>
+          <td><a href="/tools/${row.slug}/">${row.name}</a><div class="muted">${row.label}</div></td>
+          <td>${money(row.r.fee, row.currency)}</td>
+          <td>${money(row.r.net, row.currency)}</td>
+          <td>${(row.r.rate * 100).toFixed(2)}%</td>
+        </tr>`,
+        )
+        .join('');
+    };
+    input.addEventListener('input', render);
+    render();
+  }
+</script>
+
+<style>
+  .field {
+    display: grid;
+    gap: 0.35rem;
+    max-width: 280px;
+  }
+  .field__label {
+    font-weight: 600;
+  }
+  .field__input {
+    min-height: 48px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.65rem 0.75rem;
+    font-size: 1rem;
+  }
+  .table-wrap {
+    overflow-x: auto;
+  }
+  .muted {
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+  }
+</style>

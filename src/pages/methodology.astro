@@ -1,0 +1,42 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+import { FEE_DATA_VERSION, FEE_DATA_UPDATED } from '@/data/fees';
+---
+
+<BaseLayout
+  title="Methodology & Editorial Policy"
+  description="How FeeCalc Tools sources, verifies, and updates payment processor and creator fee schedules."
+  canonicalPath="/methodology/"
+>
+  <h1>Methodology & editorial policy</h1>
+  <p class="answer-first">
+    We store every fee schedule in one versioned data file with a source URL and last-verified date. Calculators use a
+    transparent percent-plus-fixed formula with a documented reverse equation. Current data version:{' '}
+    {FEE_DATA_VERSION} (updated {FEE_DATA_UPDATED}).
+  </p>
+  <h2>How calculations work</h2>
+  <p>
+    Forward: <code>fee = charge × percent + fixed</code>, <code>net = charge − fee</code>. Reverse:{' '}
+    <code>charge = (desiredNet + fixed) ÷ (1 − percent)</code>, rounded to cents. Unit tests cover every schedule.
+  </p>
+  <h2>Sourcing</h2>
+  <ul>
+    <li>Prefer the provider’s official pricing or fee policy page.</li>
+    <li>Record currency, percent, fixed fee, and notes for regional caveats.</li>
+    <li>When processing varies (Patreon, Ko-fi), label figures as blended estimates.</li>
+  </ul>
+  <h2>Update cadence</h2>
+  <p>
+    Fees change often. Follow <a href="/docs-fee-update/">the fee update process</a> (also in{' '}
+    <code>docs/FEE-UPDATE.md</code>) and the content-refresh skill. Material rate changes update{' '}
+    <code>lastmod</code> and on-page “Last updated” dates.
+  </p>
+  <h2>Corrections</h2>
+  <p>
+    Email <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a> with evidence. We prioritize
+    corrections that include an official URL.
+  </p>
+  <h2>Independence</h2>
+  <p>No payment brand sponsors our default rankings. Comparison sorts are by calculated fee for the selected amount.</p>
+</BaseLayout>

@@ -1,0 +1,32 @@
+---
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  slot?: string;
+  format?: 'horizontal' | 'rectangle';
+}
+
+const { slot = 'default', format = 'horizontal' } = Astro.props;
+const enabled = Boolean(siteConfig.adsensePublisherId);
+---
+
+<aside
+  class:list={['ad-slot', format === 'rectangle' && 'ad-slot--sidebar']}
+  aria-label="Advertisement"
+  data-ad-slot={slot}
+>
+  {
+    enabled ? (
+      <ins
+        class="adsbygoogle"
+        style={`display:block;min-height:${format === 'rectangle' ? '250px' : '90px'}`}
+        data-ad-client={siteConfig.adsensePublisherId}
+        data-ad-slot={slot === 'default' ? '0000000000' : slot}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    ) : (
+      <span>Ad placeholder (disabled until publisher ID is set)</span>
+    )
+  }
+</aside>

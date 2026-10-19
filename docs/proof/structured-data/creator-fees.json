@@ -1,0 +1,8 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Creator Platform Fee Calculators",
+    "url": "https://feecalculator.example/creator-fees/"
+  }
+]

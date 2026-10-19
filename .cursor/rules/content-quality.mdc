@@ -1,0 +1,7 @@
+---
+description: Content quality for tool and guide pages
+globs: src/**/*.{astro,ts}
+---
+- No lorem ipsum; 600+ words on tool pages with formula, example, FAQ
+- Cite official fee sources with last-verified dates
+- Avoid duplicate-intent pages; check KEYWORD-MAP
