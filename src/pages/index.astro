@@ -5,33 +5,14 @@ import Disclaimer from '@/components/Disclaimer.astro';
 import { allTools, hubCategories } from '@/lib/tools';
 import { siteConfig } from '@/config/site';
 import { FEE_DATA_UPDATED } from '@/data/fees';
-
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: siteConfig.siteName,
-    url: siteConfig.siteUrl,
-    description: siteConfig.description,
-    publisher: { '@type': 'Organization', name: siteConfig.siteName, url: siteConfig.siteUrl },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: siteConfig.siteName,
-    url: siteConfig.siteUrl,
-    email: siteConfig.contactEmail,
-    foundingDate: String(siteConfig.foundedYear),
-  },
-];
 ---
 
 <BaseLayout
-  title={`${siteConfig.siteName} – Free Payment & Creator Fee Calculators`}
-  description={siteConfig.description}
+  title="Free Payment & Creator Fee Calculators"
+  description="Calculate Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify and Wise fees. Forward and reverse calculators with dated schedules."
   canonicalPath="/"
   modified={FEE_DATA_UPDATED}
-  jsonLd={jsonLd}
+  isHome
   wide
 >
   <section class="home-hero">
@@ -74,6 +55,18 @@ const jsonLd = [
     }
   </div>
 
+  <figure class="figure">
+    <img
+      src="/images/fee-breakdown.png"
+      width="800"
+      height="450"
+      alt="Diagram showing a $100 customer payment split into processor fee and net payout"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption>Every calculator shows fee, net, and reverse pricing from published schedules.</figcaption>
+  </figure>
+
   <h2>Why these calculators</h2>
   <ul>
     <li>Forward “fee on amount” and reverse “charge to receive X” on every tool.</li>
@@ -82,9 +75,18 @@ const jsonLd = [
     <li>Comparison page across processors and creator platforms.</li>
   </ul>
 
+  <h2>Fees on common amounts</h2>
+  <div class="compare-with">
+    <a href="/examples/fee-on-50/">$50</a>
+    <a href="/examples/fee-on-100/">$100</a>
+    <a href="/examples/fee-on-500/">$500</a>
+    <a href="/examples/fee-on-1000/">$1,000</a>
+  </div>
+
   <p>
     New here? Read <a href="/guides/how-to-price-after-fees/">how to price after payment fees</a> or our{' '}
-    <a href="/methodology/">methodology</a>.
+    <a href="/methodology/">methodology</a>. Maintained by{' '}
+    <a href={`/about/${siteConfig.authorHash}`}>{siteConfig.authorName}</a>.
   </p>
 </BaseLayout>
 

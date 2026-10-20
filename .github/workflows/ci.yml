@@ -8,6 +8,14 @@ on:
 jobs:
   build-test-audit:
     runs-on: ubuntu-latest
+    env:
+      # Same PUBLIC_* pattern as Cloudflare Workers Builds (baked into static HTML).
+      PUBLIC_SITE_URL: https://payment-fee-calculators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_PAYMENT_FEES: https://payment-fee-calculators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_BUSINESS_DOCS: https://business-document-generators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_HOME_GARDEN: https://home-garden-calculators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_FIBER_ARTS: https://fiber-arts-calculators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_PET: https://pet-calculators.hammadiqbal117.workers.dev
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

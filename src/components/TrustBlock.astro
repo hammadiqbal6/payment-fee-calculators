@@ -1,0 +1,120 @@
+---
+import { siteConfig } from '@/config/site';
+import type { ProcessorSchedule } from '@/data/fees';
+import { FEE_DATA_VERSION } from '@/data/fees';
+
+interface SourceItem {
+  url: string;
+  label: string;
+  usedFor: string;
+  checked: string;
+  providerUpdated?: string;
+}
+
+interface Props {
+  processor?: ProcessorSchedule;
+  /** Explicit sources (compare page, etc.) */
+  sources?: SourceItem[];
+  formula: string;
+  lastReviewed: string;
+  /** ISO date for time[datetime] — only change when content/rates change */
+  lastReviewedIso?: string;
+}
+
+const { processor, sources: explicitSources, formula, lastReviewed, lastReviewedIso } = Astro.props;
+
+const sources: SourceItem[] =
+  explicitSources ??
+  (processor
+    ? Array.from(
+        new Map(
+          processor.rates.map((r) => [
+            r.sourceUrl,
+            {
+              url: r.sourceUrl,
+              label: `${processor.name} — ${r.label}`,
+              usedFor: `${(r.percent * 100).toFixed(2)}% + ${r.fixed.toFixed(2)} ${r.currency}`,
+              checked: r.lastVerified,
+            } satisfies SourceItem,
+          ]),
+        ).values(),
+      )
+    : []);
+
+const reviewedIso = lastReviewedIso ?? lastReviewed;
+const authorHref = `${siteConfig.authorUrl}${siteConfig.authorHash}`;
+---
+
+<section class="trust" aria-labelledby="sources-h">
+  <p class="byline">
+    Built and maintained by{' '}
+    <a href={authorHref} rel="author">{siteConfig.authorName}</a>
+    · Last reviewed <time datetime={reviewedIso}>{lastReviewed}</time>
+    · <a href="/methodology/">How this tool works</a>
+  </p>
+
+  <h2 id="formula-h">Formula</h2>
+  <p>{formula}</p>
+
+  <h2 id="sources-h">Sources</h2>
+  <ol class="refs">
+    {
+      sources.map((s) => (
+        <li>
+          <a href={s.url} rel="nofollow noopener noreferrer" target="_blank">
+            {s.label}
+          </a>
+          . Used for: {s.usedFor}. Checked <time datetime={s.checked}>{s.checked}</time>
+          {s.providerUpdated ? <> on the provider page (provider “last updated”: {s.providerUpdated}).</> : '.'}
+        </li>
+      ))
+    }
+  </ol>
+
+  <p class="disclaimer" role="note">
+    Estimates only; published rates change and custom pricing may differ. Not financial advice. Not affiliated with
+    Stripe, PayPal, Square, Venmo, Cash App, Zelle, Patreon, Ko-fi, Buy Me a Coffee, Gumroad, Shopify, or Wise. Found an
+    error? <a href="/contact/">Tell me</a>.
+  </p>
+  <p class="version">
+    Calculator version {siteConfig.calculatorVersion} · fee data {FEE_DATA_VERSION} ·{' '}
+    <a href="/methodology/#changelog">Changelog</a>
+  </p>
+</section>
+
+<style>
+  .trust {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .byline {
+    font-size: 0.9rem;
+    color: var(--color-ink-muted);
+    margin: 0 0 1rem;
+  }
+  .byline a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .refs {
+    padding-left: 1.25rem;
+    margin: 0 0 1rem;
+  }
+  .refs li {
+    margin-bottom: 0.5rem;
+  }
+  .refs a,
+  .disclaimer a,
+  .version a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .version {
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+    margin: 0;
+  }
+</style>

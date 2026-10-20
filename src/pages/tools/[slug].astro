@@ -4,11 +4,14 @@ import FeeCalculator from '@/components/FeeCalculator.astro';
 import RateTable from '@/components/RateTable.astro';
 import AdSlot from '@/components/AdSlot.astro';
 import Disclaimer from '@/components/Disclaimer.astro';
+import TrustBlock from '@/components/TrustBlock.astro';
+import SisterSites from '@/components/SisterSites.astro';
 import { processors } from '@/data/fees';
 import { toolContent } from '@/data/toolContent';
 import { toolDepth } from '@/data/toolDepth';
 import { getToolMeta, getRelatedTools } from '@/lib/tools';
-import { siteConfig } from '@/config/site';
+import { sisterLinksByContext } from '@/lib/sisterLinks';
+import { siteConfig, PERSON_ID } from '@/config/site';
 import { FEE_DATA_UPDATED, FEE_DATA_VERSION } from '@/data/fees';
 import { calculateForward, calculateReverse, formatMoney } from '@/lib/fees/calculate';
 
@@ -28,27 +31,55 @@ const sampleForward = calculateForward(100, defaultRate);
 const sampleReverse = calculateReverse(100, defaultRate);
 const modified = FEE_DATA_UPDATED;
 const published = '2026-10-19';
+const pageUrl = new URL(meta.path, siteConfig.siteUrl).toString();
+const diagramUrl = new URL('/images/fee-breakdown.png', siteConfig.siteUrl).toString();
+const sister = sisterLinksByContext[processor.id] ?? [];
+const citationUrls = [...new Set(processor.rates.map((r) => r.sourceUrl))];
 
 const jsonLd = [
   {
     '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: meta.h1,
-    url: new URL(meta.path, siteConfig.siteUrl).toString(),
-    applicationCategory: 'FinanceApplication',
-    operatingSystem: 'Any',
-    browserRequirements: 'Requires JavaScript',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    description: meta.description,
-    dateModified: modified,
-    author: {
-      '@type': 'Organization',
-      name: siteConfig.siteName,
-    },
+    '@graph': [
+      {
+        '@type': 'WebApplication',
+        '@id': `${pageUrl}#app`,
+        name: meta.h1,
+        url: pageUrl,
+        applicationCategory: 'FinanceApplication',
+        operatingSystem: 'Any',
+        isAccessibleForFree: true,
+        browserRequirements: 'Requires JavaScript',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        description: meta.description,
+        dateModified: modified,
+        author: {
+          '@type': 'Person',
+          '@id': PERSON_ID,
+          name: siteConfig.authorName,
+          url: `${siteConfig.siteUrl}/about/`,
+        },
+        publisher: { '@id': `${siteConfig.siteUrl}/#organization` },
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: meta.title,
+        isPartOf: { '@id': `${siteConfig.siteUrl}/#website` },
+        mainEntity: { '@id': `${pageUrl}#app` },
+        datePublished: `${published}T00:00:00+05:00`,
+        dateModified: `${modified}T00:00:00+05:00`,
+        lastReviewed: modified,
+        author: { '@id': PERSON_ID },
+        primaryImageOfPage: {
+          '@type': 'ImageObject',
+          url: diagramUrl,
+          width: 800,
+          height: 450,
+        },
+        citation: citationUrls,
+      },
+    ],
   },
   {
     '@context': 'https://schema.org',
@@ -65,11 +96,23 @@ const jsonLd = [
         '@type': 'ListItem',
         position: 3,
         name: meta.h1,
-        item: new URL(meta.path, siteConfig.siteUrl).toString(),
+        item: pageUrl,
       },
     ],
   },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: content.faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
 ];
+
+const embedSnippet = `<iframe src="${siteConfig.siteUrl}/embed/${processor.slug}/" title="${meta.h1}" loading="lazy" style="width:100%;max-width:420px;height:520px;border:1px solid #d5e0da;border-radius:10px;"></iframe>
+<p>Calculator by <a href="${siteConfig.siteUrl}${meta.path}">${siteConfig.shortName}</a></p>`;
 ---
 
 <BaseLayout
@@ -87,23 +130,38 @@ const jsonLd = [
   </nav>
 
   <h1>{meta.h1}</h1>
-  <p class="lead">{processor.description}</p>
-
-  <div class="meta-row">
-    <span>Last updated: <time datetime={modified}>{modified}</time></span>
-    <span>Fee data version: {FEE_DATA_VERSION}</span>
-    <span>Author: <a href="/authors/">{siteConfig.authorName}</a></span>
-  </div>
-
-  <Disclaimer />
+  <p class="lead lead--tight">{processor.description}</p>
 
   <section class="hero-tool" aria-label="Calculator">
     <FeeCalculator processor={processor} />
   </section>
 
+  <p class="byline meta-row--compact">
+    Built by <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a>
+    · Last reviewed <time datetime={modified}>{modified}</time>
+    · Fee data {FEE_DATA_VERSION}
+  </p>
+
+  <Disclaimer compact />
+
   <AdSlot slot={`${processor.id}-top`} />
 
   <p class="answer-first">{content.answerFirst}</p>
+
+  <figure class="figure">
+    <img
+      src="/images/fee-breakdown.png"
+      width="800"
+      height="450"
+      alt={`Diagram of a $100 charge broken into processor fee and net payout for ${processor.name}`}
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption>
+      Example fee vs net on $100 using a common percent-plus-fixed card schedule. Your selected {processor.name} rate may
+      differ — use the calculator above.
+    </figcaption>
+  </figure>
 
   <div class="takeaways">
     <h2>Key takeaways</h2>
@@ -128,14 +186,24 @@ const jsonLd = [
     {content.howItWorks.map((step) => <li>{step}</li>)}
   </ol>
 
-  <h2>Fee formula</h2>
+  <h2>How it’s calculated</h2>
   <p>{content.formula}</p>
+  <p>
+    Worked check on the default schedule: charge {formatMoney(100, defaultRate.currency)} → fee{' '}
+    {formatMoney(sampleForward.fee, defaultRate.currency)} → net{' '}
+    {formatMoney(sampleForward.net, defaultRate.currency)}. Reverse: to keep{' '}
+    {formatMoney(100, defaultRate.currency)}, charge about {formatMoney(sampleReverse.charge, defaultRate.currency)}.
+  </p>
 
   <h2>{content.workedExample.title}</h2>
   <p>{content.workedExample.body}</p>
 
   <h2>{processor.name} fee schedules we track</h2>
   <RateTable processor={processor} />
+  <p class="rate-check-note">
+    Each row’s source link is the official page I checked on the date shown (RealFeeCalc-style “checked on pricing page”
+    verification).
+  </p>
 
   {
     content.extraSections?.map((section) => (
@@ -177,39 +245,85 @@ const jsonLd = [
     }
   </div>
 
-  <h2>Embed this calculator</h2>
+  <h2 id="embed">Embed this calculator</h2>
   <p>
-    Add an iframe to your site (please keep the credit link). Example:
+    Copy the snippet below into your site. Please keep the attribution link so readers can open the full tool and
+    sources.
   </p>
-  <pre><code>&lt;iframe src="{siteConfig.siteUrl}/embed/{processor.slug}/" title="{meta.h1}" loading="lazy" style="width:100%;max-width:420px;height:520px;border:1px solid #d5e0da;border-radius:10px;"&gt;&lt;/iframe&gt;
-&lt;p&gt;Calculator by &lt;a href="{siteConfig.siteUrl}{meta.path}"&gt;{siteConfig.shortName}&lt;/a&gt;&lt;/p&gt;</code></pre>
+  <div class="embed-box">
+    <label class="field__label" for={`embed-${processor.id}`}>Embed code</label>
+    <textarea id={`embed-${processor.id}`} class="embed-code" readonly rows="4" data-embed-code>{embedSnippet}</textarea>
+    <button type="button" class="btn btn--secondary" data-copy-embed>Copy embed code</button>
+  </div>
+
+  <h2>Compare with…</h2>
+  <div class="compare-with">
+    {related.slice(0, 4).map((t) => <a href={t.path}>{t.h1}</a>)}
+    <a href="/tools/compare-payment-fees/">Side-by-side comparison</a>
+  </div>
+
+  <SisterSites links={sister} />
 
   <h2>Related tools</h2>
   <div class="related">
     {related.map((t) => <a href={t.path}>{t.h1}</a>)}
-    <a href="/guides/">Fee guides & explainers</a>
+    <a href="/guides/how-to-price-after-fees/">Guide: how to price after fees</a>
+    <a href="/guides/">More fee guides</a>
   </div>
 
   <AdSlot slot={`${processor.id}-bottom`} format="rectangle" />
 
-  <section class="author-box">
-    <p>
-      <strong>Reviewed by:</strong> <a href="/authors/">{siteConfig.authorName}</a> · Methodology:{' '}
-      <a href="/methodology/">how we verify fees</a>
-    </p>
-    <p>
-      <strong>Sources:</strong> official pricing pages linked in the table above (last verified dates per row). See also{' '}
-      <a href="/docs-fee-update/">fee update process</a>.
-    </p>
-  </section>
+  <TrustBlock
+    processor={processor}
+    formula={content.formula}
+    lastReviewed={modified}
+    lastReviewedIso={modified}
+  />
 </BaseLayout>
 
 <style>
-  pre {
-    overflow-x: auto;
-    background: #e8f0ec;
-    padding: 0.85rem;
+  .embed-box {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .embed-code {
+    width: 100%;
+    min-height: 120px;
+    font-family: var(--font-mono);
+    font-size: max(0.85rem, 16px);
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
-    font-size: 0.85rem;
+    background: #e8f0ec;
+    resize: vertical;
+  }
+  .field__label {
+    font-weight: 600;
+  }
+  .rate-check-note {
+    font-size: 0.9rem;
+    color: var(--color-ink-muted);
+    margin-top: -0.5rem;
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-embed]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const box = btn.closest('.embed-box');
+      const ta = box?.querySelector<HTMLTextAreaElement>('[data-embed-code]');
+      if (!ta) return;
+      try {
+        await navigator.clipboard.writeText(ta.value);
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy embed code';
+        }, 1500);
+        (window as unknown as { __feecalcTrack?: (n: string) => void }).__feecalcTrack?.('embed_copy');
+      } catch {
+        ta.select();
+      }
+    });
+  });
+</script>

@@ -1,0 +1,133 @@
+---
+/**
+ * Long-tail “fee on $X” example pages — unique worked tables, not thin clones of tool pages.
+ * Primary keywords target “stripe fee on 100”, “paypal fee on 500”, etc. without competing
+ * with the interactive calculators (which own “stripe fee calculator”).
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { processors, comparisonOrder, FEE_DATA_UPDATED } from '@/data/fees';
+import { calculateForward, calculateReverse, formatMoney, formatPercent } from '@/lib/fees/calculate';
+import { siteConfig } from '@/config/site';
+
+export function getStaticPaths() {
+  const amounts = [50, 100, 500, 1000] as const;
+  return amounts.map((amount) => ({
+    params: { amount: String(amount) },
+    props: { amount },
+  }));
+}
+
+const amounts = [50, 100, 500, 1000] as const;
+const { amount } = Astro.props;
+const path = `/examples/fee-on-${amount}/`;
+const pageUrl = new URL(path, siteConfig.siteUrl).toString();
+
+const rows = comparisonOrder
+  .map((id) => processors.find((p) => p.id === id))
+  .filter(Boolean)
+  .map((p) => {
+    const rate = p!.rates.find((r) => r.id === p!.defaultRateId) ?? p!.rates[0];
+    const forward = calculateForward(amount, rate);
+    const reverse = calculateReverse(amount, rate);
+    return { processor: p!, rate, forward, reverse };
+  })
+  .sort((a, b) => a.forward.fee - b.forward.fee);
+
+const title = `Payment Fees on $${amount}: Stripe, PayPal, Square & More`;
+const description = `Estimated fees and net on a $${amount} charge across Stripe, PayPal, Square, Venmo, Cash App and more. Dated default schedules plus reverse pricing to receive $${amount}.`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-10-20T00:00:00+05:00',
+    dateModified: `${FEE_DATA_UPDATED}T00:00:00+05:00`,
+    author: [{ '@type': 'Person', name: siteConfig.authorName, url: `${siteConfig.siteUrl}/about/` }],
+    publisher: { '@type': 'Organization', name: siteConfig.siteName, url: siteConfig.siteUrl },
+    mainEntityOfPage: pageUrl,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteConfig.siteUrl}/` },
+      { '@type': 'ListItem', position: 2, name: `Fees on $${amount}`, item: pageUrl },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath={path} ogType="article" published="2026-10-20" modified={FEE_DATA_UPDATED} jsonLd={jsonLd} wide>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a> <span>/</span> <span>Examples</span> <span>/</span> <span>${amount}</span>
+  </nav>
+  <h1>Payment fees on ${amount}</h1>
+  <p class="lead">
+    Worked estimates using each product’s default schedule in our dated dataset. Open a calculator to change country,
+    channel, or reverse-price a different net.
+  </p>
+  <p class="byline">
+    By <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a>
+    · Last reviewed <time datetime={FEE_DATA_UPDATED}>{FEE_DATA_UPDATED}</time>
+  </p>
+
+  <p class="answer-first">
+    On a ${amount} charge, fees range from about{' '}
+    {formatMoney(rows[0].forward.fee, rows[0].rate.currency)} ({rows[0].processor.name}) to{' '}
+    {formatMoney(rows[rows.length - 1].forward.fee, rows[rows.length - 1].rate.currency)} (
+    {rows[rows.length - 1].processor.name}) under default schedules. To <em>receive</em> ${amount} after fees, charge
+    the reverse amount in the table.
+  </p>
+
+  <h2>Fee and net on ${amount} charged</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Processor</th>
+          <th>Default schedule</th>
+          <th>Rate</th>
+          <th>Fee</th>
+          <th>Net</th>
+          <th>Charge to receive ${amount}</th>
+          <th>Tool</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map(({ processor, rate, forward, reverse }) => (
+            <tr>
+              <td>{processor.name}</td>
+              <td>{rate.label}</td>
+              <td>
+                {formatPercent(rate.percent)} + {rate.fixed.toFixed(2)} {rate.currency}
+              </td>
+              <td>{formatMoney(forward.fee, rate.currency)}</td>
+              <td>{formatMoney(forward.net, rate.currency)}</td>
+              <td>{formatMoney(reverse.charge, rate.currency)}</td>
+              <td>
+                <a href={`/tools/${processor.slug}/?amount=${amount}`}>Calculate</a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2>How it’s calculated</h2>
+  <p>
+    Forward: <code>fee = {amount} × percent + fixed</code>, <code>net = {amount} − fee</code>. Reverse to receive $
+    {amount}: <code>charge = ({amount} + fixed) ÷ (1 − percent)</code>, rounded to cents. Creator platforms include
+    platform commissions in the blended default — they are not comparable 1:1 with raw card processors.
+  </p>
+
+  <h2>Other common amounts</h2>
+  <div class="compare-with">
+    {amounts.filter((a) => a !== amount).map((a) => <a href={`/examples/fee-on-${a}/`}>Fees on ${a}</a>)}
+    <a href="/tools/compare-payment-fees/">Interactive comparison</a>
+    <a href="/guides/how-to-price-after-fees/">Reverse pricing guide</a>
+  </div>
+</BaseLayout>

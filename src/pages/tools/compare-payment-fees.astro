@@ -2,10 +2,13 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import AdSlot from '@/components/AdSlot.astro';
 import Disclaimer from '@/components/Disclaimer.astro';
+import TrustBlock from '@/components/TrustBlock.astro';
+import SisterSites from '@/components/SisterSites.astro';
 import { processors, comparisonOrder, FEE_DATA_UPDATED, FEE_DATA_VERSION } from '@/data/fees';
 import { calculateForward, formatMoney, formatPercent } from '@/lib/fees/calculate';
 import { comparisonTool, getRelatedTools } from '@/lib/tools';
-import { siteConfig } from '@/config/site';
+import { sisterLinksByContext } from '@/lib/sisterLinks';
+import { siteConfig, PERSON_ID } from '@/config/site';
 
 const meta = comparisonTool;
 const amount = 100;
@@ -32,27 +35,63 @@ const compareRows = comparisonOrder
       percent: rate.percent,
       fixed: rate.fixed,
       currency: rate.currency,
+      sourceUrl: rate.sourceUrl,
+      lastVerified: rate.lastVerified,
     };
   });
 const compareRowsJson = JSON.stringify(compareRows);
+const pageUrl = new URL(meta.path, siteConfig.siteUrl).toString();
+const sister = sisterLinksByContext.comparison ?? [];
+
+const trustSources = compareRows.map((r) => ({
+  url: r.sourceUrl,
+  label: `${r.name} — ${r.label}`,
+  usedFor: `default schedule ${(r.percent * 100).toFixed(2)}% + ${r.fixed.toFixed(2)} ${r.currency}`,
+  checked: r.lastVerified,
+}));
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: meta.h1,
-    url: new URL(meta.path, siteConfig.siteUrl).toString(),
-    applicationCategory: 'FinanceApplication',
-    operatingSystem: 'Any',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    description: meta.description,
-    dateModified: FEE_DATA_UPDATED,
+    '@graph': [
+      {
+        '@type': 'WebApplication',
+        '@id': `${pageUrl}#app`,
+        name: meta.h1,
+        url: pageUrl,
+        applicationCategory: 'FinanceApplication',
+        operatingSystem: 'Any',
+        isAccessibleForFree: true,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        description: meta.description,
+        dateModified: FEE_DATA_UPDATED,
+        author: {
+          '@type': 'Person',
+          '@id': PERSON_ID,
+          name: siteConfig.authorName,
+          url: `${siteConfig.siteUrl}/about/`,
+        },
+        publisher: { '@id': `${siteConfig.siteUrl}/#organization` },
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: meta.title,
+        datePublished: '2026-10-19T00:00:00+05:00',
+        dateModified: `${FEE_DATA_UPDATED}T00:00:00+05:00`,
+        lastReviewed: FEE_DATA_UPDATED,
+        author: { '@id': PERSON_ID },
+        mainEntity: { '@id': `${pageUrl}#app` },
+      },
+    ],
   },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.siteUrl + '/' },
-      { '@type': 'ListItem', position: 2, name: meta.h1, item: new URL(meta.path, siteConfig.siteUrl).toString() },
+      { '@type': 'ListItem', position: 2, name: meta.h1, item: pageUrl },
     ],
   },
 ];
@@ -71,21 +110,64 @@ const jsonLd = [
     <a href="/">Home</a> <span>/</span> <span>Compare</span>
   </nav>
   <h1>{meta.h1}</h1>
-  <p class="lead">
-    Side-by-side default schedules on a ${amount} charge. Lower fee is not always better — consider protections, payout
-    speed, and regional availability.
+  <p class="lead lead--tight">
+    Side-by-side default schedules on any amount. Lower fee is not always better — consider protections, payout speed,
+    and regional availability. For a narrative Stripe vs PayPal comparison, see the{' '}
+    <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal fees guide</a>.
   </p>
-  <div class="meta-row">
-    <span>Last updated: <time datetime={FEE_DATA_UPDATED}>{FEE_DATA_UPDATED}</time></span>
-    <span>Data version: {FEE_DATA_VERSION}</span>
-  </div>
-  <Disclaimer />
 
   <section class="hero-tool" aria-label="Interactive comparison">
-    <div id="compare-app" data-compare-app data-rows={compareRowsJson}></div>
+    <div id="compare-app" data-compare-app data-rows={compareRowsJson}>
+      <label class="field" for="compare-amount">
+        <span class="field__label">Compare amount</span>
+        <input
+          id="compare-amount"
+          class="field__input"
+          type="number"
+          min="0"
+          step="0.01"
+          value="100"
+          inputmode="decimal"
+          data-amount
+        />
+      </label>
+      <div class="table-wrap" style="margin-top:1rem">
+        <table>
+          <caption class="sr-only">Interactive fee comparison by processor</caption>
+          <thead>
+            <tr>
+              <th scope="col">Processor</th>
+              <th scope="col">Fee</th>
+              <th scope="col">Net</th>
+              <th scope="col">Effective</th>
+            </tr>
+          </thead>
+          <tbody data-body></tbody>
+        </table>
+      </div>
+    </div>
   </section>
 
+  <p class="byline">
+    Built by <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a>
+    · Last reviewed <time datetime={FEE_DATA_UPDATED}>{FEE_DATA_UPDATED}</time>
+    · Data {FEE_DATA_VERSION}
+  </p>
+  <Disclaimer compact />
+
   <AdSlot />
+
+  <figure class="figure">
+    <img
+      src="/images/compare-fees.png"
+      width="800"
+      height="420"
+      alt="Illustration comparing example Stripe, PayPal, and Square fees on a $100 charge"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption>Illustrative default-schedule fees on $100 — change the amount above for live ranking.</figcaption>
+  </figure>
 
   <p class="answer-first">
     On a $100 charge using each product’s default schedule in our dated dataset, in-person or P2P options can look
@@ -127,6 +209,12 @@ const jsonLd = [
     </table>
   </div>
 
+  <h2>How it’s calculated</h2>
+  <p>
+    For each processor we take the default schedule (percent + fixed), then fee = amount × percent + fixed and net =
+    amount − fee. The interactive table re-runs that formula when you change the amount and sorts by fee ascending.
+  </p>
+
   <h2>How to compare payment processors fairly</h2>
   <ol>
     <li>Match the same country and channel (online vs in-person vs P2P).</li>
@@ -153,30 +241,19 @@ const jsonLd = [
     </details>
   </div>
 
-  
-  <h2>Reading the comparison table</h2>
-  <p>
-    The interactive table sorts by fee for the amount you enter using each product’s default schedule in our dated dataset.
-    Defaults favor common US online or business rates where applicable. Switch into each calculator to model UK/EU/AUD schedules,
-    in-person Square rates, or Patreon plan differences.
-  </p>
-  <p>
-    Creator platforms will look “expensive” next to raw card processors because they include platform commissions for hosting,
-    memberships, or storefront features. That is expected — compare Gumroad to Stripe only when you are willing to build the
-    storefront yourself.
-  </p>
-  <h2>Suggested comparison workflow</h2>
-  <ul>
-    <li>Enter your average order value (not only $100).</li>
-    <li>Note the cheapest three, then open each tool and switch to your real country/channel.</li>
-    <li>Run reverse mode for your margin floor.</li>
-    <li>Factor disputes, payout speed, and customer conversion before switching providers.</li>
-  </ul>
+  <SisterSites links={sister} />
 
   <h2>Related tools</h2>
   <div class="related">
     {related.map((t) => <a href={t.path}>{t.h1}</a>)}
+    <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal fees guide</a>
   </div>
+
+  <TrustBlock
+    sources={trustSources}
+    formula="fee = amount × percent + fixed; net = amount − fee (default schedule per processor)."
+    lastReviewed={FEE_DATA_UPDATED}
+  />
 </BaseLayout>
 
 <script>
@@ -199,22 +276,10 @@ const jsonLd = [
   const root = document.querySelector('[data-compare-app]');
   if (root) {
     const defaults = JSON.parse(root.dataset.rows || '[]');
-    root.innerHTML = `
-      <label class="field">
-        <span class="field__label">Compare amount</span>
-        <input class="field__input" type="number" min="0" step="0.01" value="100" inputmode="decimal" data-amount />
-      </label>
-      <div class="table-wrap" style="margin-top:1rem">
-        <table>
-          <thead><tr><th>Processor</th><th>Fee</th><th>Net</th><th>Effective</th></tr></thead>
-          <tbody data-body></tbody>
-        </table>
-      </div>`;
-
     const input = root.querySelector('[data-amount]');
     const body = root.querySelector('[data-body]');
 
-    const render = () => {
+    const render = (fromUser = false) => {
       const amount = Number(input.value) || 0;
       const rows = defaults
         .map((d) => {
@@ -232,33 +297,57 @@ const jsonLd = [
         </tr>`,
         )
         .join('');
+      if (fromUser) {
+        window.__feecalcTrack?.('compare_used', { amount });
+      }
     };
-    input.addEventListener('input', render);
-    render();
+    input.addEventListener('change', () => render(true));
+    input.addEventListener('input', () => render(false));
+    render(false);
   }
 </script>
 
-<style>
-  .field {
+<style is:global>
+  #compare-app .field {
     display: grid;
     gap: 0.35rem;
     max-width: 280px;
   }
-  .field__label {
+  #compare-app .field__label {
     font-weight: 600;
   }
-  .field__input {
+  #compare-app .field__input {
     min-height: 48px;
     border: 1px solid var(--color-border);
     border-radius: 8px;
     padding: 0.65rem 0.75rem;
-    font-size: 1rem;
+    font-size: max(1rem, 16px);
+    width: 100%;
+    background: #fff;
   }
-  .table-wrap {
+  #compare-app .table-wrap {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
   }
-  .muted {
+  #compare-app .muted {
     font-size: 0.85rem;
     color: var(--color-ink-muted);
+  }
+  #compare-app td a,
+  .table-wrap td a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
   }
 </style>

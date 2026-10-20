@@ -1,22 +1,19 @@
 ---
+/**
+ * Legacy URL — content folded into /methodology/. Kept noindex; _redirects issues 301.
+ */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
-  title="Fee update process (summary)"
-  description="Public summary of how FeeCalc Tools updates payment fee schedules and verification dates."
-  canonicalPath="/docs-fee-update/"
+  title="Fee update process"
+  description="Fee update process has moved to the methodology page."
+  canonicalPath="/methodology/"
+  noindex
 >
-  <h1>Fee update process</h1>
-  <p class="answer-first">
-    Maintainers update <code>src/data/fees.ts</code>, refresh last-verified dates, run unit tests, and note material
-    changes in page “Last updated” fields. Full checklist lives in the repo at <code>docs/FEE-UPDATE.md</code>.
+  <h1>Moved to methodology</h1>
+  <p>
+    The fee update process is now part of <a href="/methodology/">Methodology</a>.
   </p>
-  <ol>
-    <li>Open the official pricing URL for the schedule.</li>
-    <li>Update percent, fixed, currency, notes, sourceUrl, lastVerified.</li>
-    <li>Bump <code>FEE_DATA_VERSION</code> / <code>FEE_DATA_UPDATED</code> when material.</li>
-    <li>Run <code>npm test</code> and <code>npm run build</code>.</li>
-  </ol>
-  <p>See also <a href="/methodology/">methodology</a>.</p>
+  <meta http-equiv="refresh" content="0;url=/methodology/" />
 </BaseLayout>

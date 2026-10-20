@@ -1,49 +1,44 @@
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
 
-export const GET: APIRoute = () => {
-  const body = `# ${siteConfig.siteName} robots.txt
-# Allow search and AI-answer crawlers. Training crawlers: currently allowed;
-# flip to Disallow if you prefer not to contribute to model training.
-# Google Search is unaffected by GPTBot / Google-Extended / ClaudeBot / CCBot choices.
-
-User-agent: *
-Allow: /
+const disallowBlock = `Allow: /
 Disallow: /api/
 Disallow: /*?utm_
-Disallow: /embed/
+Disallow: /embed/`;
 
-# AI search / answer engines (allow to be cited)
+export const GET: APIRoute = () => {
+  // Per-bot groups must repeat Disallows — Google uses only the most specific group.
+  // Listing Allow-only groups would cancel the * Disallows for those bots.
+  const body = `# ${siteConfig.siteName} robots.txt
+# Search and AI-answer crawlers. Training crawlers allowed via same Disallow set.
+# Flip training agents to Disallow if you prefer not to contribute to model training.
+
+User-agent: *
+${disallowBlock}
+
 User-agent: OAI-SearchBot
-Allow: /
+${disallowBlock}
 
 User-agent: ChatGPT-User
-Allow: /
+${disallowBlock}
 
 User-agent: PerplexityBot
-Allow: /
+${disallowBlock}
 
 User-agent: Claude-SearchBot
-Allow: /
+${disallowBlock}
 
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-# AI model training (documented choice: allow)
 User-agent: GPTBot
-Allow: /
+${disallowBlock}
 
 User-agent: Google-Extended
-Allow: /
+${disallowBlock}
 
 User-agent: ClaudeBot
-Allow: /
+${disallowBlock}
 
 User-agent: CCBot
-Allow: /
+${disallowBlock}
 
 Sitemap: ${siteConfig.siteUrl}/sitemap-index.xml
 `;

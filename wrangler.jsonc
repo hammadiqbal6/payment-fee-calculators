@@ -2,17 +2,26 @@
  * Pure static-assets Worker (no Astro Cloudflare adapter, no bindings).
  * Workers Builds: npm run build → npx wrangler deploy && node scripts/indexnow.mjs
  * (IndexNow ping must run after deploy so public/<key>.txt is live.)
+ *
+ * Build-time env (Workers Builds → Variables, same as PUBLIC_SITE_URL):
+ *   PUBLIC_SITE_URL, PUBLIC_SITE_URL_PAYMENT_FEES, PUBLIC_SITE_URL_BUSINESS_DOCS,
+ *   PUBLIC_SITE_URL_HOME_GARDEN, PUBLIC_SITE_URL_FIBER_ARTS, PUBLIC_SITE_URL_PET
+ * Astro inlines these during `npm run build`; runtime Worker vars are not used for URLs.
  */
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "payment-fee-calculators",
   // Current date at config authoring; bump when adopting new runtime APIs
   "compatibility_date": "2026-10-19",
+  // Worker issues 308 trailing-slash redirects before assets (html_handling alone uses 307)
+  "main": "src/worker.ts",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true,
     // Astro SSG with src/pages/404.astro → dist/404.html
     "not_found_handling": "404-page",
-    // Matches astro.config trailingSlash: 'always'
+    // Matches astro.config trailingSlash: 'always' (slash redirects handled in worker as 308)
     "html_handling": "force-trailing-slash"
   }
 }

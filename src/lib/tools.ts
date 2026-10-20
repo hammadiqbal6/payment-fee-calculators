@@ -15,17 +15,17 @@ export type ToolMeta = {
 
 const keywordMap: Record<string, { title: string; description: string; primaryKeyword: string; h1: string; related: string[] }> = {
   stripe: {
-    title: 'Stripe Fee Calculator (US, UK, EU & More)',
+    title: 'Stripe Fee Calculator 2026: US, UK, EU & Reverse Fees',
     description:
-      'Calculate Stripe fees for US, UK, Canada, Australia, EU cards, international, Connect and Invoicing. Forward and reverse: how much to charge to receive a net amount.',
+      'Free Stripe fee calculator: see the 2.9% + 30¢ fee and your net payout, or work backward to the price to charge. Covers US, UK, EU, Connect and Invoicing.',
     primaryKeyword: 'stripe fee calculator',
     h1: 'Stripe Fee Calculator',
     related: ['paypal', 'square', 'shopify', 'comparison'],
   },
   paypal: {
-    title: 'PayPal Fee Calculator (G&S, F&F, International)',
+    title: 'PayPal Fee Calculator 2026: G&S, Friends & International',
     description:
-      'PayPal fee calculator for Goods & Services, Friends & Family, international, UK, AUD, India and micropayments. Forward and reverse fees.',
+      'Calculate PayPal Goods & Services, Friends & Family and international fees. See what you keep, or find how much to invoice to receive an exact amount.',
     primaryKeyword: 'paypal fee calculator',
     h1: 'PayPal Fee Calculator',
     related: ['stripe', 'venmo', 'square', 'comparison'],
@@ -55,11 +55,11 @@ const keywordMap: Record<string, { title: string; description: string; primaryKe
     related: ['venmo', 'zelle', 'paypal', 'comparison'],
   },
   zelle: {
-    title: 'Zelle Fees Explained – Free Transfer Notes',
+    title: 'Does Zelle Charge Fees? Zelle Fee Calculator & Limits',
     description:
-      'Zelle is usually free through banks. See typical zero-fee transfers, credit-card caveats, send limits notes, and compare with Venmo and Cash App.',
-    primaryKeyword: 'zelle fees',
-    h1: 'Zelle Fees Calculator & Notes',
+      'Zelle is usually free through your bank. See when fees can apply, typical send limits, and how Zelle compares with Venmo and Cash App on the same payment.',
+    primaryKeyword: 'does zelle charge fees',
+    h1: 'Does Zelle Charge Fees?',
     related: ['venmo', 'cashapp', 'wise', 'comparison'],
   },
   patreon: {
@@ -73,7 +73,7 @@ const keywordMap: Record<string, { title: string; description: string; primaryKe
   kofi: {
     title: 'Ko-fi Fee Calculator – Donations & Shop',
     description:
-      'Calculate Ko-fi free plan and Gold fees on donations and shop sales. Forward and reverse calculators with dated fee schedule sources.',
+      'Calculate Ko-fi free plan and Gold fees on donations and shop sales. See payout timing notes, forward and reverse net math, and dated schedule sources.',
     primaryKeyword: 'ko-fi fee calculator',
     h1: 'Ko-fi Fee Calculator',
     related: ['bmac', 'patreon', 'gumroad', 'comparison'],
@@ -81,7 +81,7 @@ const keywordMap: Record<string, { title: string; description: string; primaryKe
   bmac: {
     title: 'Buy Me a Coffee Fee Calculator',
     description:
-      'Estimate Buy Me a Coffee platform and processing fees on tips and memberships. See net earnings and reverse pricing in seconds.',
+      'Estimate Buy Me a Coffee platform and processing fees on tips and memberships. See net earnings, chargeback notes, and reverse pricing in seconds.',
     primaryKeyword: 'buy me a coffee fee calculator',
     h1: 'Buy Me a Coffee Fee Calculator',
     related: ['kofi', 'patreon', 'gumroad', 'comparison'],
@@ -89,7 +89,7 @@ const keywordMap: Record<string, { title: string; description: string; primaryKe
   gumroad: {
     title: 'Gumroad Fee Calculator – What You Keep',
     description:
-      'Calculate Gumroad direct sales fees (platform + processing estimate). Find net payout and the price to set to receive a target amount.',
+      'Calculate Gumroad direct sales fees (platform + processing estimate). Find net payout and the price to set to receive a target amount after fees.',
     primaryKeyword: 'gumroad fee calculator',
     h1: 'Gumroad Fee Calculator',
     related: ['shopify', 'patreon', 'stripe', 'comparison'],
@@ -117,9 +117,9 @@ export const comparisonTool: ToolMeta = {
   slug: 'compare-payment-fees',
   path: '/tools/compare-payment-fees/',
   name: 'Fee Comparison',
-  title: 'Payment Processor Fee Comparison Calculator',
+  title: 'Payment Processor Fee Comparison: Stripe vs PayPal & More',
   description:
-    'Compare Stripe, PayPal, Square, Venmo, Cash App, Shopify Payments, Gumroad, Patreon, Ko-fi and Wise fees on the same amount. Free side-by-side calculator.',
+    'Compare Stripe, PayPal, Square, Venmo, Cash App, Shopify and Wise fees side by side on any amount. Free calculator ranks processors by fee and net payout.',
   primaryKeyword: 'payment processor fee comparison',
   h1: 'Payment Processor Fee Comparison',
   category: 'processor',

@@ -12,7 +12,10 @@ export default defineConfig({
   compressHTML: true,
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/embed/'),
+      filter: (page) =>
+        !page.includes('/embed/') &&
+        !page.includes('/docs-fee-update/') &&
+        !page.includes('/authors/'),
       changefreq: undefined,
       priority: undefined,
       lastmod: new Date(),

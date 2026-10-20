@@ -43,8 +43,10 @@ for (const [route, html] of pages) {
   }
 }
 
+const redirectStubs = new Set(['/authors/', '/docs-fee-update/']);
 for (const route of allRoutes) {
   if (route === '/404/') continue;
+  if (redirectStubs.has(route)) continue;
   if (!linked.has(route)) errors.push(`orphan page: ${route}`);
 }
 
