@@ -33,6 +33,15 @@ const jsonLd = [
       { '@type': 'ListItem', position: 3, name: guide.title, item: siteConfig.siteUrl + path },
     ],
   },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: guide.faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
 ];
 ---
 

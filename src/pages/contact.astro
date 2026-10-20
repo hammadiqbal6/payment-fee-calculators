@@ -5,21 +5,33 @@ import { siteConfig } from '@/config/site';
 
 <BaseLayout
   title="Contact"
-  description={`Contact ${siteConfig.siteName} about fee corrections, partnerships, or privacy questions.`}
+  description={`Contact ${siteConfig.siteName} about fee corrections, partnerships, privacy questions, or press. Include official pricing URLs for rate fixes.`}
   canonicalPath="/contact/"
 >
   <h1>Contact</h1>
   <p class="answer-first">
     Email us at <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>. For fee corrections, include
-    the processor, country, screenshot or URL, and the date you observed the rate.
+    the processor, country, screenshot or URL, and the date you observed the rate. We usually reply within a few business
+    days.
   </p>
   <h2>What to include</h2>
   <ul>
-    <li>Tool page URL</li>
+    <li>Tool page URL (for example the Stripe fee calculator page)</li>
     <li>Expected vs displayed fee</li>
     <li>Link to the official pricing page</li>
+    <li>Country or currency if it differs from the US default schedule</li>
   </ul>
-  <p>We do not provide personalized financial, tax, or legal advice.</p>
+  <h2>Other topics</h2>
+  <p>
+    Partnerships, embed attribution questions, privacy requests, and press inquiries can use the same address. We do not
+    provide personalized financial, tax, or legal advice — only corrections to published schedules and product feedback.
+  </p>
+  <p>
+    Maintainer: <a href="/authors/">{siteConfig.authorName}</a> · GitHub:{' '}
+    <a href={siteConfig.authorGithub} rel="noopener noreferrer" target="_blank">
+      {siteConfig.authorGithub.replace('https://', '')}
+    </a>
+  </p>
   <!-- Static form-ready markup for hosts that add a form backend later -->
   <form class="contact-form" action={`mailto:${siteConfig.contactEmail}`} method="post" enctype="text/plain">
     <label class="field">

@@ -6,6 +6,8 @@ export const GET: APIRoute = () => {
 # Allow search and AI-answer crawlers. Training crawlers: currently allowed;
 # flip to Disallow if you prefer not to contribute to model training.
 # Google Search is unaffected by GPTBot / Google-Extended / ClaudeBot / CCBot choices.
+# Do not add User-agent: Googlebot / Bingbot groups with only Allow: / — that would
+# cancel the Disallow rules under User-agent: * for those bots.
 
 User-agent: *
 Allow: /
@@ -24,12 +26,6 @@ User-agent: PerplexityBot
 Allow: /
 
 User-agent: Claude-SearchBot
-Allow: /
-
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
 Allow: /
 
 # AI model training (documented choice: allow)

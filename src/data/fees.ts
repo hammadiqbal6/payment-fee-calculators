@@ -333,7 +333,8 @@ export const processors: ProcessorSchedule[] = [
     name: 'Zelle',
     slug: 'zelle-fee-calculator',
     category: 'p2p',
-    description: 'Zelle person-to-person transfers (usually free; bank limits apply).',
+    description:
+      'Does Zelle charge fees? Usually no network fee through your bank — see limits, credit-funding caveats, and P2P comparisons.',
     disclaimer:
       'Zelle is typically free through participating banks. This page documents common bank behaviors — not a processing fee schedule.',
     rates: [

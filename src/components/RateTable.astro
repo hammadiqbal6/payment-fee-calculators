@@ -8,7 +8,8 @@ interface Props {
 const { processor } = Astro.props;
 ---
 
-<div class="table-wrap">
+<div class="table-wrap table-wrap--hint">
+  <p class="table-hint" aria-hidden="true">Swipe →</p>
   <table>
     <caption>
       {processor.name} fee schedules (data version shown on page; verify on source links)
@@ -55,6 +56,7 @@ const { processor } = Astro.props;
   .table-wrap {
     overflow-x: auto;
     margin-bottom: 1.5rem;
+    -webkit-overflow-scrolling: touch;
   }
   caption {
     text-align: left;
@@ -66,5 +68,10 @@ const { processor } = Astro.props;
     font-size: 0.85rem;
     color: var(--color-ink-muted);
     margin-top: 0.25rem;
+  }
+  td a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 </style>

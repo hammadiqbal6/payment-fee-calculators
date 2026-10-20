@@ -41,7 +41,7 @@ const defaultRate = processor.defaultRateId;
       <select name="rate" data-rate class="field__input" aria-describedby={`rate-help-${processor.id}`}>
         {processor.rates.map((r) => (
           <option value={r.id} selected={r.id === defaultRate}>
-            {r.label} ({(r.percent * 100).toFixed(2)}% + {r.fixed.toFixed(2)} {r.currency})
+            {r.label}
           </option>
         ))}
       </select>

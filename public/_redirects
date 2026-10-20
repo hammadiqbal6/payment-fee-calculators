@@ -2,3 +2,9 @@
 # Host-level www↔apex redirects stay at DNS/CDN (see docs/DEPLOYMENT.md)
 
 /sitemap.xml /sitemap-index.xml 301
+/docs-fee-update /methodology/ 301
+/docs-fee-update/ /methodology/ 301
+/guides/what-does-ebay-not-cover /guides/hidden-payment-fees/ 301
+/guides/what-does-ebay-not-cover/ /guides/hidden-payment-fees/ 301
+/guides/how-much-to-charge-to-receive-100 /guides/how-to-price-after-fees/ 301
+/guides/how-much-to-charge-to-receive-100/ /guides/how-to-price-after-fees/ 301

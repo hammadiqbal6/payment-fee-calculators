@@ -16,12 +16,12 @@ export const guides: Guide[] = [
     slug: 'how-to-price-after-fees',
     title: 'How to Price After Payment Fees (Reverse Calculator Guide)',
     description:
-      'Learn the reverse fee formula so your invoice still nets the amount you need after Stripe, PayPal, Square or creator platform fees.',
+      'Learn the reverse fee formula so your invoice still nets what you need after Stripe, PayPal, Square or creator fees — including how much to charge to receive $100.',
     primaryKeyword: 'how to price after payment fees',
     published: '2026-10-19',
-    modified: '2026-10-19',
+    modified: '2026-10-20',
     answerFirst:
-      'To receive a target net after percent-plus-fixed fees, charge (desiredNet + fixed) ÷ (1 − percent). For Stripe US (2.9% + $0.30) to net $100, charge about $103.30. Always verify your live rate.',
+      'To receive a target net after percent-plus-fixed fees, charge (desiredNet + fixed) ÷ (1 − percent). Approximate charges to receive $100: Stripe US ≈ $103.30; PayPal US G&S ≈ $104.14; Square online ≈ $103.30; Gumroad blended ≈ $115.73. Always verify your live rate in each calculator.',
     sections: [
       {
         h2: 'Why reverse math matters',
@@ -33,7 +33,9 @@ export const guides: Guide[] = [
       },
       {
         h2: 'Step-by-step',
-        paragraphs: ['Use any calculator on this site in “Charge to receive X” mode.'],
+        paragraphs: [
+          'Use any calculator on this site in “Charge to receive X” mode — for example the Stripe fee calculator or PayPal fee calculator.',
+        ],
         list: [
           'Decide the net you need after processing (and platform) fees.',
           'Select the correct country/channel schedule.',
@@ -43,11 +45,26 @@ export const guides: Guide[] = [
         ],
       },
       {
+        h2: 'How much to charge to receive $100',
+        paragraphs: [
+          'Open any tool, switch to “Charge to receive X”, enter 100, and pick your schedule. Share links keep mode, rate, and amount in the query string for teammates.',
+          'Approximate list prices to net $100 on common defaults: Stripe US ≈ $103.30; PayPal US G&S ≈ $104.14; Square online ≈ $103.30; Gumroad blended direct ≈ $115.73; Patreon Pro blended ≈ $112.47.',
+          'For team rate cards, screenshot the result and note the fee data version shown on the page so quotes stay auditable. Doubling the desired net does not exactly double the charge when a fixed fee exists — re-run the calculator rather than multiplying a $100 result by 10.',
+        ],
+      },
+      {
         h2: 'Worked examples',
         paragraphs: [
           'PayPal US G&S (3.49% + $0.49) to net $100 → charge ≈ $104.14. Square online at 2.9% + $0.30 matches Stripe’s US online shape on the same $100 net target.',
           'Creator example: if you need $1,000/month net on Patreon Pro blended estimates, reverse-calculate the pledge total, then divide by patron count to see required average pledge.',
           'P2P example: Venmo Business at 1.9% + $0.10 to net $250 → charge ≈ $255.05. If you also instant-transfer out, model that second fee separately.',
+        ],
+      },
+      {
+        h2: 'Why fixed fees hurt small invoices',
+        paragraphs: [
+          'A $0.30–$0.49 fixed fee is 3–5% on a $10 invoice but minor on $500. Bundle work or set minimum invoices when fixed fees dominate.',
+          'International schedules change the percent. A domestic $103.30 target can become meaningfully higher with cross-border fees.',
         ],
       },
       {
@@ -71,6 +88,14 @@ export const guides: Guide[] = [
         q: 'What if my processor gave me custom pricing?',
         a: 'Use the closest schedule then adjust the percent/fixed mentally, or ask us to document a custom note. Custom rates beat public list rates for many growing accounts.',
       },
+      {
+        q: 'Do these numbers include sales tax?',
+        a: 'No. Tax collection is separate from processor fees.',
+      },
+      {
+        q: 'Can I bookmark a pre-filled calculator?',
+        a: 'Yes. Share links include mode, rate, and amount. Canonical tags still point at the clean tool URL for SEO.',
+      },
     ],
     relatedTools: ['stripe', 'paypal', 'gumroad', 'comparison'],
   },
@@ -78,10 +103,10 @@ export const guides: Guide[] = [
     slug: 'stripe-vs-paypal-fees',
     title: 'Stripe vs PayPal Fees in 2026: Which Costs Less?',
     description:
-      'Compare typical US online Stripe and PayPal Goods & Services fees, international add-ons, and when each processor wins.',
+      'Compare typical US online Stripe and PayPal Goods & Services fees, international add-ons, and when each processor wins — then model your cart in the comparison tool.',
     primaryKeyword: 'stripe vs paypal fees',
     published: '2026-10-19',
-    modified: '2026-10-19',
+    modified: '2026-10-20',
     answerFirst:
       'On a standard US online card payment, Stripe’s common 2.9% + $0.30 is usually cheaper than PayPal’s common 3.49% + $0.49 Goods & Services rate. PayPal can still win for buyer familiarity, certain buyer segments, or when you already hold PayPal balances.',
     sections: [
@@ -89,13 +114,13 @@ export const guides: Guide[] = [
         h2: '$100 example',
         paragraphs: [
           'Stripe US: fee $3.20, net $96.80. PayPal US G&S: fee about $3.98, net about $96.02. Difference ≈ $0.78 per $100 — material at volume.',
-          'At $50,000/month processed, that gap is hundreds of dollars before disputes, FX, or custom pricing. Use the comparison calculator with your average order value, not only $100 demos.',
+          'At $50,000/month processed, that gap is hundreds of dollars before disputes, FX, or custom pricing. Use the payment processor fee comparison calculator with your average order value, not only $100 demos — then return here for the strategic tradeoffs.',
         ],
       },
       {
         h2: 'International and FX',
         paragraphs: [
-          'Both add costs for cross-border cards or currency conversion. Model the international schedules in each calculator rather than assuming domestic rates.',
+          'Both add costs for cross-border cards or currency conversion. Model the international schedules in the Stripe fee calculator and PayPal fee calculator rather than assuming domestic rates.',
           'If you invoice in USD but customers pay in other currencies, compare total customer cost and your settlement currency carefully. Sometimes Wise payouts beat holding multi-currency balances in a wallet.',
         ],
       },
@@ -117,6 +142,10 @@ export const guides: Guide[] = [
         q: 'Can I offer both?',
         a: 'Yes. Many stores offer Stripe (cards) and PayPal as a wallet option. Track effective blended fee in your books.',
       },
+      {
+        q: 'Where can I compare more than two processors?',
+        a: 'Use the side-by-side payment processor fee comparison tool for Square, Venmo, Shopify, Gumroad and more on the same amount.',
+      },
     ],
     relatedTools: ['stripe', 'paypal', 'comparison'],
   },
@@ -134,7 +163,7 @@ export const guides: Guide[] = [
       {
         h2: 'When Ko-fi Gold pays for itself',
         paragraphs: [
-          'If monthly donation volume is high, removing a 5% platform cut can exceed the Gold subscription quickly. Plug your monthly tips into the Ko-fi calculator to estimate.',
+          'If monthly donation volume is high, removing a 5% platform cut can exceed the Gold subscription quickly. Plug your monthly tips into the Ko-fi fee calculator to estimate.',
           'Example: $800/month in tips × 5% = $40 platform commission. If Gold costs less than that, the switch is arithmetic — then confirm current Gold pricing on Ko-fi.',
         ],
       },
@@ -165,20 +194,20 @@ export const guides: Guide[] = [
     relatedTools: ['patreon', 'kofi', 'bmac'],
   },
   {
-    slug: 'what-does-ebay-not-cover',
+    slug: 'hidden-payment-fees',
     title: 'Payment Fees Freelancers Forget to Budget',
     description:
       'Beyond the headline percent: instant payouts, currency conversion, chargebacks, platform commissions and fixed per-transaction fees.',
     primaryKeyword: 'hidden payment processing fees',
     published: '2026-10-19',
-    modified: '2026-10-19',
+    modified: '2026-10-20',
     answerFirst:
       'Headline percent fees are only part of take-home pay. Instant deposits, FX conversion, chargebacks, platform commissions, and fixed per-transaction fees can erase freelancer margins if you price only on the sticker rate.',
     sections: [
       {
         h2: 'Instant payouts',
         paragraphs: [
-          'Venmo and Cash App instant transfers charge their own percent. Wire that into reverse pricing if clients expect same-day cash-out.',
+          'Venmo and Cash App instant transfers charge their own percent. Wire that into reverse pricing if clients expect same-day cash-out — try the Venmo fee calculator and Cash App fee calculator.',
           'If you can wait for standard deposits, you often keep more. Teach clients your payout schedule up front.',
         ],
       },
@@ -205,7 +234,7 @@ export const guides: Guide[] = [
     faqs: [
       {
         q: 'Are Zelle transfers really free?',
-        a: 'Usually yes at participating banks, but they are not a full merchant stack with buyer protection.',
+        a: 'Usually yes at participating banks, but they are not a full merchant stack with buyer protection. See Does Zelle charge fees? for limits and caveats.',
       },
       {
         q: 'Where should freelancers start?',
@@ -213,49 +242,5 @@ export const guides: Guide[] = [
       },
     ],
     relatedTools: ['venmo', 'cashapp', 'wise', 'gumroad'],
-  },
-  {
-    slug: 'how-much-to-charge-to-receive-100',
-    title: 'How Much to Charge to Receive $100 After Fees',
-    description:
-      'Reverse fee examples: how much to invoice to receive $100 after Stripe, PayPal, Square, Gumroad and Patreon fees.',
-    primaryKeyword: 'how much to charge to receive 100 after fees',
-    published: '2026-10-19',
-    modified: '2026-10-19',
-    answerFirst:
-      'Approximate charges to receive $100: Stripe US ≈ $103.30; PayPal US G&S ≈ $104.14; Square online ≈ $103.30; Gumroad blended direct ≈ $115.73; Patreon Pro blended ≈ $112.47. Confirm with each calculator and live provider pricing.',
-    sections: [
-      {
-        h2: 'Use the calculators',
-        paragraphs: [
-          'Open any tool, switch to “Charge to receive X”, enter 100, and pick your schedule. Share links keep mode, rate, and amount in the query string for teammates.',
-          'For team rate cards, screenshot the result and note the fee data version shown on the page so quotes stay auditable.',
-        ],
-      },
-      {
-        h2: 'Why fixed fees hurt small invoices',
-        paragraphs: [
-          'A $0.30–$0.49 fixed fee is 3–5% on a $10 invoice but minor on $500. Bundle work or set minimum invoices when fixed fees dominate.',
-        ],
-      },
-      {
-        h2: 'Scaling the $100 example',
-        paragraphs: [
-          'The reverse formula is linear in the percent term plus fixed. Doubling the desired net does not exactly double the charge when a fixed fee exists — re-run the calculator rather than multiplying a $100 result by 10.',
-          'International schedules change the percent. A domestic $103.30 target can become meaningfully higher with cross-border fees.',
-        ],
-      },
-    ],
-    faqs: [
-      {
-        q: 'Do these numbers include sales tax?',
-        a: 'No. Tax collection is separate from processor fees.',
-      },
-      {
-        q: 'Can I bookmark a pre-filled calculator?',
-        a: 'Yes. Share links include mode, rate, and amount. Canonical tags still point at the clean tool URL for SEO.',
-      },
-    ],
-    relatedTools: ['stripe', 'paypal', 'square', 'gumroad', 'patreon'],
   },
 ];

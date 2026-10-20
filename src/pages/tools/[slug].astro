@@ -7,7 +7,7 @@ import Disclaimer from '@/components/Disclaimer.astro';
 import { processors } from '@/data/fees';
 import { toolContent } from '@/data/toolContent';
 import { toolDepth } from '@/data/toolDepth';
-import { getToolMeta, getRelatedTools } from '@/lib/tools';
+import { getToolMeta, getRelatedTools, comparisonTool } from '@/lib/tools';
 import { siteConfig } from '@/config/site';
 import { FEE_DATA_UPDATED, FEE_DATA_VERSION } from '@/data/fees';
 import { calculateForward, calculateReverse, formatMoney } from '@/lib/fees/calculate';
@@ -28,6 +28,7 @@ const sampleForward = calculateForward(100, defaultRate);
 const sampleReverse = calculateReverse(100, defaultRate);
 const modified = FEE_DATA_UPDATED;
 const published = '2026-10-19';
+const comparePeers = related.filter((t) => t.id !== 'comparison').slice(0, 3);
 
 const jsonLd = [
   {
@@ -46,8 +47,9 @@ const jsonLd = [
     description: meta.description,
     dateModified: modified,
     author: {
-      '@type': 'Organization',
-      name: siteConfig.siteName,
+      '@type': 'Person',
+      name: siteConfig.authorName,
+      url: siteConfig.siteUrl + '/authors/',
     },
   },
   {
@@ -69,6 +71,15 @@ const jsonLd = [
       },
     ],
   },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: content.faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
 ];
 ---
 
@@ -89,21 +100,38 @@ const jsonLd = [
   <h1>{meta.h1}</h1>
   <p class="lead">{processor.description}</p>
 
-  <div class="meta-row">
-    <span>Last updated: <time datetime={modified}>{modified}</time></span>
-    <span>Fee data version: {FEE_DATA_VERSION}</span>
-    <span>Author: <a href="/authors/">{siteConfig.authorName}</a></span>
-  </div>
-
-  <Disclaimer />
-
   <section class="hero-tool" aria-label="Calculator">
     <FeeCalculator processor={processor} />
   </section>
 
+  <div class="meta-row meta-row--compact">
+    <span>
+      Verified against official sources · Updated <time datetime={modified}>{modified}</time> · v{FEE_DATA_VERSION} ·
+      <a href="/authors/">{siteConfig.authorName}</a>
+    </span>
+  </div>
+
+  <Disclaimer compact />
+
   <AdSlot slot={`${processor.id}-top`} />
 
   <p class="answer-first">{content.answerFirst}</p>
+
+  <figure class="content-figure">
+    <img
+      src="/images/fee-breakdown.svg"
+      width="720"
+      height="360"
+      alt={`${processor.name} fee breakdown: customer charge minus percent-plus-fixed fee equals net payout`}
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption>
+      On {formatMoney(100, defaultRate.currency)} charged at the default schedule: fee{' '}
+      {formatMoney(sampleForward.fee, defaultRate.currency)}, net{' '}
+      {formatMoney(sampleForward.net, defaultRate.currency)}.
+    </figcaption>
+  </figure>
 
   <div class="takeaways">
     <h2>Key takeaways</h2>
@@ -118,7 +146,8 @@ const jsonLd = [
       </li>
       <li>
         To receive {formatMoney(100, defaultRate.currency)}: charge about{' '}
-        {formatMoney(sampleReverse.charge, defaultRate.currency)}
+        {formatMoney(sampleReverse.charge, defaultRate.currency)}. See the
+        <a href="/guides/how-to-price-after-fees/"> reverse fee pricing guide</a>.
       </li>
     </ul>
   </div>
@@ -135,6 +164,10 @@ const jsonLd = [
   <p>{content.workedExample.body}</p>
 
   <h2>{processor.name} fee schedules we track</h2>
+  <p class="verified-line">
+    Last verified against each official URL on the date in the table (dataset {FEE_DATA_VERSION}, updated{' '}
+    {FEE_DATA_UPDATED}).
+  </p>
   <RateTable processor={processor} />
 
   {
@@ -177,6 +210,16 @@ const jsonLd = [
     }
   </div>
 
+  <h2>Compare with…</h2>
+  <div class="related">
+    {comparePeers.map((t) => (
+      <a href={t.path}>
+        {t.name} fee calculator
+      </a>
+    ))}
+    <a href={comparisonTool.path}>Side-by-side fee comparison</a>
+  </div>
+
   <h2>Embed this calculator</h2>
   <p>
     Add an iframe to your site (please keep the credit link). Example:
@@ -188,6 +231,7 @@ const jsonLd = [
   <div class="related">
     {related.map((t) => <a href={t.path}>{t.h1}</a>)}
     <a href="/guides/">Fee guides & explainers</a>
+    <a href="/guides/how-to-price-after-fees/">How to price after fees</a>
   </div>
 
   <AdSlot slot={`${processor.id}-bottom`} format="rectangle" />
@@ -198,8 +242,7 @@ const jsonLd = [
       <a href="/methodology/">how we verify fees</a>
     </p>
     <p>
-      <strong>Sources:</strong> official pricing pages linked in the table above (last verified dates per row). See also{' '}
-      <a href="/docs-fee-update/">fee update process</a>.
+      <strong>Sources:</strong> official pricing pages linked in the table above (last verified dates per row).
     </p>
   </section>
 </BaseLayout>
@@ -211,5 +254,9 @@ const jsonLd = [
     padding: 0.85rem;
     border-radius: 8px;
     font-size: 0.85rem;
+  }
+  .verified-line {
+    font-size: 0.9rem;
+    color: var(--color-ink-muted);
   }
 </style>

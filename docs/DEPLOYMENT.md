@@ -223,7 +223,13 @@ Cloudflare Pages, Vercel, and Netlify issue **free TLS certificates** automatica
 
 ### Trailing slashes
 
-`astro.config.mjs` sets `trailingSlash: 'always'`. URLs look like `/tools/stripe-fee-calculator/`. Configure redirects on the host so `/path` and `/path/` do not both index as duplicates (Pages often normalizes; verify in GSC).
+`astro.config.mjs` sets `trailingSlash: 'always'`. URLs look like `/tools/stripe-fee-calculator/`.
+
+On the current **Workers static assets** deploy (`wrangler.jsonc` → `html_handling: "force-trailing-slash"`), Cloudflare issues a **307** from `/path` → `/path/`. Prefer a **301/308** for consolidation when the host allows it (Cloudflare Pages project redirects, or a thin Worker wrapper). Canonical tags already point at the slash form, so indexing risk is low even while the hop stays 307. Verify in GSC after changing host settings.
+
+### Custom domain note (workers.dev)
+
+`*.workers.dev` is fine for previews. Before investing in links and brand SEO, attach a custom domain in the Cloudflare dashboard and set `PUBLIC_SITE_URL` to that origin, then rebuild so canonicals and the sitemap match.
 
 ---
 

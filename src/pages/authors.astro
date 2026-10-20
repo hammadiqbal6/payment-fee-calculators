@@ -5,19 +5,45 @@ import { siteConfig } from '@/config/site';
 
 <BaseLayout
   title="Authors & reviewers"
-  description="Editorial contacts who maintain FeeCalc Tools fee schedules and calculator explainers."
+  description={`Meet ${siteConfig.authorName}, the editor who maintains FeeCalc Tools fee schedules, calculator copy, and verification dates.`}
   canonicalPath="/authors/"
 >
   <h1>Authors & reviewers</h1>
   <p class="answer-first">
     {siteConfig.authorName} maintains fee schedules, calculator copy, and verification dates for {siteConfig.siteName}.
+    Every processor page lists last-verified dates against official pricing URLs.
   </p>
   <h2>{siteConfig.authorName}</h2>
   <p>{siteConfig.authorBio}</p>
   <p>
-    Role: editor & fee data maintainer. Focus: payment processor pricing pages, creator platform fee policies, and clear
-    worked examples for freelancers and small businesses.
+    Role: editor & fee data maintainer. Focus: payment processor pricing pages, creator platform fee policies, reverse
+    pricing explainers for freelancers and small businesses, and keeping mobile-friendly calculators accurate.
   </p>
-  <p>Contact: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a></p>
-  <p>Related: <a href="/methodology/">methodology</a> · <a href="/about/">about</a></p>
+  <ul>
+    <li>
+      GitHub:{' '}
+      <a href={siteConfig.authorGithub} rel="noopener noreferrer" target="_blank">
+        {siteConfig.authorGithub.replace('https://', '')}
+      </a>
+    </li>
+    {
+      siteConfig.authorLinkedIn && (
+        <li>
+          LinkedIn:{' '}
+          <a href={siteConfig.authorLinkedIn} rel="noopener noreferrer" target="_blank">
+            Profile
+          </a>
+        </li>
+      )
+    }
+    <li>
+      Email: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
+    </li>
+  </ul>
+  <h2>Editorial standards</h2>
+  <p>
+    We prefer primary sources (official pricing pages), label blended estimates when processing varies by country or
+    method, and never invent rates. See <a href="/methodology/">methodology</a> for the verification checklist.
+  </p>
+  <p>Related: <a href="/about/">about</a> · <a href="/contact/">contact</a></p>
 </BaseLayout>

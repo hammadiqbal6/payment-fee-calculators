@@ -35,6 +35,16 @@ const compareRows = comparisonOrder
     };
   });
 const compareRowsJson = JSON.stringify(compareRows);
+const faqs = [
+  {
+    q: 'Which payment processor has the lowest fees?',
+    a: 'It depends on average order value, country, and whether you need chargebacks protection. Zelle is often $0 but is not a full merchant stack. Compare with your real volume on this page, then open each calculator.',
+  },
+  {
+    q: 'Should creators use Gumroad or Stripe?',
+    a: 'Gumroad bundles storefront features with a higher take rate. Stripe is usually cheaper per payment if you already have a storefront. Run both calculators on your price point.',
+  },
+];
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -54,6 +64,15 @@ const jsonLd = [
       { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.siteUrl + '/' },
       { '@type': 'ListItem', position: 2, name: meta.h1, item: new URL(meta.path, siteConfig.siteUrl).toString() },
     ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
   },
 ];
 ---
@@ -75,26 +94,67 @@ const jsonLd = [
     Side-by-side default schedules on a ${amount} charge. Lower fee is not always better — consider protections, payout
     speed, and regional availability.
   </p>
-  <div class="meta-row">
-    <span>Last updated: <time datetime={FEE_DATA_UPDATED}>{FEE_DATA_UPDATED}</time></span>
-    <span>Data version: {FEE_DATA_VERSION}</span>
-  </div>
-  <Disclaimer />
 
   <section class="hero-tool" aria-label="Interactive comparison">
-    <div id="compare-app" data-compare-app data-rows={compareRowsJson}></div>
+    <div id="compare-app" data-compare-app data-rows={compareRowsJson}>
+      <label class="field">
+        <span class="field__label">Compare amount</span>
+        <input
+          class="field__input"
+          type="number"
+          min="0"
+          step="0.01"
+          value="100"
+          inputmode="decimal"
+          data-amount
+        />
+      </label>
+      <div class="table-wrap table-wrap--hint" style="margin-top:1rem">
+        <p class="table-hint" aria-hidden="true">Swipe →</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Processor</th>
+              <th>Fee</th>
+              <th>Net</th>
+              <th>Effective</th>
+            </tr>
+          </thead>
+          <tbody data-body></tbody>
+        </table>
+      </div>
+    </div>
   </section>
+
+  <div class="meta-row meta-row--compact">
+    <span>Updated <time datetime={FEE_DATA_UPDATED}>{FEE_DATA_UPDATED}</time> · v{FEE_DATA_VERSION}</span>
+  </div>
+  <Disclaimer compact />
 
   <AdSlot />
 
   <p class="answer-first">
     On a $100 charge using each product’s default schedule in our dated dataset, in-person or P2P options can look
     cheapest, while creator platforms with platform commissions cost more. Use the interactive table to change the amount
-    and sort by fee or net.
+    and sort by fee or net. For a narrative Stripe vs PayPal walkthrough, see our
+    <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal fees guide</a>.
   </p>
 
+  <figure class="content-figure">
+    <img
+      src="/images/fee-breakdown.svg"
+      width="720"
+      height="360"
+      alt="Diagram of a payment: customer charge splits into processor fee and seller net payout"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption>How percent-plus-fixed fees split a charge into fee vs net.</figcaption>
+  </figure>
+
   <h2>Static comparison at ${amount}</h2>
-  <div class="table-wrap">
+  <div class="table-wrap table-wrap--hint">
+    <p class="table-hint" aria-hidden="true">Swipe →</p>
     <table>
       <thead>
         <tr>
@@ -137,23 +197,16 @@ const jsonLd = [
 
   <h2>FAQ</h2>
   <div class="faq">
-    <details>
-      <summary>Which payment processor has the lowest fees?</summary>
-      <p>
-        It depends on average order value, country, and whether you need chargebacks protection. Zelle is often $0 but is
-        not a full merchant stack. Compare with your real volume on this page, then open each calculator.
-      </p>
-    </details>
-    <details>
-      <summary>Should creators use Gumroad or Stripe?</summary>
-      <p>
-        Gumroad bundles storefront features with a higher take rate. Stripe is usually cheaper per payment if you already
-        have a storefront. Run both calculators on your price point.
-      </p>
-    </details>
+    {
+      faqs.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))
+    }
   </div>
 
-  
   <h2>Reading the comparison table</h2>
   <p>
     The interactive table sorts by fee for the amount you enter using each product’s default schedule in our dated dataset.
@@ -176,6 +229,7 @@ const jsonLd = [
   <h2>Related tools</h2>
   <div class="related">
     {related.map((t) => <a href={t.path}>{t.h1}</a>)}
+    <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal fees guide</a>
   </div>
 </BaseLayout>
 
@@ -199,18 +253,6 @@ const jsonLd = [
   const root = document.querySelector('[data-compare-app]');
   if (root) {
     const defaults = JSON.parse(root.dataset.rows || '[]');
-    root.innerHTML = `
-      <label class="field">
-        <span class="field__label">Compare amount</span>
-        <input class="field__input" type="number" min="0" step="0.01" value="100" inputmode="decimal" data-amount />
-      </label>
-      <div class="table-wrap" style="margin-top:1rem">
-        <table>
-          <thead><tr><th>Processor</th><th>Fee</th><th>Net</th><th>Effective</th></tr></thead>
-          <tbody data-body></tbody>
-        </table>
-      </div>`;
-
     const input = root.querySelector('[data-amount]');
     const body = root.querySelector('[data-body]');
 
@@ -253,9 +295,8 @@ const jsonLd = [
     border-radius: 8px;
     padding: 0.65rem 0.75rem;
     font-size: 1rem;
-  }
-  .table-wrap {
-    overflow-x: auto;
+    width: 100%;
+    background: #fff;
   }
   .muted {
     font-size: 0.85rem;

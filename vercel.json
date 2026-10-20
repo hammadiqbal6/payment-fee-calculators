@@ -17,6 +17,28 @@
     }
   ],
   "redirects": [
-    { "source": "/sitemap.xml", "destination": "/sitemap-index.xml", "permanent": true }
+    { "source": "/sitemap.xml", "destination": "/sitemap-index.xml", "permanent": true },
+    { "source": "/docs-fee-update", "destination": "/methodology/", "permanent": true },
+    { "source": "/docs-fee-update/", "destination": "/methodology/", "permanent": true },
+    {
+      "source": "/guides/what-does-ebay-not-cover",
+      "destination": "/guides/hidden-payment-fees/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/what-does-ebay-not-cover/",
+      "destination": "/guides/hidden-payment-fees/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/how-much-to-charge-to-receive-100",
+      "destination": "/guides/how-to-price-after-fees/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/how-much-to-charge-to-receive-100/",
+      "destination": "/guides/how-to-price-after-fees/",
+      "permanent": true
+    }
   ]
 }

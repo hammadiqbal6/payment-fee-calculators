@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="title desc">
+  <title id="title">Payment fee breakdown</title>
+  <desc id="desc">Customer charge splits into processor fee and seller net payout</desc>
+  <rect width="720" height="360" fill="#f3f6f4"/>
+  <rect x="40" y="40" width="640" height="280" rx="16" fill="#ffffff" stroke="#d5e0da"/>
+  <text x="360" y="78" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#0b3d2e">How a charge splits</text>
+  <rect x="80" y="110" width="560" height="56" rx="10" fill="#145c45"/>
+  <text x="360" y="145" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#ffffff">Customer pays (charge)</text>
+  <path d="M360 166 v28" stroke="#0b3d2e" stroke-width="3"/>
+  <path d="M200 194 H520" stroke="#0b3d2e" stroke-width="3"/>
+  <path d="M200 194 v22" stroke="#0b3d2e" stroke-width="3"/>
+  <path d="M520 194 v22" stroke="#0b3d2e" stroke-width="3"/>
+  <rect x="80" y="216" width="240" height="64" rx="10" fill="#fff6e8" stroke="#e6c58a"/>
+  <text x="200" y="244" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#c45c26">Processor fee</text>
+  <text x="200" y="266" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#3d5248">% + fixed</text>
+  <rect x="400" y="216" width="240" height="64" rx="10" fill="#e8f0ec" stroke="#0b6b45"/>
+  <text x="520" y="244" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#0b6b45">You keep (net)</text>
+  <text x="520" y="266" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#3d5248">charge  fee</text>
+</svg>

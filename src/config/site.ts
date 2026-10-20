@@ -30,8 +30,8 @@ const siteUrl = env('PUBLIC_SITE_URL', DEFAULT_SITE_URL).replace(/\/$/, '');
 const siteName = env('PUBLIC_SITE_NAME', 'FeeCalc Tools');
 const contactEmail = env('PUBLIC_CONTACT_EMAIL', 'hammadiqbal117@gmail.com');
 
-const defaultAuthorName = `${siteName} Team`;
-const defaultAuthorBio = `${siteName} is built and maintained by an independent developer and small team. Fee schedules are taken from each payment processor’s published pricing pages and reviewed regularly. For questions or corrections, contact ${contactEmail}.`;
+const defaultAuthorName = 'Hammad Iqbal';
+const defaultAuthorBio = `${defaultAuthorName} builds and maintains ${siteName}. Fee schedules are taken from each payment processor’s published pricing pages, recorded with source URLs and last-verified dates, and re-checked when providers announce changes. For questions or corrections, contact ${contactEmail}.`;
 
 export const siteConfig = {
   /** Canonical site origin — no trailing slash */
@@ -40,13 +40,15 @@ export const siteConfig = {
   shortName: env('PUBLIC_SITE_SHORT_NAME', 'FeeCalc'),
   tagline: 'Free payment processor & creator fee calculators',
   description:
-    'Calculate Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify Payments and Wise fees. Forward and reverse calculators with dated fee schedules.',
+    'Free Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify and Wise fee calculators. Forward and reverse math with dated schedules.',
   locale: 'en_US',
   language: 'en',
   contactEmail,
   authorName: env('PUBLIC_AUTHOR_NAME', defaultAuthorName),
   authorBio: env('PUBLIC_AUTHOR_BIO', defaultAuthorBio),
-  authorUrl: '/about/',
+  authorUrl: '/authors/',
+  authorGithub: env('PUBLIC_AUTHOR_GITHUB', 'https://github.com/hammadiqbal6'),
+  authorLinkedIn: env('PUBLIC_AUTHOR_LINKEDIN', ''),
   twitterHandle: env('PUBLIC_TWITTER_HANDLE', ''),
   /** Leave empty to keep AdSense disabled */
   adsensePublisherId: env('PUBLIC_ADSENSE_PUBLISHER_ID', ''),

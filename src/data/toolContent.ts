@@ -230,7 +230,7 @@ export const toolContent: Record<string, ToolContent> = {
   },
   zelle: {
     answerFirst:
-      'Zelle transfers through most participating banks have no Zelle network fee. You usually send and receive at face value, subject to bank send limits and fraud rules. This calculator documents that zero-fee baseline and rare credit-card funding caveats — it is not a classic processor fee tool.',
+      'No — Zelle usually does not charge a network fee when you send or receive through a participating bank. You typically keep the full amount, subject to bank send limits and fraud rules. Fees can still appear if you fund from a credit card (cash-advance style costs) or if your bank adds its own account fees.',
     howItWorks: [
       'Select standard Zelle (0%) or a bank-specific credit-funded caveat schedule.',
       'Enter an amount to see that fees stay $0 on the standard schedule.',
@@ -244,6 +244,7 @@ export const toolContent: Record<string, ToolContent> = {
     tips: [
       'Zelle is typically for people you trust; purchase protection is limited compared with cards.',
       'Businesses should confirm whether their bank supports Zelle for business accounts.',
+      'Check your bank’s daily and monthly send limits before large transfers.',
     ],
     mistakes: [
       'Assuming Zelle offers the same dispute rights as credit cards.',
@@ -258,6 +259,10 @@ export const toolContent: Record<string, ToolContent> = {
         h2: 'Bank limits and credit funding',
         body: 'Banks set send limits that can change with history and channel (app vs web). Rare credit-card funding paths may look like cash advances. Our optional credit-funded schedule is a cautionary estimate — your issuer’s rules control.',
       },
+      {
+        h2: 'When to prefer Venmo or Cash App instead',
+        body: 'If you need business profiles, purchase protection, or instant cash-out products, model Venmo Business and Cash App for Business fees side by side. Zelle wins on sticker price for trusted person-to-person transfers; the others win when you need seller tooling.',
+      },
     ],
     faqs: [
       {
@@ -267,6 +272,10 @@ export const toolContent: Record<string, ToolContent> = {
       {
         q: 'Why might a Zelle payment cost money?',
         a: 'Funding from a credit card (if allowed) can trigger cash-advance interest or fees from the issuer.',
+      },
+      {
+        q: 'Are there Zelle send limits?',
+        a: 'Yes. Limits are set by your bank or credit union and can vary by channel and account history. Check your bank’s Zelle FAQ for current caps.',
       },
     ],
   },
@@ -318,10 +327,25 @@ export const toolContent: Record<string, ToolContent> = {
     tips: [
       'Gold is often worth it above a modest monthly tip volume — run the numbers here.',
       'Shop and commissions may have different rules than simple donations.',
+      'Ko-fi payouts often route through PayPal or Stripe; model that rail if you cash out frequently.',
     ],
     mistakes: [
       'Assuming Gold means zero cost end-to-end (processing can remain).',
       'Not updating prices after a plan change.',
+    ],
+    extraSections: [
+      {
+        h2: 'Payout timing on Ko-fi',
+        body: 'Ko-fi is tip-jar native: supporters can send one-off donations quickly, and creators often withdraw via PayPal or connected payout rails. Timing depends on that rail’s settlement, not only Ko-fi’s commission. If you need predictable monthly membership cash flow, compare Patreon’s pledge cycle with Ko-fi memberships before you migrate fans.',
+      },
+      {
+        h2: 'Shop commissions vs donation Gold',
+        body: 'Gold’s headline benefit is removing Ko-fi’s donation commission, but shop/commission products can still carry different takes. Run the shop schedule separately from the donation schedule so a digital download is not priced like a tip jar.',
+      },
+      {
+        h2: 'Regional quirks creators miss',
+        body: 'Currency conversion and local payment methods can change what supporters pay even when your Ko-fi page is priced in USD. If a large share of fans are outside your settlement currency, stress-test a few amounts in both free and Gold modes before announcing a funding goal.',
+      },
     ],
     faqs: [
       {
@@ -331,6 +355,10 @@ export const toolContent: Record<string, ToolContent> = {
       {
         q: 'Are PayPal/Stripe payout fees included?',
         a: 'Schedules note processing where relevant; verify your payout method’s fees separately.',
+      },
+      {
+        q: 'When does Ko-fi Gold pay for itself?',
+        a: 'When monthly donation volume times ~5% exceeds the Gold subscription cost. Plug your tip volume into this calculator, then confirm current Gold pricing on Ko-fi.',
       },
     ],
   },
@@ -350,6 +378,7 @@ export const toolContent: Record<string, ToolContent> = {
     tips: [
       'Memberships compound monthly — small fee differences matter at scale.',
       'Compare with Ko-fi Gold and Patreon if you are choosing a stack.',
+      'Publish net funding goals, not gross tip totals, so chargebacks or refunds do not surprise you.',
     ],
     mistakes: [
       'Quoting supporters a gross goal without fee drag.',
@@ -361,6 +390,14 @@ export const toolContent: Record<string, ToolContent> = {
         body: 'One-off “coffee” tips and recurring memberships behave differently at scale. Memberships multiply small percent differences across months. Use the calculator on your average tip and on your monthly membership ARPU before you promise net funding goals publicly.',
       },
       {
+        h2: 'Chargebacks and refunds on tip jars',
+        body: 'Buy Me a Coffee is still card-rail money: disputed tips and membership refunds can erase several successful coffees. Keep clear perk descriptions and delivery timelines for memberships, and avoid promising physical goods you cannot fulfill on a tip-sized margin.',
+      },
+      {
+        h2: 'Payout and tax reporting notes',
+        body: 'Payout cadence and tax forms follow Buy Me a Coffee’s current help docs and your country rules — they are separate from the percent fee. Model the fee here, then confirm payout thresholds and reporting thresholds on the official site before you treat tip income as immediately available cash.',
+      },
+      {
         h2: 'Compare adjacent platforms',
         body: 'If you are choosing between Buy Me a Coffee, Ko-fi, and Patreon, line up the same $5 and $10 examples in each tool. Feature fit (shop, memberships, posts) may matter more than a half-point of fees, but you should know the fee gap explicitly.',
       },
@@ -369,6 +406,14 @@ export const toolContent: Record<string, ToolContent> = {
       {
         q: 'What is the Buy Me a Coffee fee percentage?',
         a: 'Platform fees are commonly around 5%, plus processing. Check Buy Me a Coffee’s fees page for current details.',
+      },
+      {
+        q: 'How is Buy Me a Coffee different from Ko-fi on fees?',
+        a: 'Both often sit near a 5% platform take on tips, but Gold, shop rules, and payout rails differ. Compare the same tip amount in each calculator rather than assuming they are identical.',
+      },
+      {
+        q: 'Do memberships cost the same as one-off coffees?',
+        a: 'Use the membership estimate schedule in this tool. Recurring billing can change processing outcomes; confirm on Buy Me a Coffee’s fees documentation.',
       },
     ],
   },
