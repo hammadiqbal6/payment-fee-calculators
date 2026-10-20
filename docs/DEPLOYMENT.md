@@ -123,6 +123,11 @@ These are read when Astro builds. On Cloudflare Pages / Vercel / Netlify, add th
 | Variable | Required at launch? | Purpose |
 |----------|---------------------|---------|
 | `PUBLIC_SITE_URL` | **Yes** | Canonical origin, **no trailing slash** (e.g. `https://feecalc.example`) |
+| `PUBLIC_SITE_URL_PAYMENT_FEES` | Recommended | Sister-site base (this niche); same name on all five repos |
+| `PUBLIC_SITE_URL_BUSINESS_DOCS` | Recommended | Sister-site base for business-document-generators |
+| `PUBLIC_SITE_URL_HOME_GARDEN` | Recommended | Sister-site base for home-garden-calculators |
+| `PUBLIC_SITE_URL_FIBER_ARTS` | Recommended | Sister-site base for fiber-arts-calculators |
+| `PUBLIC_SITE_URL_PET` | Recommended | Sister-site base for pet-calculators |
 | `PUBLIC_SITE_NAME` | Yes | Full site name (titles, schema) |
 | `PUBLIC_SITE_SHORT_NAME` | Yes | Short brand in header |
 | `PUBLIC_CONTACT_EMAIL` | Optional | Contact page, footer, privacy/terms, JSON-LD; default `hammadiqbal117@gmail.com` |
@@ -262,6 +267,11 @@ In **Settings → Environment variables**, add at minimum for **Production**:
 
 ```text
 PUBLIC_SITE_URL=https://your-domain.com
+PUBLIC_SITE_URL_PAYMENT_FEES=https://your-domain.com
+PUBLIC_SITE_URL_BUSINESS_DOCS=https://docs.example.com
+PUBLIC_SITE_URL_HOME_GARDEN=https://yard.example.com
+PUBLIC_SITE_URL_FIBER_ARTS=https://fiber.example.com
+PUBLIC_SITE_URL_PET=https://pet.example.com
 PUBLIC_SITE_NAME=Your Brand Name
 PUBLIC_SITE_SHORT_NAME=YourBrand
 PUBLIC_CONTACT_EMAIL=hammadiqbal117@gmail.com

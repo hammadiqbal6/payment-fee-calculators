@@ -1,6 +1,10 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { siteConfig, PERSON_ID } from '@/config/site';
+import { sisterSiteCatalog } from '@/config/sisterSites';
+
+/** Other niches only (exclude this payment-fees site). */
+const otherSites = sisterSiteCatalog.filter((s) => s.key !== 'paymentFees');
 
 const aboutModified = '2026-10-20T00:00:00+05:00';
 
@@ -110,9 +114,9 @@ const jsonLd = {
   <p>Same maintainer, different niches — linked here only, not in every footer:</p>
   <ul>
     {
-      siteConfig.otherSites.map((s) => (
+      otherSites.map((s) => (
         <li>
-          <a href={s.url} rel="noopener noreferrer">
+          <a href={`${s.url}/`} rel="noopener noreferrer">
             {s.name}
           </a>
         </li>

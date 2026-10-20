@@ -48,7 +48,7 @@ Live site: https://payment-fee-calculators.hammadiqbal117.workers.dev
 | Keep GSC / Bing meta | Unchanged |
 | Worked examples / how calculated | Done on tools + examples |
 | Long-tail fee-on-$X pages | `/examples/fee-on-{50,100,500,1000}/` |
-| Sister-site links (sparing) | `SisterSites` on topical tools/guides only |
+| Sister-site links (sparing) | `SisterSites` on topical tools/guides only; bases from `PUBLIC_SITE_URL_*` via `src/config/sisterSites.ts` (not hard-coded) |
 | A11y: focus, aria-live, dark mode, reduced motion | Done |
 | Embed snippet + copy | Done on tool pages |
 

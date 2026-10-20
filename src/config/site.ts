@@ -84,25 +84,6 @@ export const siteConfig = {
   /** First public release of the site (ISO date; timezone +05:00 for PKT) */
   dateCreated: '2026-10-18T00:00:00+05:00',
   themeColor: '#0b3d2e',
-  /** Sibling tool sites by the same maintainer (about page only) */
-  otherSites: [
-    {
-      name: 'Business Document Generators',
-      url: 'https://business-document-generators.hammadiqbal117.workers.dev/',
-    },
-    {
-      name: 'Home & Garden Calculators',
-      url: 'https://home-garden-calculators.hammadiqbal117.workers.dev/',
-    },
-    {
-      name: 'Fiber Arts Calculators',
-      url: 'https://fiber-arts-calculators.hammadiqbal117.workers.dev/',
-    },
-    {
-      name: 'Pet Calculators',
-      url: 'https://pet-calculators.hammadiqbal117.workers.dev/',
-    },
-  ] as readonly { name: string; url: string }[],
 } as const;
 
 export type SiteConfig = typeof siteConfig;

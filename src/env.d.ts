@@ -2,6 +2,12 @@
 
 interface ImportMetaEnv {
   readonly PUBLIC_SITE_URL?: string;
+  /** Sister-site bases (shared names across all five tool repos); no trailing slash */
+  readonly PUBLIC_SITE_URL_PAYMENT_FEES?: string;
+  readonly PUBLIC_SITE_URL_BUSINESS_DOCS?: string;
+  readonly PUBLIC_SITE_URL_HOME_GARDEN?: string;
+  readonly PUBLIC_SITE_URL_FIBER_ARTS?: string;
+  readonly PUBLIC_SITE_URL_PET?: string;
   readonly PUBLIC_SITE_NAME?: string;
   readonly PUBLIC_SITE_SHORT_NAME?: string;
   readonly PUBLIC_CONTACT_EMAIL?: string;
