@@ -1,4 +1,19 @@
 # Workers static assets / Pages / Netlify style redirects
 # Host-level www↔apex redirects stay at DNS/CDN (see docs/DEPLOYMENT.md)
+# Trailing-slash consolidation uses 308 via src/worker.ts (not html_handling 307).
 
 /sitemap.xml /sitemap-index.xml 301
+
+# Renamed / consolidated guides (permanent)
+/guides/what-does-ebay-not-cover /guides/hidden-payment-fees/ 301
+/guides/what-does-ebay-not-cover/ /guides/hidden-payment-fees/ 301
+/guides/how-much-to-charge-to-receive-100 /guides/how-to-price-after-fees/ 301
+/guides/how-much-to-charge-to-receive-100/ /guides/how-to-price-after-fees/ 301
+
+# Developer note folded into methodology
+/docs-fee-update /methodology/ 301
+/docs-fee-update/ /methodology/ 301
+
+# Author URL consolidated to About (playbook)
+/authors /about/#maintainer 301
+/authors/ /about/#maintainer 301

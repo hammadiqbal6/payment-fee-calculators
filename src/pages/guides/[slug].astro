@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import AdSlot from '@/components/AdSlot.astro';
+import SisterSites from '@/components/SisterSites.astro';
 import { guides } from '@/data/guides';
 import { getRelatedTools } from '@/lib/tools';
+import { sisterLinksByContext } from '@/lib/sisterLinks';
 import { siteConfig } from '@/config/site';
 
 export function getStaticPaths() {
@@ -12,6 +14,8 @@ export function getStaticPaths() {
 const { guide } = Astro.props;
 const related = getRelatedTools(guide.relatedTools);
 const path = `/guides/${guide.slug}/`;
+const sister =
+  guide.slug === 'how-to-price-after-fees' ? (sisterLinksByContext['guide-price'] ?? []) : [];
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -20,7 +24,13 @@ const jsonLd = [
     description: guide.description,
     datePublished: guide.published,
     dateModified: guide.modified,
-    author: { '@type': 'Person', name: siteConfig.authorName, url: siteConfig.siteUrl + '/authors/' },
+    author: [
+      {
+        '@type': 'Person',
+        name: siteConfig.authorName,
+        url: siteConfig.siteUrl + '/about/',
+      },
+    ],
     publisher: { '@type': 'Organization', name: siteConfig.siteName, url: siteConfig.siteUrl },
     mainEntityOfPage: siteConfig.siteUrl + path,
   },
@@ -52,7 +62,7 @@ const jsonLd = [
   <div class="meta-row">
     <span>Published: <time datetime={guide.published}>{guide.published}</time></span>
     <span>Updated: <time datetime={guide.modified}>{guide.modified}</time></span>
-    <span>By <a href="/authors/">{siteConfig.authorName}</a></span>
+    <span>By <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a></span>
   </div>
   <p class="answer-first">{guide.answerFirst}</p>
   <AdSlot />
@@ -84,8 +94,12 @@ const jsonLd = [
       ))
     }
   </div>
+  <SisterSites links={sister} />
   <h2>Related calculators</h2>
   <div class="related">
     {related.map((t) => <a href={t.path}>{t.h1}</a>)}
+    {guide.slug === 'stripe-vs-paypal-fees' && (
+      <a href="/tools/compare-payment-fees/">Open the side-by-side fee comparison tool</a>
+    )}
   </div>
 </BaseLayout>

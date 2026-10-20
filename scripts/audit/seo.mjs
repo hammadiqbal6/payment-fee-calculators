@@ -27,6 +27,8 @@ function walkHtml(file) {
   const rel = '/' + path.relative(dist, file).replace(/index\.html$/, '').replace(/\\/g, '/');
   const html = fs.readFileSync(file, 'utf8');
   if (rel.includes('/embed/')) return;
+  // Redirect stubs (noindex) — skip full on-page checks
+  if (rel === '/authors/' || rel === '/docs-fee-update/') return;
 
   const title = html.match(/<title>([^<]*)<\/title>/i)?.[1] ?? '';
   const desc = html.match(/<meta\s+name="description"\s+content="([^"]*)"/i)?.[1] ?? '';

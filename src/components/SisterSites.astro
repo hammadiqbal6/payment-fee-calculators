@@ -1,0 +1,58 @@
+---
+/**
+ * Sparing cross-links to topical sister tools only — never a full sitewide list.
+ */
+interface Link {
+  href: string;
+  label: string;
+  why: string;
+}
+
+interface Props {
+  links: Link[];
+}
+
+const { links } = Astro.props;
+---
+
+{
+  links.length > 0 && (
+    <aside class="sister-sites" aria-labelledby="sister-h">
+      <h2 id="sister-h">Related tools from our other sites</h2>
+      <ul>
+        {links.map((l) => (
+          <li>
+            <a href={l.href} rel="noopener noreferrer">{l.label}</a>
+            <span class="muted"> — {l.why}</span>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  )
+}
+
+<style>
+  .sister-sites {
+    margin: 1.5rem 0;
+    padding: 0.85rem 1rem;
+    border-left: 3px solid var(--color-border);
+    background: transparent;
+  }
+  .sister-sites h2 {
+    font-size: 1.05rem;
+    margin: 0 0 0.5rem;
+  }
+  .sister-sites ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+  .sister-sites a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .muted {
+    color: var(--color-ink-muted);
+    font-size: 0.9rem;
+  }
+</style>

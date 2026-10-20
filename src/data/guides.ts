@@ -16,10 +16,10 @@ export const guides: Guide[] = [
     slug: 'how-to-price-after-fees',
     title: 'How to Price After Payment Fees (Reverse Calculator Guide)',
     description:
-      'Learn the reverse fee formula so your invoice still nets the amount you need after Stripe, PayPal, Square or creator platform fees.',
+      'Reverse fee formula so invoices still net what you need after Stripe, PayPal, Square or creator fees — including how much to charge to receive $100.',
     primaryKeyword: 'how to price after payment fees',
     published: '2026-10-19',
-    modified: '2026-10-19',
+    modified: '2026-10-20',
     answerFirst:
       'To receive a target net after percent-plus-fixed fees, charge (desiredNet + fixed) ÷ (1 − percent). For Stripe US (2.9% + $0.30) to net $100, charge about $103.30. Always verify your live rate.',
     sections: [
@@ -43,7 +43,16 @@ export const guides: Guide[] = [
         ],
       },
       {
-        h2: 'Worked examples',
+        h2: 'How much to charge to receive $100',
+        paragraphs: [
+          'Approximate charges to receive $100 after common default schedules: Stripe US ≈ $103.30; PayPal US G&S ≈ $104.14; Square online ≈ $103.30; Gumroad blended direct ≈ $115.73; Patreon Pro blended ≈ $112.47. Confirm with each calculator and live provider pricing.',
+          'Open any tool, switch to “Charge to receive X”, enter 100, and pick your schedule. Share links keep mode, rate, and amount in the query string for teammates.',
+          'For team rate cards, screenshot the result and note the fee data version shown on the page so quotes stay auditable.',
+          'The reverse formula is linear in the percent term plus fixed. Doubling the desired net does not exactly double the charge when a fixed fee exists — re-run the calculator rather than multiplying a $100 result by 10.',
+        ],
+      },
+      {
+        h2: 'More worked examples',
         paragraphs: [
           'PayPal US G&S (3.49% + $0.49) to net $100 → charge ≈ $104.14. Square online at 2.9% + $0.30 matches Stripe’s US online shape on the same $100 net target.',
           'Creator example: if you need $1,000/month net on Patreon Pro blended estimates, reverse-calculate the pledge total, then divide by patron count to see required average pledge.',
@@ -55,6 +64,7 @@ export const guides: Guide[] = [
         paragraphs: [
           'Customers prefer clean prices. After reverse math, round up to a marketable number ($103.30 → $105 or $109) rather than rounding down and eating the gap.',
           'For subscriptions, tiny monthly shortfalls compound. Prefer slightly higher list prices over “close enough” nets.',
+          'A $0.30–$0.49 fixed fee is 3–5% on a $10 invoice but minor on $500. Bundle work or set minimum invoices when fixed fees dominate.',
         ],
       },
     ],
@@ -69,7 +79,15 @@ export const guides: Guide[] = [
       },
       {
         q: 'What if my processor gave me custom pricing?',
-        a: 'Use the closest schedule then adjust the percent/fixed mentally, or ask us to document a custom note. Custom rates beat public list rates for many growing accounts.',
+        a: 'Use the closest schedule then adjust the percent/fixed mentally. Custom rates beat public list rates for many growing accounts.',
+      },
+      {
+        q: 'Do these numbers include sales tax?',
+        a: 'No. Tax collection is separate from processor fees.',
+      },
+      {
+        q: 'Can I bookmark a pre-filled calculator?',
+        a: 'Yes. Share links include mode, rate, and amount. Canonical tags still point at the clean tool URL for SEO.',
       },
     ],
     relatedTools: ['stripe', 'paypal', 'gumroad', 'comparison'],
@@ -165,13 +183,13 @@ export const guides: Guide[] = [
     relatedTools: ['patreon', 'kofi', 'bmac'],
   },
   {
-    slug: 'what-does-ebay-not-cover',
+    slug: 'hidden-payment-fees',
     title: 'Payment Fees Freelancers Forget to Budget',
     description:
       'Beyond the headline percent: instant payouts, currency conversion, chargebacks, platform commissions and fixed per-transaction fees.',
     primaryKeyword: 'hidden payment processing fees',
     published: '2026-10-19',
-    modified: '2026-10-19',
+    modified: '2026-10-20',
     answerFirst:
       'Headline percent fees are only part of take-home pay. Instant deposits, FX conversion, chargebacks, platform commissions, and fixed per-transaction fees can erase freelancer margins if you price only on the sticker rate.',
     sections: [
@@ -213,49 +231,5 @@ export const guides: Guide[] = [
       },
     ],
     relatedTools: ['venmo', 'cashapp', 'wise', 'gumroad'],
-  },
-  {
-    slug: 'how-much-to-charge-to-receive-100',
-    title: 'How Much to Charge to Receive $100 After Fees',
-    description:
-      'Reverse fee examples: how much to invoice to receive $100 after Stripe, PayPal, Square, Gumroad and Patreon fees.',
-    primaryKeyword: 'how much to charge to receive 100 after fees',
-    published: '2026-10-19',
-    modified: '2026-10-19',
-    answerFirst:
-      'Approximate charges to receive $100: Stripe US ≈ $103.30; PayPal US G&S ≈ $104.14; Square online ≈ $103.30; Gumroad blended direct ≈ $115.73; Patreon Pro blended ≈ $112.47. Confirm with each calculator and live provider pricing.',
-    sections: [
-      {
-        h2: 'Use the calculators',
-        paragraphs: [
-          'Open any tool, switch to “Charge to receive X”, enter 100, and pick your schedule. Share links keep mode, rate, and amount in the query string for teammates.',
-          'For team rate cards, screenshot the result and note the fee data version shown on the page so quotes stay auditable.',
-        ],
-      },
-      {
-        h2: 'Why fixed fees hurt small invoices',
-        paragraphs: [
-          'A $0.30–$0.49 fixed fee is 3–5% on a $10 invoice but minor on $500. Bundle work or set minimum invoices when fixed fees dominate.',
-        ],
-      },
-      {
-        h2: 'Scaling the $100 example',
-        paragraphs: [
-          'The reverse formula is linear in the percent term plus fixed. Doubling the desired net does not exactly double the charge when a fixed fee exists — re-run the calculator rather than multiplying a $100 result by 10.',
-          'International schedules change the percent. A domestic $103.30 target can become meaningfully higher with cross-border fees.',
-        ],
-      },
-    ],
-    faqs: [
-      {
-        q: 'Do these numbers include sales tax?',
-        a: 'No. Tax collection is separate from processor fees.',
-      },
-      {
-        q: 'Can I bookmark a pre-filled calculator?',
-        a: 'Yes. Share links include mode, rate, and amount. Canonical tags still point at the clean tool URL for SEO.',
-      },
-    ],
-    relatedTools: ['stripe', 'paypal', 'square', 'gumroad', 'patreon'],
   },
 ];

@@ -5,19 +5,24 @@ import { siteConfig } from '@/config/site';
 
 <BaseLayout
   title="Privacy Policy"
-  description={`Privacy Policy for ${siteConfig.siteName}: client-side calculators, cookies, Google AdSense, and analytics disclosures.`}
+  description={`Privacy Policy for ${siteConfig.siteName}: client-side calculators, cookies, Google AdSense, Consent Mode, and analytics disclosures.`}
   canonicalPath="/privacy/"
+  modified="2026-10-20"
 >
   <h1>Privacy Policy</h1>
-  <p><em>Last updated: 2026-10-19</em></p>
+  <p><em>Last updated: 2026-10-20</em></p>
   <p class="answer-first">
-    Calculator inputs stay in your browser. We do not upload payment amounts to our servers. If the site owner later
-    enables Google Analytics or Google AdSense, those services may set cookies as described below.
+    Calculator inputs stay in your browser. We do not upload payment amounts to our servers. Google Analytics loads only
+    after you Accept analytics cookies (Consent Mode v2 defaults deny storage until then). AdSense, if enabled later,
+    follows the rules below.
   </p>
   <h2>Information we process</h2>
   <ul>
     <li><strong>Calculator usage:</strong> amounts and fee options are processed locally in JavaScript on your device.</li>
-    <li><strong>Essential preferences:</strong> cookie-notice acknowledgement stored in localStorage.</li>
+    <li>
+      <strong>Consent preference:</strong> Accept / Reject for analytics is stored in <code>localStorage</code> (
+      <code>feecalc-consent-v2</code>).
+    </li>
     <li><strong>Contact email:</strong> if you email us, we receive the content of your message.</li>
     <li><strong>Hosting logs:</strong> standard request logs (IP, user agent) may be collected by the hosting provider.</li>
   </ul>
@@ -36,9 +41,11 @@ import { siteConfig } from '@/config/site';
   </p>
   <h2>Google Analytics (GA4)</h2>
   <p>
-    If a GA4 measurement ID is configured, Google Analytics may collect pseudonymous usage data (pages viewed, device
-    category, approximate geo). IP anonymization should remain enabled. You can block analytics with browser controls or
-    opt-out extensions.
+    A GA4 measurement ID is configured. We use Google Consent Mode v2 with <code>analytics_storage</code> defaulting to
+    denied. After you click Accept, analytics storage is granted and the gtag.js library is loaded on idle or first
+    interaction (not render-blocking). IP anonymization remains enabled. We may send events such as calculation runs,
+    compare-tool use, outbound reference clicks, and embed-code copies. Reject keeps analytics storage denied. You can
+    also block analytics with browser controls or opt-out extensions.
   </p>
   <h2>Children</h2>
   <p>This site is not directed at children under 13, and we do not knowingly collect personal information from them.</p>

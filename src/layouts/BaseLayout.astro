@@ -1,5 +1,5 @@
 ---
-import { siteConfig } from '@/config/site';
+import { siteConfig, PERSON_ID } from '@/config/site';
 import '../styles/global.css';
 
 interface Props {
@@ -12,6 +12,8 @@ interface Props {
   noindex?: boolean;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   wide?: boolean;
+  /** When true, emit home-page WebSite/Organization/Person @graph once */
+  isHome?: boolean;
 }
 
 const {
@@ -24,12 +26,64 @@ const {
   noindex = false,
   jsonLd = [],
   wide = false,
+  isHome = false,
 } = Astro.props;
 
 const canonical = new URL(canonicalPath, siteConfig.siteUrl).toString();
-const fullTitle = title.includes(siteConfig.shortName) ? title : `${title} | ${siteConfig.shortName}`;
+/** Skip brand suffix when the title is already long (audit: >50 chars). */
+const fullTitle =
+  title.includes(siteConfig.shortName) || title.length > 50
+    ? title
+    : `${title} | ${siteConfig.shortName}`;
 const ogImage = new URL(siteConfig.defaultOgImage, siteConfig.siteUrl).toString();
 const schemas = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+
+const orgId = `${siteConfig.siteUrl}/#organization`;
+const websiteId = `${siteConfig.siteUrl}/#website`;
+const logoUrl = new URL(siteConfig.logoPath, siteConfig.siteUrl).toString();
+
+const homeGraph = isHome
+  ? [
+      {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebSite',
+            '@id': websiteId,
+            name: siteConfig.siteName,
+            alternateName: [siteConfig.shortName],
+            url: `${siteConfig.siteUrl}/`,
+            inLanguage: siteConfig.language,
+            description: siteConfig.description,
+            publisher: { '@id': orgId },
+          },
+          {
+            '@type': 'Organization',
+            '@id': orgId,
+            name: siteConfig.siteName,
+            url: `${siteConfig.siteUrl}/`,
+            email: siteConfig.contactEmail,
+            foundingDate: String(siteConfig.foundedYear),
+            logo: {
+              '@type': 'ImageObject',
+              url: logoUrl,
+              width: 512,
+              height: 512,
+            },
+            founder: { '@id': PERSON_ID },
+            publishingPrinciples: `${siteConfig.siteUrl}/methodology/`,
+          },
+          {
+            '@type': 'Person',
+            '@id': PERSON_ID,
+            name: siteConfig.authorName,
+            url: `${siteConfig.siteUrl}/about/`,
+            sameAs: [...siteConfig.authorSameAs],
+          },
+        ],
+      },
+    ]
+  : [];
 
 const nav = [
   { href: '/payment-processors/', label: 'Processors' },
@@ -39,6 +93,8 @@ const nav = [
   { href: '/guides/', label: 'Guides' },
   { href: '/about/', label: 'About' },
 ];
+
+const gaId = siteConfig.ga4MeasurementId;
 ---
 
 <!doctype html>
@@ -49,19 +105,29 @@ const nav = [
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex,follow" />}
+    {noindex ? (
+      <meta name="robots" content="noindex,follow" />
+    ) : (
+      <meta name="robots" content="index,follow,max-image-preview:large" />
+    )}
     <meta name="theme-color" content={siteConfig.themeColor} />
+    <meta name="apple-mobile-web-app-title" content={siteConfig.shortName} />
+    <meta name="author" content={siteConfig.authorName} />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={siteConfig.siteName} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content={String(siteConfig.ogImageWidth)} />
+    <meta property="og:image:height" content={String(siteConfig.ogImageHeight)} />
+    <meta property="og:image:alt" content={siteConfig.ogImageAlt} />
     <meta property="og:locale" content={siteConfig.locale} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={siteConfig.ogImageAlt} />
     {siteConfig.twitterHandle && <meta name="twitter:site" content={`@${siteConfig.twitterHandle}`} />}
     {published && <meta property="article:published_time" content={published} />}
     {modified && <meta property="article:modified_time" content={modified} />}
@@ -71,11 +137,13 @@ const nav = [
     {siteConfig.bingSiteVerification && (
       <meta name="msvalidate.01" content={siteConfig.bingSiteVerification} />
     )}
-    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="alternate" type="application/rss+xml" title={`${siteConfig.siteName} guides`} href="/rss.xml" />
-    {schemas.map((schema) => (
+    {[...homeGraph, ...schemas].map((schema) => (
       <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     ))}
     {siteConfig.adsensePublisherId && siteConfig.adsenseAutoAds && (
@@ -85,18 +153,41 @@ const nav = [
         crossorigin="anonymous"
       />
     )}
-    {siteConfig.ga4MeasurementId && (
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.ga4MeasurementId}`} />
-    )}
-    {siteConfig.ga4MeasurementId && (
-      <script
-        is:inline
-        define:vars={{ gaId: siteConfig.ga4MeasurementId }}
-      >
+    {/* Consent Mode v2 defaults denied until the user accepts; gtag loads after idle/interaction */}
+    {gaId && (
+      <script is:inline define:vars={{ gaId }}>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', gaId, { anonymize_ip: true });
+        window.gtag = gtag;
+        gtag('consent', 'default', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'denied',
+          functionality_storage: 'granted',
+          security_storage: 'granted',
+          wait_for_update: 500,
+        });
+        window.__FEECALC_GA_ID = gaId;
+        window.__FEECALC_GA_LOADED = false;
+        window.__feecalcLoadGa = function () {
+          if (window.__FEECALC_GA_LOADED || !window.__FEECALC_GA_ID) return;
+          window.__FEECALC_GA_LOADED = true;
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.__FEECALC_GA_ID;
+          document.head.appendChild(s);
+          gtag('js', new Date());
+          gtag('config', window.__FEECALC_GA_ID, {
+            anonymize_ip: true,
+            send_page_view: true,
+          });
+        };
+        window.__feecalcTrack = function (name, params) {
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', name, params || {});
+          }
+        };
       </script>
     )}
   </head>
@@ -111,7 +202,7 @@ const nav = [
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
           Menu
         </button>
-        <nav class="site-nav" id="site-nav" data-nav>
+        <nav class="site-nav" id="site-nav" data-nav aria-label="Primary">
           {nav.map((item) => (
             <a href={item.href} aria-current={Astro.url.pathname === item.href ? 'page' : undefined}>
               {item.label}
@@ -131,6 +222,7 @@ const nav = [
           <h2>{siteConfig.siteName}</h2>
           <p>{siteConfig.tagline}. Client-side calculators — amounts never leave your browser.</p>
           <p>
+            Maintained by <a href={`/about/${siteConfig.authorHash}`}>{siteConfig.authorName}</a> ·{' '}
             <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
           </p>
         </div>
@@ -151,20 +243,23 @@ const nav = [
             <li><a href="/privacy/">Privacy</a></li>
             <li><a href="/terms/">Terms</a></li>
             <li><a href="/contact/">Contact</a></li>
-            <li><a href="/authors/">Authors</a></li>
           </ul>
         </div>
       </div>
     </footer>
 
-    <div class="cookie-banner" data-cookie-banner role="dialog" aria-label="Cookie notice">
-      <p>
-        We use essential cookies for preferences. If you enable Google Analytics or AdSense later, advertising/analytics
-        cookies may be used. See our <a href="/privacy/">Privacy Policy</a>.
+    <div class="cookie-banner" data-cookie-banner role="dialog" aria-label="Cookie and analytics consent" aria-modal="false">
+      <p class="cookie-banner__text">
+        <span class="cookie-banner__short">We use cookies for analytics. </span>
+        <span class="cookie-banner__long">
+          Essential preferences stay on-device. Accept to enable Google Analytics (anonymized IP). See our{' '}
+        </span>
+        <a href="/privacy/">Privacy</a>
+        <span class="cookie-banner__long"> policy.</span>
       </p>
       <div class="cookie-banner__actions">
-        <button type="button" class="btn btn--primary" data-cookie-accept>Got it</button>
-        <a class="btn btn--secondary" href="/privacy/">Privacy</a>
+        <button type="button" class="btn btn--secondary" data-cookie-reject>Reject</button>
+        <button type="button" class="btn btn--primary" data-cookie-accept>Accept</button>
       </div>
     </div>
 
@@ -176,14 +271,81 @@ const nav = [
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
 
+      const CONSENT_KEY = 'feecalc-consent-v2';
       const banner = document.querySelector<HTMLElement>('[data-cookie-banner]');
-      const key = 'feecalc-cookie-ok';
-      if (banner && !localStorage.getItem(key)) {
-        banner.classList.add('is-visible');
+
+      function applyConsent(granted: boolean) {
+        const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+        if (typeof gtag === 'function') {
+          gtag('consent', 'update', {
+            analytics_storage: granted ? 'granted' : 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+          });
+        }
+        if (granted) {
+          const load = (window as unknown as { __feecalcLoadGa?: () => void }).__feecalcLoadGa;
+          load?.();
+        }
       }
-      document.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
-        localStorage.setItem(key, '1');
+
+      function hideBanner() {
         banner?.classList.remove('is-visible');
+        document.body.classList.remove('has-cookie-banner');
+      }
+
+      const stored = localStorage.getItem(CONSENT_KEY);
+      if (stored === 'granted') {
+        applyConsent(true);
+      } else if (stored === 'denied') {
+        applyConsent(false);
+      } else if (banner) {
+        banner.classList.add('is-visible');
+        document.body.classList.add('has-cookie-banner');
+      }
+
+      document.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
+        localStorage.setItem(CONSENT_KEY, 'granted');
+        applyConsent(true);
+        hideBanner();
+      });
+      document.querySelector('[data-cookie-reject]')?.addEventListener('click', () => {
+        localStorage.setItem(CONSENT_KEY, 'denied');
+        applyConsent(false);
+        hideBanner();
+      });
+
+      // Defer GA load until idle or first interaction when consent already granted
+      if (stored === 'granted') {
+        const load = () => (window as unknown as { __feecalcLoadGa?: () => void }).__feecalcLoadGa?.();
+        if ('requestIdleCallback' in window) {
+          (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => void }).requestIdleCallback(load, {
+            timeout: 4000,
+          });
+        } else {
+          window.addEventListener('load', () => setTimeout(load, 1), { once: true });
+        }
+        ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach((evt) => {
+          window.addEventListener(evt, load, { once: true, passive: true });
+        });
+      }
+
+      // Outbound reference / official pricing clicks
+      document.addEventListener('click', (e) => {
+        const a = (e.target as HTMLElement | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+        if (!a) return;
+        try {
+          const url = new URL(a.href, window.location.href);
+          if (url.origin !== window.location.origin) {
+            (window as unknown as { __feecalcTrack?: (n: string, p?: Record<string, string>) => void }).__feecalcTrack?.(
+              'outbound_reference_click',
+              { link_url: url.href, link_text: (a.textContent || '').trim().slice(0, 100) },
+            );
+          }
+        } catch {
+          /* ignore */
+        }
       });
     </script>
   </body>

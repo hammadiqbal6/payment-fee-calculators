@@ -41,7 +41,7 @@ const defaultRate = processor.defaultRateId;
       <select name="rate" data-rate class="field__input" aria-describedby={`rate-help-${processor.id}`}>
         {processor.rates.map((r) => (
           <option value={r.id} selected={r.id === defaultRate}>
-            {r.label} ({(r.percent * 100).toFixed(2)}% + {r.fixed.toFixed(2)} {r.currency})
+            {r.label}
           </option>
         ))}
       </select>
@@ -70,23 +70,23 @@ const defaultRate = processor.defaultRateId;
     </div>
   </form>
 
-  <div class="fee-calc__results" data-results aria-live="polite">
+  <div class="fee-calc__results" data-results aria-live="polite" aria-atomic="true" role="status">
     <div class="result-grid">
       <div>
-        <div class="result-label">Fee</div>
-        <div class="result-value" data-out-fee>—</div>
+        <div class="result-label" id={`fee-label-${processor.id}`}>Fee</div>
+        <div class="result-value" data-out-fee aria-labelledby={`fee-label-${processor.id}`}>—</div>
       </div>
       <div>
-        <div class="result-label">You receive (net)</div>
-        <div class="result-value" data-out-net>—</div>
+        <div class="result-label" id={`net-label-${processor.id}`}>You receive (net)</div>
+        <div class="result-value" data-out-net aria-labelledby={`net-label-${processor.id}`}>—</div>
       </div>
       <div>
-        <div class="result-label">Customer pays</div>
-        <div class="result-value" data-out-charge>—</div>
+        <div class="result-label" id={`charge-label-${processor.id}`}>Customer pays</div>
+        <div class="result-value" data-out-charge aria-labelledby={`charge-label-${processor.id}`}>—</div>
       </div>
       <div>
-        <div class="result-label">Effective rate</div>
-        <div class="result-value" data-out-rate>—</div>
+        <div class="result-label" id={`rate-label-${processor.id}`}>Effective rate</div>
+        <div class="result-value" data-out-rate aria-labelledby={`rate-label-${processor.id}`}>—</div>
       </div>
     </div>
     <p class="result-note" data-out-note></p>
@@ -130,11 +130,11 @@ const defaultRate = processor.defaultRateId;
     font-size: 0.95rem;
   }
   .field__input {
-    min-height: 48px;
+    min-height: var(--tap, 48px);
     border: 1px solid var(--color-border);
     border-radius: 8px;
     padding: 0.65rem 0.75rem;
-    font-size: 1rem;
+    font-size: max(1rem, 16px);
     background: #fff;
     width: 100%;
   }
@@ -233,7 +233,8 @@ const defaultRate = processor.defaultRateId;
       calculate();
     }
 
-    function calculate() {
+    let lastTracked = '';
+    function calculate(fromUser = false) {
       const r = currentRate();
       const amount = Number(amountInput.value);
       if (!Number.isFinite(amount) || amount < 0) return;
@@ -246,17 +247,32 @@ const defaultRate = processor.defaultRateId;
         mode === 'forward'
           ? `On a ${money(result.charge, r.currency)} charge, fees are ${money(result.fee, r.currency)} and you keep ${money(result.net, r.currency)}.`
           : `To receive about ${money(amount, r.currency)}, charge ${money(result.charge, r.currency)} (fee ${money(result.fee, r.currency)}).`;
+      if (fromUser) {
+        const key = `${mode}:${r.id}:${amount}`;
+        if (key !== lastTracked) {
+          lastTracked = key;
+          (window as unknown as { __feecalcTrack?: (n: string, p?: Record<string, string | number>) => void }).__feecalcTrack?.(
+            'calculation_run',
+            { mode, rate_id: r.id, amount },
+          );
+        }
+      }
     }
 
-    modeButtons.forEach((btn) => btn.addEventListener('click', () => setMode(btn.dataset.mode as 'forward' | 'reverse')));
+    modeButtons.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        setMode(btn.dataset.mode as 'forward' | 'reverse');
+        calculate(true);
+      }),
+    );
     rateSelect.addEventListener('change', () => {
       updateHelp();
-      calculate();
+      calculate(true);
     });
-    amountInput.addEventListener('input', calculate);
+    amountInput.addEventListener('change', () => calculate(true));
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      calculate();
+      calculate(true);
     });
 
     const shareBtn = root.querySelector<HTMLButtonElement>('[data-share]');

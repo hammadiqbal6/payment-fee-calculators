@@ -1,35 +1,122 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { siteConfig } from '@/config/site';
+import { siteConfig, PERSON_ID } from '@/config/site';
+
+const aboutModified = '2026-10-20T00:00:00+05:00';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  dateCreated: siteConfig.dateCreated,
+  dateModified: aboutModified,
+  mainEntity: {
+    '@type': 'Person',
+    '@id': PERSON_ID,
+    name: siteConfig.authorName,
+    description: siteConfig.authorBio,
+    url: `${siteConfig.siteUrl}/about/`,
+    knowsAbout: [
+      'payment processor fees',
+      'Stripe fees',
+      'PayPal fees',
+      'creator platform fees',
+      'reverse fee pricing',
+    ],
+    sameAs: [...siteConfig.authorSameAs],
+  },
+};
 ---
 
 <BaseLayout
   title={`About ${siteConfig.siteName}`}
-  description={`About ${siteConfig.siteName}: free, client-side payment and creator fee calculators with dated schedules and transparent methodology.`}
+  description={`${siteConfig.siteName} is a free set of payment and creator fee calculators built and maintained by ${siteConfig.authorName}. Client-side math, dated sources, no invented credentials.`}
   canonicalPath="/about/"
+  modified="2026-10-20"
+  jsonLd={jsonLd}
 >
   <h1>About {siteConfig.siteName}</h1>
+
   <p class="answer-first">
-    {siteConfig.siteName} builds free fee calculators for payment processors and creator platforms. Every tool runs in
-    your browser, cites official pricing pages, and shows when we last verified each rate.
+    {siteConfig.siteName} is a free set of payment-fee calculators, built and maintained by one person: me,{' '}
+    {siteConfig.authorName}.
+  </p>
+
+  <h2 id="why">Why I built it</h2>
+  <p>
+    Fee pages are scattered across regions, “what should I charge to receive X?” is still harder than it should be, and
+    many calculators hide their sources. I wanted one place where every schedule shows an official pricing URL, a
+    last-checked date, and a transparent percent-plus-fixed formula that runs in your browser.
   </p>
   <p>
-    We started this site because fee pages are scattered, regional rates differ, and “what should I charge to receive X?”
-    is still harder than it should be. Our edge is freshness: a single versioned fee data file, public last-verified
-    dates, and a documented update process.
+    Existing tools either locked rates behind apps, mixed marketing with math, or used anonymous “editorial team”
+    bylines nobody could verify. This site is the opposite: named maintainer, dated checks, public methodology.
   </p>
-  <h2>What we offer</h2>
+
+  <h2 id="maintainer">Who I am</h2>
+  <p>{siteConfig.authorBio}</p>
+  <p>
+    I’m not a payment processor, financial advisor, or CPA, and this site isn’t one either. What I do is turn published,
+    authoritative pricing pages into tools that are easy to use, and show exactly which sources each tool uses.
+  </p>
+  <p>
+    Find me on:{' '}
+    {
+      siteConfig.authorSameAs.map((url, i) => (
+        <>
+          {i > 0 && ', '}
+          <a href={url} rel="noopener noreferrer me">
+            {url.replace(/^https?:\/\//, '')}
+          </a>
+        </>
+      ))
+    }
+    . Email: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>.
+  </p>
+
+  <h2>How the tools are made</h2>
+  <p>
+    Every tool lists its formula and its sources at the bottom of the page. Sources are official pages (Stripe, PayPal,
+    Square, Venmo, Patreon, and the others named on each calculator). Each rate shows the date I last checked it against
+    that page. Full details: <a href="/methodology/">Methodology</a>.
+  </p>
+
+  <h2>What this site doesn’t do</h2>
   <ul>
-    <li>Forward and reverse calculators for major processors and creator platforms</li>
-    <li>A comparison view across default schedules</li>
-    <li>Guides on pricing after fees and processor tradeoffs</li>
-    <li>Embeddable widgets with credit links</li>
+    <li>It doesn’t give financial, tax, or legal advice. Results are estimates from published list rates.</li>
+    <li>
+      Amounts you type stay in your browser. If you accept analytics cookies, Google Analytics may run with Consent Mode
+      defaults and an anonymized IP — details on <a href="/privacy/">Privacy</a>.
+    </li>
+    <li>
+      It isn’t affiliated with Stripe, PayPal, Square, Venmo, Cash App, Zelle, Patreon, Ko-fi, Buy Me a Coffee, Gumroad,
+      Shopify, or Wise.
+    </li>
   </ul>
-  <h2>Independence</h2>
+
+  <h2>How the site is funded</h2>
   <p>
-    We are not affiliated with Stripe, PayPal, Square, Venmo, Block, Early Warning (Zelle), Patreon, Ko-fi, Buy Me a
-    Coffee, Gumroad, Shopify, or Wise. Brand names are trademarks of their owners.
+    The site may show Google AdSense units after publisher approval. There are no paid processor rankings. Affiliate
+    links, if added later, will be labelled and use <code>rel="sponsored"</code>.
   </p>
-  <p>Contact: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a></p>
-  <p>See also <a href="/authors/">authors</a> and <a href="/methodology/">methodology</a>.</p>
+
+  <h2>Found a mistake?</h2>
+  <p>
+    Email <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a> with the page, the number that
+    looks wrong, and a link to the source that shows the right one. Confirmed fixes are listed in the{' '}
+    <a href="/methodology/#corrections">correction log</a>.
+  </p>
+
+  <h2>Other free tool sites by {siteConfig.authorName}</h2>
+  <p>Same maintainer, different niches — linked here only, not in every footer:</p>
+  <ul>
+    {
+      siteConfig.otherSites.map((s) => (
+        <li>
+          <a href={s.url} rel="noopener noreferrer">
+            {s.name}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
 </BaseLayout>

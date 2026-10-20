@@ -323,6 +323,20 @@ export const toolContent: Record<string, ToolContent> = {
       'Assuming Gold means zero cost end-to-end (processing can remain).',
       'Not updating prices after a plan change.',
     ],
+    extraSections: [
+      {
+        h2: 'Payout timing on Ko-fi',
+        body: 'Ko-fi payouts depend on your connected PayPal or Stripe balance and that processor’s deposit schedule — often a few business days after the tip clears, not instant. If supporters expect same-day cash, model an instant-transfer fee on the payout rail separately from Ko-fi’s platform cut.',
+      },
+      {
+        h2: 'Donations vs shop vs commissions',
+        body: 'Donation buttons, shop sales, and commissions can hit different commission rules on free vs Gold. Gold’s headline benefit is removing Ko-fi’s donation commission; shop and commission products may still carry platform or processing costs. Run each mode on your real average order before promising a net goal on a launch page.',
+      },
+      {
+        h2: 'Regional quirks',
+        body: 'Currency conversion and local payout eligibility vary by country. A US-centric 5% + processing estimate can understate costs when supporters pay in another currency. Confirm Ko-fi’s help docs for your payout country before relying on the Gold break-even math.',
+      },
+    ],
     faqs: [
       {
         q: 'Does Ko-fi take a fee?',
@@ -331,6 +345,10 @@ export const toolContent: Record<string, ToolContent> = {
       {
         q: 'Are PayPal/Stripe payout fees included?',
         a: 'Schedules note processing where relevant; verify your payout method’s fees separately.',
+      },
+      {
+        q: 'When does Gold pay for itself?',
+        a: 'When monthly donation volume × 5% exceeds what you pay for Gold. Plug your monthly tips into the free-plan schedule, then compare.',
       },
     ],
   },
@@ -368,7 +386,15 @@ export const toolContent: Record<string, ToolContent> = {
     faqs: [
       {
         q: 'What is the Buy Me a Coffee fee percentage?',
-        a: 'Platform fees are commonly around 5%, plus processing. Check Buy Me a Coffee’s fees page for current details.',
+        a: 'Platform fees are commonly around 5%, plus processing. Check Buy Me a Coffee’s help article on calculating charges for current details.',
+      },
+      {
+        q: 'How do chargebacks work on Buy Me a Coffee?',
+        a: 'Disputes can reverse a support and may include processor fees. Keep delivery records for shop and membership products, and read BMaC’s chargeback help article before large launches.',
+      },
+      {
+        q: 'Are memberships priced the same as one-off coffees?',
+        a: 'Platform percent is similar in our blended estimate, but monthly recurrence multiplies small gaps. Model ARPU × patron count, not only a single $5 tip.',
       },
     ],
   },

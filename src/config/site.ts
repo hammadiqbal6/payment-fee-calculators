@@ -30,8 +30,13 @@ const siteUrl = env('PUBLIC_SITE_URL', DEFAULT_SITE_URL).replace(/\/$/, '');
 const siteName = env('PUBLIC_SITE_NAME', 'FeeCalc Tools');
 const contactEmail = env('PUBLIC_CONTACT_EMAIL', 'hammadiqbal117@gmail.com');
 
-const defaultAuthorName = `${siteName} Team`;
-const defaultAuthorBio = `${siteName} is built and maintained by an independent developer and small team. Fee schedules are taken from each payment processor’s published pricing pages and reviewed regularly. For questions or corrections, contact ${contactEmail}.`;
+/** Same Person @id across all five tool sites (playbook). */
+export const CANONICAL_PERSON_URL = 'https://github.com/hammadiqbal6';
+export const PERSON_ID = `${CANONICAL_PERSON_URL}#person`;
+
+const defaultAuthorName = 'Hammad Iqbal';
+const defaultAuthorBio =
+  'Independent developer who builds free, browser-based fee calculators. I copy rates from official pricing pages, record when I checked them, and show the formula on every tool. I am not a financial advisor, CPA, or employee of any payment brand.';
 
 export const siteConfig = {
   /** Canonical site origin — no trailing slash */
@@ -46,7 +51,12 @@ export const siteConfig = {
   contactEmail,
   authorName: env('PUBLIC_AUTHOR_NAME', defaultAuthorName),
   authorBio: env('PUBLIC_AUTHOR_BIO', defaultAuthorBio),
+  /** Author landing on this site (ProfilePage) */
   authorUrl: '/about/',
+  authorHash: '#maintainer',
+  authorSameAs: [CANONICAL_PERSON_URL] as readonly string[],
+  personId: PERSON_ID,
+  calculatorVersion: '1.0',
   twitterHandle: env('PUBLIC_TWITTER_HANDLE', ''),
   /** Leave empty to keep AdSense disabled */
   adsensePublisherId: env('PUBLIC_ADSENSE_PUBLISHER_ID', ''),
@@ -66,8 +76,33 @@ export const siteConfig = {
   /** IndexNow key; must match public/<key>.txt (committed; public by design) */
   indexNowKey: env('PUBLIC_INDEXNOW_KEY', 'cded36863aa6be8ac5bf690ab6889910'),
   defaultOgImage: '/og-default.png',
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogImageAlt: 'FeeCalc Tools — free payment processor and creator fee calculators',
+  logoPath: '/logo-512.png',
   foundedYear: 2026,
+  /** First public release of the site (ISO date; timezone +05:00 for PKT) */
+  dateCreated: '2026-10-18T00:00:00+05:00',
   themeColor: '#0b3d2e',
+  /** Sibling tool sites by the same maintainer (about page only) */
+  otherSites: [
+    {
+      name: 'Business Document Generators',
+      url: 'https://business-document-generators.hammadiqbal117.workers.dev/',
+    },
+    {
+      name: 'Home & Garden Calculators',
+      url: 'https://home-garden-calculators.hammadiqbal117.workers.dev/',
+    },
+    {
+      name: 'Fiber Arts Calculators',
+      url: 'https://fiber-arts-calculators.hammadiqbal117.workers.dev/',
+    },
+    {
+      name: 'Pet Calculators',
+      url: 'https://pet-calculators.hammadiqbal117.workers.dev/',
+    },
+  ] as readonly { name: string; url: string }[],
 } as const;
 
 export type SiteConfig = typeof siteConfig;
