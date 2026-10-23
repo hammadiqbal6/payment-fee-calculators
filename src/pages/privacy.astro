@@ -1,6 +1,15 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { siteConfig } from '@/config/site';
+import { breadcrumbList } from '@/lib/breadcrumbs';
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Privacy', href: '/privacy/' },
+];
+
+const jsonLd = [breadcrumbList(crumbs)];
 ---
 
 <BaseLayout
@@ -8,7 +17,9 @@ import { siteConfig } from '@/config/site';
   description={`Privacy Policy for ${siteConfig.siteName}: client-side calculators, cookies, Google AdSense, Consent Mode, and analytics disclosures.`}
   canonicalPath="/privacy/"
   modified="2026-10-20"
+  jsonLd={jsonLd}
 >
+  <Breadcrumbs items={crumbs} />
   <h1>Privacy Policy</h1>
   <p><em>Last updated: 2026-10-20</em></p>
   <p class="answer-first">

@@ -1,7 +1,32 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { siteConfig } from '@/config/site';
 import { FEE_DATA_VERSION, FEE_DATA_UPDATED } from '@/data/fees';
+import { breadcrumbList } from '@/lib/breadcrumbs';
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Methodology', href: '/methodology/' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Methodology & Editorial Policy',
+    url: `${siteConfig.siteUrl}/methodology/`,
+    description:
+      'How FeeCalc Tools sources, verifies, and updates payment processor and creator fee schedules — correction log and changelog included.',
+    dateModified: `${FEE_DATA_UPDATED}T00:00:00+05:00`,
+    author: {
+      '@type': 'Person',
+      name: siteConfig.authorName,
+      url: `${siteConfig.siteUrl}/about/`,
+    },
+  },
+  breadcrumbList(crumbs),
+];
 ---
 
 <BaseLayout
@@ -9,7 +34,9 @@ import { FEE_DATA_VERSION, FEE_DATA_UPDATED } from '@/data/fees';
   description="How FeeCalc Tools sources, verifies, and updates payment processor and creator fee schedules — correction log and changelog included."
   canonicalPath="/methodology/"
   modified={FEE_DATA_UPDATED}
+  jsonLd={jsonLd}
 >
+  <Breadcrumbs items={crumbs} />
   <h1>Methodology & editorial policy</h1>
   <p class="answer-first">
     I store every fee schedule in one versioned data file with a source URL and last-verified date. Calculators use a

@@ -7,6 +7,7 @@ import SisterSites from '@/components/SisterSites.astro';
 import { processors, comparisonOrder, FEE_DATA_UPDATED, FEE_DATA_VERSION } from '@/data/fees';
 import { calculateForward, formatMoney, formatPercent } from '@/lib/fees/calculate';
 import { comparisonTool, getRelatedTools } from '@/lib/tools';
+import { getGuidesForTool } from '@/data/relatedGuides';
 import { sisterLinksByContext } from '@/lib/sisterLinks';
 import { siteConfig, PERSON_ID } from '@/config/site';
 
@@ -23,6 +24,7 @@ const rows = comparisonOrder
   .sort((a, b) => a.result.fee - b.result.fee);
 
 const related = getRelatedTools(meta.related);
+const learnMoreGuides = getGuidesForTool('comparison');
 const compareRows = comparisonOrder
   .map((id) => processors.find((p) => p.id === id))
   .filter(Boolean)
@@ -241,12 +243,18 @@ const jsonLd = [
     </details>
   </div>
 
+  <h2>Learn more</h2>
+  <div class="related">
+    {learnMoreGuides.map((g) => (
+      <a href={`/guides/${g.slug}/`}>{g.title}</a>
+    ))}
+  </div>
+
   <SisterSites links={sister} />
 
   <h2>Related tools</h2>
   <div class="related">
     {related.map((t) => <a href={t.path}>{t.h1}</a>)}
-    <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal fees guide</a>
   </div>
 
   <TrustBlock

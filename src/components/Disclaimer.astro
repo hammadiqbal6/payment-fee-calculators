@@ -7,17 +7,12 @@ const { compact = false } = Astro.props;
 
 {
   compact ? (
-    <div class="disclaimer disclaimer--compact" role="note">
-      <details>
-        <summary>Not financial advice — verify rates</summary>
-        <p>
-          These calculators use published fee schedules with last-verified dates. Providers change rates and apply custom
-          pricing. Always confirm on the official provider site before setting prices or filing taxes. This site is not
-          affiliated with Stripe, PayPal, Square, Venmo, Cash App, Zelle, Patreon, Ko-fi, Buy Me a Coffee, Gumroad,
-          Shopify, or Wise.
-        </p>
-      </details>
-    </div>
+    <p class="disclaimer disclaimer--compact" role="note">
+      <strong>Not financial advice.</strong> These calculators use published fee schedules with last-verified dates.
+      Providers change rates and apply custom pricing — confirm on the official provider site before setting prices or
+      filing taxes. This site is not affiliated with Stripe, PayPal, Square, Venmo, Cash App, Zelle, Patreon, Ko-fi, Buy
+      Me a Coffee, Gumroad, Shopify, or Wise.
+    </p>
   ) : (
     <p class="disclaimer" role="note">
       <strong>Not financial advice.</strong> These calculators use published fee schedules we last verified on the dates

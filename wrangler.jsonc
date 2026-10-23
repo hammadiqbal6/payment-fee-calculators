@@ -7,6 +7,10 @@
  *   PUBLIC_SITE_URL, PUBLIC_SITE_URL_PAYMENT_FEES, PUBLIC_SITE_URL_BUSINESS_DOCS,
  *   PUBLIC_SITE_URL_HOME_GARDEN, PUBLIC_SITE_URL_FIBER_ARTS, PUBLIC_SITE_URL_PET
  * Astro inlines these during `npm run build`; runtime Worker vars are not used for URLs.
+ *
+ * Do NOT put PUBLIC_* in a top-level wrangler `vars` block — that broke
+ * `npx wrangler preview` on sibling sites. Prefer Workers Builds / CI env;
+ * if preview-only vars are required, use a `previews` block. See docs/SEO-GUARDRAILS.md.
  */
 {
   "$schema": "./node_modules/wrangler/config-schema.json",

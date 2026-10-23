@@ -1,13 +1,24 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { siteConfig } from '@/config/site';
+import { breadcrumbList } from '@/lib/breadcrumbs';
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Terms', href: '/terms/' },
+];
+
+const jsonLd = [breadcrumbList(crumbs)];
 ---
 
 <BaseLayout
   title="Terms of Use"
   description={`Terms of use for ${siteConfig.siteName} fee calculators. Not financial advice; verify provider rates.`}
   canonicalPath="/terms/"
+  jsonLd={jsonLd}
 >
+  <Breadcrumbs items={crumbs} />
   <h1>Terms of Use</h1>
   <p><em>Last updated: 2026-10-19</em></p>
   <p class="answer-first">

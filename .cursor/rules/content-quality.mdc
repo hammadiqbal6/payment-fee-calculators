@@ -3,5 +3,7 @@ description: Content quality for tool and guide pages
 globs: src/**/*.{astro,ts}
 ---
 - No lorem ipsum; 600+ words on tool pages with formula, example, FAQ
-- Cite official fee sources with last-verified dates
-- Avoid duplicate-intent pages; check KEYWORD-MAP
+- Guides ≥800 words (target 1000+): worked example, fee table, FAQ+FAQPage, author/dateModified
+- Cite official fee sources with last-verified / as-of dates; reuse src/data/fees.ts — never invent stats
+- Topical Learn more on every tool (relatedGuides.ts); guide↔guide and hub links
+- Avoid duplicate-intent pages; check KEYWORD-MAP and docs/SEO-GUARDRAILS.md

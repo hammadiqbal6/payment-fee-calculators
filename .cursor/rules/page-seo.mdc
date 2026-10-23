@@ -2,7 +2,8 @@
 description: On-page SEO rules for Astro pages
 globs: src/pages/**/*.astro
 ---
-- One H1, unique title <60 chars, meta description <155
-- Self-referencing canonical via BaseLayout
-- Primary keyword in title and first paragraph (answer-first)
-- BreadcrumbList + page-appropriate JSON-LD
+- One H1, unique title ≤60 chars, meta description 50–165 (prefer 120–160)
+- Self-referencing canonical via BaseLayout (embeds: canonical → full tool URL)
+- Primary keyword in title and first paragraph (40–60 word answer-first)
+- Visible breadcrumbs + BreadcrumbList; page-appropriate JSON-LD (FAQPage on guides)
+- Follow docs/SEO-GUARDRAILS.md and .cursor/rules/seo-guardrails.mdc

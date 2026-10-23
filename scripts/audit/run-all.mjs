@@ -6,6 +6,7 @@ const steps = [
   ['AdSense readiness', 'scripts/audit/adsense.mjs'],
   ['JS budget', 'scripts/audit/budget.mjs'],
   ['Internal links', 'scripts/audit/links.mjs'],
+  ['Structured data', 'scripts/audit/structured-data.mjs'],
 ];
 
 let failed = false;

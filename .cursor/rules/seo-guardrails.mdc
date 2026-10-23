@@ -1,0 +1,15 @@
+---
+description: SEO/AEO guardrails from the multi-site audit — fail CI if violated
+globs: src/**/*.{astro,ts,js,mjs}, scripts/**/*.mjs, public/**/*, docs/SEO*.md
+---
+
+- Site origin: only `PUBLIC_SITE_URL` → `siteConfig.siteUrl` (canonicals, sitemap, robots, llms.txt, OG, JSON-LD, IndexNow). No `example.com` or hardcoded hosts outside config.
+- Titles ≤60; meta descriptions 50–165; exactly one H1; self-canonical on every indexable page; embeds noindex + canonical to the tool.
+- Direct-answer intro (~40–60 words) after H1 on home and tools. “Not financial advice” is a disclaimer note — never an FAQ item.
+- Guides ≥800 words (target 1000+), fee table, FAQPage, author/dateModified, official sources with as-of dates; reuse `src/data/fees.ts`.
+- Every tool has topical Learn more guides (`relatedGuides.ts`); Stripe/PayPal/Square link `/examples/fee-on-*`.
+- Visible breadcrumbs + BreadcrumbList on hubs, guides, about, contact, methodology, privacy, terms.
+- Full llms.txt lists every tool and guide. `og:image` must not end with `/`.
+- Worker `FILE_EXT` allows 1–16 chars so `.webmanifest` is not slash-redirected.
+- Do not put Astro `PUBLIC_*` in top-level Wrangler `vars` (breaks `npx wrangler preview`); use build env / `previews` block.
+- See `docs/SEO-GUARDRAILS.md` for custom-domain switch steps and the full do/don’t list.

@@ -1,0 +1,22 @@
+---
+/**
+ * Visible breadcrumb trail. Pair with breadcrumbList() JSON-LD in the page.
+ * Last item is the current page (rendered as text, still listed for a11y).
+ */
+interface Props {
+  items: { name: string; href: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  {
+    items.map((item, i) => (
+      <>
+        {i > 0 && <span aria-hidden="true">/</span>}
+        {i < items.length - 1 ? <a href={item.href}>{item.name}</a> : <span>{item.name}</span>}
+      </>
+    ))
+  }
+</nav>
