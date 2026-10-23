@@ -1,18 +1,48 @@
 [
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Payment Processor Fee Comparison",
-    "url": "https://feecalculator.example/tools/compare-payment-fees/",
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Compare Stripe, PayPal, Square, Venmo, Cash App, Shopify Payments, Gumroad, Patreon, Ko-fi and Wise fees on the same amount. Free side-by-side calculator.",
-    "dateModified": "2026-10-19"
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/compare-payment-fees/#app",
+        "name": "Payment Processor Fee Comparison",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/compare-payment-fees/",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Compare Stripe, PayPal, Square, Venmo, Cash App, Shopify and Wise fees side by side on any amount. Free calculator ranks processors by fee and net payout.",
+        "dateModified": "2026-10-19",
+        "author": {
+          "@type": "Person",
+          "@id": "https://github.com/hammadiqbal6#person",
+          "name": "Hammad Iqbal",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+        },
+        "publisher": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#organization"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/compare-payment-fees/#webpage",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/compare-payment-fees/",
+        "name": "Payment Processor Fee Comparison: Stripe vs PayPal & More",
+        "datePublished": "2026-10-19T00:00:00+05:00",
+        "dateModified": "2026-10-19T00:00:00+05:00",
+        "lastReviewed": "2026-10-19",
+        "author": {
+          "@id": "https://github.com/hammadiqbal6#person"
+        },
+        "mainEntity": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/compare-payment-fees/#app"
+        }
+      }
+    ]
   },
   {
     "@context": "https://schema.org",
@@ -22,13 +52,35 @@
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://feecalculator.example/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Payment Processor Fee Comparison",
-        "item": "https://feecalculator.example/tools/compare-payment-fees/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/compare-payment-fees/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Which payment processor has the lowest fees?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on average order value, country, and whether you need chargebacks protection. Zelle is often $0 but is not a full merchant stack. Compare with your real volume on this page, then open each calculator."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should creators use Gumroad or Stripe?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Gumroad bundles storefront features with a higher take rate. Stripe is usually cheaper per payment if you already have a storefront. Run both calculators on your price point."
+        }
       }
     ]
   }

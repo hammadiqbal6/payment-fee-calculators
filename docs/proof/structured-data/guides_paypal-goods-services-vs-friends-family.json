@@ -1,0 +1,92 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "PayPal G&S vs Friends & Family",
+    "description": "Understand PayPal Goods & Services fees (3.49%+$0.49 US) versus Friends & Family $0 personal payments—protections, risks, and when each is appropriate.",
+    "datePublished": "2026-10-23",
+    "dateModified": "2026-10-23",
+    "author": {
+      "@type": "Person",
+      "@id": "https://github.com/hammadiqbal6#person",
+      "name": "Hammad Iqbal",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev"
+    },
+    "mainEntityOfPage": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/paypal-goods-services-vs-friends-family/"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Guides",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "PayPal G&S vs Friends & Family",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/paypal-goods-services-vs-friends-family/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Friends & Family always free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It can be $0 for eligible personal payments funded from PayPal balance or linked bank. Other funding sources can add fees. Confirm on PayPal’s official fees page—do not use F&F for commercial sales to chase $0."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much is Goods & Services on $100?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "About $3.98 in fees (3.49% + $0.49), net about $96.02, using US list G&S as of 2026-10-15. Confirm in /tools/paypal-fee-calculator/."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I offer a discount for F&F?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You should not steer commercial buyers to F&F to avoid fees. That practice risks policy issues and protection gaps. Offer discounts for other legitimate methods only if your processor and laws allow."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What if a client already sent F&F?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Follow your written policy. Many freelancers pause work until funds are resent as G&S or refunded. Document communication. Do not treat accidental F&F as a loophole."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does G&S always protect sellers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Protections depend on eligibility, category, and following PayPal’s requirements (tracking, proof of delivery, etc.). Read PayPal’s seller protection terms for your country—fees buy access to a commercial framework, not a guarantee in every dispute."
+        }
+      }
+    ]
+  }
+]

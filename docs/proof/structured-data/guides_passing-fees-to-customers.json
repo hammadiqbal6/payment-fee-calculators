@@ -1,0 +1,92 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Passing fees to customers (where allowed)",
+    "description": "How to build processor fees into prices or surcharges where rules allow—with Stripe and PayPal reverse math, compliance cautions, and customer-friendly framing.",
+    "datePublished": "2026-10-23",
+    "dateModified": "2026-10-23",
+    "author": {
+      "@type": "Person",
+      "@id": "https://github.com/hammadiqbal6#person",
+      "name": "Hammad Iqbal",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev"
+    },
+    "mainEntityOfPage": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/passing-fees-to-customers/"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Guides",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Passing fees to customers (where allowed)",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/passing-fees-to-customers/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is surcharging legal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on your country, state, and card-network rules, and on your processor’s acceptable-use terms. Many sellers choose fee-inclusive prices instead. This article is not legal advice—verify current rules before enabling surcharges."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I pass through Stripe fees mathematically?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Charge (desiredNet + 0.30) ÷ (1 − 0.029) for US list Stripe pricing at 2.9% + $0.30. Example: net $100 → about $103.30. Confirm with /tools/stripe-fee-calculator/."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What about PayPal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For US Goods & Services at 3.49% + $0.49, charge (desiredNet + 0.49) ÷ (1 − 0.0349). Example: net $100 → about $104.14. Use /tools/paypal-fee-calculator/."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I show fees as a separate line item?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Only if allowed and clearly disclosed before payment authorization. Otherwise, include fees in the listed price to avoid checkout surprises and compliance issues."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I tell customers to use Friends & Family?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No for commercial goods and services. F&F can be $0 for eligible personal payments but lacks appropriate commercial protections and can violate policies. Use G&S or another merchant product."
+        }
+      }
+    ]
+  }
+]

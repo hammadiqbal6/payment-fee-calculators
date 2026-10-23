@@ -1,0 +1,92 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Square vs Stripe vs Shopify Payments",
+    "description": "Compare Square, Stripe, and Shopify Payments US online and in-person rates—with $100 examples, plan tiers, and guidance on when each commerce stack wins.",
+    "datePublished": "2026-10-23",
+    "dateModified": "2026-10-23",
+    "author": {
+      "@type": "Person",
+      "@id": "https://github.com/hammadiqbal6#person",
+      "name": "Hammad Iqbal",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev"
+    },
+    "mainEntityOfPage": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/square-vs-stripe-vs-shopify/"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Guides",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Square vs Stripe vs Shopify Payments",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/square-vs-stripe-vs-shopify/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Shopify Payments cheaper than Stripe?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "On Basic, online list rates often match Stripe at 2.9% + $0.30. Shopify and Advanced plans list lower online card rates (2.7% / 2.5% + $0.30) but higher subscriptions. Compare total cost at your volume."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Square beat Stripe for cafés?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Often on fee mix when most volume is in-person at 2.6% + $0.10 versus online-shaped 2.9% + $0.30. Hardware, software, and payout features still matter—run both calculators on your ticket size."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the fee on a $100 online charge?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Stripe and Square online: $3.20 (net $96.80). Shopify Basic: same shape. Shopify plan: $3.00. Advanced: $2.80. Confirm on official pricing and our calculators."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use Stripe inside Shopify?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Shopify’s ecosystem and third-party gateways have specific rules and possible fees beyond Shopify Payments. Check Shopify’s current gateway documentation; native Shopify Payments rates above assume you use Shopify Payments."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where should I compare side by side?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use /tools/compare-payment-fees/ with your average order value, and read Stripe vs PayPal fees if wallets are in scope."
+        }
+      }
+    ]
+  }
+]

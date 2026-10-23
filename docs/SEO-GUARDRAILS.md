@@ -40,14 +40,16 @@ Do/don’t rules from the Oct 2026 multi-site technical SEO + AEO audit. CI (`np
 **DO**
 
 - Exactly **one H1** per indexable page.
-- Unique `<title>` **≤ 60** characters (final rendered title in HTML).
-- Meta description **50–165** characters (prefer 120–160).
+- Unique `<title>` **25–65** characters (final rendered title in HTML; aim ~30–60).
+- Meta description **70–160** characters (prefer **120–160**).
+- Keep `og:title` / `twitter:title` and `og:description` / `twitter:description` aligned with `<title>` and meta description (`BaseLayout`).
 - Self-referencing absolute **canonical** on every indexable page; embed pages are `noindex` but still get a canonical to the full tool URL.
 
 **DON’T**
 
 - Ship missing titles, descriptions, or canonicals.
-- Let BaseLayout append `| FeeCalc` when that would push the title over 60.
+- Ship titles under 25 characters (e.g. bare “Contact” / “About”) or over 65.
+- Let BaseLayout append `| FeeCalc` when that would push the title over 65.
 
 ## Direct answers & disclaimers
 
@@ -80,11 +82,13 @@ Do/don’t rules from the Oct 2026 multi-site technical SEO + AEO audit. CI (`np
 
 - BreadcrumbList **and** visible breadcrumbs on tools, guides, hubs, about, contact, methodology, privacy, terms, guides index.
 - CollectionPage / WebPage / ContactPage / Article / FAQPage / WebApplication as appropriate.
+- When a page renders a **visible FAQ** (`<h2>FAQ</h2>` and/or `.faq` with `<details>`), emit matching **`FAQPage` JSON-LD** whose Q&A text matches the visible copy (same pattern as tool pages and guides). Comparison page included.
 - Full `llms.txt`: H1, summary, sections listing **every** tool and guide with one-liners (absolute URLs from `siteConfig.siteUrl`).
 
 **DON’T**
 
 - Ship invalid JSON-LD.
+- Ship a visible FAQ section without `FAQPage` structured data.
 - Keep a stub llms.txt with only a handful of links.
 
 ## Open Graph & IndexNow
@@ -123,8 +127,9 @@ This Worker is static-assets + slash worker only; URL config is build-time, not 
 |-------|--------|
 | `example.com` or hardcoded host ≠ configured site | `seo.mjs` |
 | `og:image` ends with `/` | `seo.mjs` |
-| Title missing or >60 | `seo.mjs` |
-| Meta description outside 50–165 | `seo.mjs` |
+| Title missing or length outside **25–65** | `seo.mjs` |
+| Meta description outside **70–160** | `seo.mjs` |
+| Visible FAQ without `FAQPage` JSON-LD | `seo.mjs` |
 | Missing canonical | `seo.mjs` |
 | H1 count ≠ 1 | `seo.mjs` |
 | Tool page with no `/guides/` link | `seo.mjs` |

@@ -1,0 +1,92 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Hidden Payment Fees Freelancers Miss",
+    "description": "Beyond the headline percent: instant payouts, FX, chargebacks, platform commissions, and fixed per-transaction fees that quietly erase freelancer margins.",
+    "datePublished": "2026-10-19",
+    "dateModified": "2026-10-23",
+    "author": {
+      "@type": "Person",
+      "@id": "https://github.com/hammadiqbal6#person",
+      "name": "Hammad Iqbal",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev"
+    },
+    "mainEntityOfPage": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/hidden-payment-fees/"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Guides",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Hidden Payment Fees Freelancers Miss",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/hidden-payment-fees/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Are Zelle transfers really free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Usually yes at participating banks for eligible transfers, but bank policies can vary and Zelle is not a full merchant stack with buyer protection. Confirm on zelle.com/help-center and your bank’s disclosures."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where should freelancers start?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pick one card processor (often Stripe or PayPal), price with reverse mode, and only add P2P rails for trusted clients. Model instant payout and platform commissions before you advertise a net hourly rate."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What hidden fee surprises freelancers most?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Instant deposit percentages stacked on already-processed payments, FX conversion on international invoices, and creator platform commissions on top of processing. Fixed fees on tiny invoices are a close fourth."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I budget for chargebacks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Do not invent a single dollar fee. Dispute costs vary by processor and change over time—check official pages. Keep a percentage reserve based on your category’s refund/dispute history and read our chargeback fees by processor guide for framing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Wise eliminate hidden FX fees?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Wise is often more transparent on corridor pricing (planning estimates ~0.37–0.45% + fixed as of 2026-10-15), but it is still a fee. Compare the full path against PayPal or bank wires for your corridor using /tools/wise-transfer-fee-calculator/."
+        }
+      }
+    ]
+  }
+]

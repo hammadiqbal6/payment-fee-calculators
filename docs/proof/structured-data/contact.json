@@ -1,1 +1,33 @@
-[]
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact FeeCalc Tools for Corrections & Help",
+    "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/contact/",
+    "description": "Contact FeeCalc Tools for fee corrections, partnerships, privacy questions, or calculator bugs. Include the processor, country, and official pricing URL.",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools",
+      "email": "hammadiqbal117@gmail.com",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Contact",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/contact/"
+      }
+    ]
+  }
+]

@@ -30,10 +30,10 @@ const {
 } = Astro.props;
 
 const canonical = new URL(canonicalPath, siteConfig.siteUrl).toString();
-/** Brand suffix only when it keeps the final title ≤60 chars (SEO guardrail). */
+/** Brand suffix only when it keeps the final title within 25–65 chars (SEO guardrail). */
 const withBrand = `${title} | ${siteConfig.shortName}`;
 const fullTitle =
-  title.includes(siteConfig.shortName) || withBrand.length > 60 ? title : withBrand;
+  title.includes(siteConfig.shortName) || withBrand.length > 65 ? title : withBrand;
 if (siteConfig.defaultOgImage.endsWith('/')) {
   throw new Error('siteConfig.defaultOgImage must not end with a trailing slash');
 }

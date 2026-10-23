@@ -1,23 +1,61 @@
 [
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Zelle Fees Calculator & Notes",
-    "url": "https://feecalculator.example/tools/zelle-fee-calculator/",
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Zelle is usually free through banks. See typical zero-fee transfers, credit-card caveats, send limits notes, and compare with Venmo and Cash App.",
-    "dateModified": "2026-10-19",
-    "author": {
-      "@type": "Organization",
-      "name": "FeeCalc Tools"
-    }
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/zelle-fee-calculator/#app",
+        "name": "Does Zelle Charge Fees?",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/zelle-fee-calculator/",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Zelle is usually free through your bank. See when fees can apply, typical send limits, and how Zelle compares with Venmo and Cash App on the same payment.",
+        "dateModified": "2026-10-19",
+        "author": {
+          "@type": "Person",
+          "@id": "https://github.com/hammadiqbal6#person",
+          "name": "Hammad Iqbal",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+        },
+        "publisher": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#organization"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/zelle-fee-calculator/#webpage",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/zelle-fee-calculator/",
+        "name": "Does Zelle Charge Fees? Zelle Fee Calculator & Limits",
+        "isPartOf": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#website"
+        },
+        "mainEntity": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/zelle-fee-calculator/#app"
+        },
+        "datePublished": "2026-10-19T00:00:00+05:00",
+        "dateModified": "2026-10-19T00:00:00+05:00",
+        "lastReviewed": "2026-10-19",
+        "author": {
+          "@id": "https://github.com/hammadiqbal6#person"
+        },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/images/fee-breakdown.png",
+          "width": 800,
+          "height": 450
+        },
+        "citation": [
+          "https://www.zelle.com/help-center"
+        ]
+      }
+    ]
   },
   {
     "@context": "https://schema.org",
@@ -27,19 +65,41 @@
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://feecalculator.example/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Tools",
-        "item": "https://feecalculator.example/payment-processors/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/payment-processors/"
       },
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Zelle Fees Calculator & Notes",
-        "item": "https://feecalculator.example/tools/zelle-fee-calculator/"
+        "name": "Does Zelle Charge Fees?",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/zelle-fee-calculator/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does Zelle charge fees?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Zelle network generally does not charge send/receive fees at participating banks; your bank may have other account fees."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why might a Zelle payment cost money?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Funding from a credit card (if allowed) can trigger cash-advance interest or fees from the issuer."
+        }
       }
     ]
   }

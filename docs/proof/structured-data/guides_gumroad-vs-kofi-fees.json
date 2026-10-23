@@ -1,0 +1,92 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Gumroad fees vs Ko-fi",
+    "description": "Compare Gumroad’s blended direct fees with Ko-fi free and Gold processing estimates—worked $100 examples, break-evens, and when each creator checkout wins.",
+    "datePublished": "2026-10-23",
+    "dateModified": "2026-10-23",
+    "author": {
+      "@type": "Person",
+      "@id": "https://github.com/hammadiqbal6#person",
+      "name": "Hammad Iqbal",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev"
+    },
+    "mainEntityOfPage": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/gumroad-vs-kofi-fees/"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Guides",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Gumroad fees vs Ko-fi",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/gumroad-vs-kofi-fees/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why is Gumroad so much higher than Ko-fi on $100?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Gumroad’s ~12.9% + $0.80 is a storefront blended planning rate; Ko-fi free tips near ~5% (and Gold processing near ~2.9% + $0.30) target different jobs. Compare same-job checkouts, not tip jars vs product platforms blindly."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much should I charge on Gumroad to net $100?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "About $115.73 using the ~12.9% + $0.80 blend: (100 + 0.80) ÷ (1 − 0.129). Confirm in /tools/gumroad-fee-calculator/ and on gumroad.com/pricing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Ko-fi Gold remove all fees?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Gold can remove donation commission on eligible tips, but card processing-like fees remain. Our Gold schedule models processing near 2.9% + $0.30 for planning—verify current Gold benefits on Ko-fi."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use both Gumroad and Ko-fi?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Many creators take tips on Ko-fi and sell downloads on Gumroad. Just reverse-price each catalog correctly and avoid splitting the same SKU across too many storefronts."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I move products to Stripe instead?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "If you can host checkout and support customers yourself, Stripe US list at 2.9% + $0.30 is far cheaper than Gumroad’s blend—but you own fraud, hosting, and UX. Model engineering time honestly."
+        }
+      }
+    ]
+  }
+]

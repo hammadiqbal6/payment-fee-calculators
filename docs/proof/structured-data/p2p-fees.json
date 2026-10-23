@@ -3,6 +3,25 @@
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "P2P & Instant Pay Fee Calculators",
-    "url": "https://feecalculator.example/p2p-fees/"
+    "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/p2p-fees/",
+    "description": "Venmo, Cash App, Zelle and Wise transfer fee estimates."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "P2P fees",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/p2p-fees/"
+      }
+    ]
   }
 ]

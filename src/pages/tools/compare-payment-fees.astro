@@ -52,6 +52,18 @@ const trustSources = compareRows.map((r) => ({
   checked: r.lastVerified,
 }));
 
+/** Visible FAQ + FAQPage JSON-LD must stay in sync (seo.mjs enforces FAQPage when FAQ UI is present). */
+const faqs = [
+  {
+    q: 'Which payment processor has the lowest fees?',
+    a: 'It depends on average order value, country, and whether you need chargebacks protection. Zelle is often $0 but is not a full merchant stack. Compare with your real volume on this page, then open each calculator.',
+  },
+  {
+    q: 'Should creators use Gumroad or Stripe?',
+    a: 'Gumroad bundles storefront features with a higher take rate. Stripe is usually cheaper per payment if you already have a storefront. Run both calculators on your price point.',
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -95,6 +107,15 @@ const jsonLd = [
       { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.siteUrl + '/' },
       { '@type': 'ListItem', position: 2, name: meta.h1, item: pageUrl },
     ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
   },
 ];
 ---
@@ -227,20 +248,14 @@ const jsonLd = [
 
   <h2>FAQ</h2>
   <div class="faq">
-    <details>
-      <summary>Which payment processor has the lowest fees?</summary>
-      <p>
-        It depends on average order value, country, and whether you need chargebacks protection. Zelle is often $0 but is
-        not a full merchant stack. Compare with your real volume on this page, then open each calculator.
-      </p>
-    </details>
-    <details>
-      <summary>Should creators use Gumroad or Stripe?</summary>
-      <p>
-        Gumroad bundles storefront features with a higher take rate. Stripe is usually cheaper per payment if you already
-        have a storefront. Run both calculators on your price point.
-      </p>
-    </details>
+    {
+      faqs.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))
+    }
   </div>
 
   <h2>Learn more</h2>

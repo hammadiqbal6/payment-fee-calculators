@@ -3,6 +3,25 @@
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Creator Platform Fee Calculators",
-    "url": "https://feecalculator.example/creator-fees/"
+    "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/creator-fees/",
+    "description": "Patreon, Ko-fi, Buy Me a Coffee and Gumroad earnings calculators."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Creator fees",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/creator-fees/"
+      }
+    ]
   }
 ]

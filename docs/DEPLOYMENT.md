@@ -138,6 +138,9 @@ These are read when Astro builds. On Cloudflare Pages / Vercel / Netlify, add th
 | `PUBLIC_GSC_VERIFICATION` | Recommended | Google Search Console HTML tag **content** value |
 | `PUBLIC_BING_VERIFICATION` | Optional | Bing `msvalidate.01` content |
 | `PUBLIC_INDEXNOW_KEY` | Optional | 32-character hex key; must match `public/<key>.txt` |
+| `PUBLIC_EMAILJS_SERVICE_ID` | Optional | EmailJS service ID for `/contact/` (with template + public key) |
+| `PUBLIC_EMAILJS_TEMPLATE_ID` | Optional | EmailJS template ID — see `docs/CONTACT-EMAILJS.md` |
+| `PUBLIC_EMAILJS_PUBLIC_KEY` | Optional | EmailJS **public** key only (never the private key) |
 
 **Important:** After changing any `PUBLIC_*` value, run **`npm run build`** again and redeploy. Astro bakes these into static HTML at build time.
 

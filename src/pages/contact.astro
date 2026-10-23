@@ -9,13 +9,19 @@ const crumbs = [
   { name: 'Contact', href: '/contact/' },
 ];
 
+const contactDescription = `Contact ${siteConfig.siteName} for fee corrections, partnerships, privacy questions, or calculator bugs. Include the processor, country, and official pricing URL.`;
+
+const emailjsReady = Boolean(
+  siteConfig.emailjsServiceId && siteConfig.emailjsTemplateId && siteConfig.emailjsPublicKey,
+);
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
-    name: 'Contact',
+    name: 'Contact FeeCalc Tools for Corrections & Help',
     url: `${siteConfig.siteUrl}/contact/`,
-    description: `Contact ${siteConfig.siteName} about fee corrections, partnerships, or privacy questions.`,
+    description: contactDescription,
     mainEntity: {
       '@type': 'Organization',
       name: siteConfig.siteName,
@@ -25,19 +31,21 @@ const jsonLd = [
   },
   breadcrumbList(crumbs),
 ];
+
+const mailtoHref = `mailto:${siteConfig.contactEmail}`;
 ---
 
 <BaseLayout
-  title="Contact"
-  description={`Contact ${siteConfig.siteName} about fee corrections, partnerships, or privacy questions.`}
+  title="Contact FeeCalc Tools for Corrections & Help"
+  description={contactDescription}
   canonicalPath="/contact/"
   jsonLd={jsonLd}
 >
   <Breadcrumbs items={crumbs} />
   <h1>Contact</h1>
   <p class="answer-first">
-    Email us at <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>. For fee corrections, include
-    the processor, country, screenshot or URL, and the date you observed the rate.
+    Reach us at <a href={mailtoHref}>{siteConfig.contactEmail}</a>. For fee corrections, include the processor, country,
+    screenshot or URL, and the date you observed the rate.
   </p>
   <h2>What to include</h2>
   <ul>
@@ -46,19 +54,204 @@ const jsonLd = [
     <li>Link to the official pricing page</li>
   </ul>
   <p>We do not provide personalized financial, tax, or legal advice.</p>
-  <!-- Static form-ready markup for hosts that add a form backend later -->
-  <form class="contact-form" action={`mailto:${siteConfig.contactEmail}`} method="post" enctype="text/plain">
-    <label class="field">
-      <span class="field__label">Your email</span>
-      <input class="field__input" type="email" name="email" required autocomplete="email" />
-    </label>
-    <label class="field">
-      <span class="field__label">Message</span>
-      <textarea class="field__input" name="message" rows="5" required></textarea>
-    </label>
-    <button class="btn btn--primary" type="submit">Send via email</button>
-  </form>
+
+  {
+    emailjsReady ? (
+      <form
+        class="contact-form"
+        id="contact-form"
+        data-emailjs-form
+        data-service-id={siteConfig.emailjsServiceId}
+        data-template-id={siteConfig.emailjsTemplateId}
+        data-public-key={siteConfig.emailjsPublicKey}
+        data-site-name={siteConfig.siteName}
+        data-page-url={`${siteConfig.siteUrl}/contact/`}
+        data-throttle-ms="60000"
+        data-max-message="2000"
+        novalidate
+      >
+        <label class="field">
+          <span class="field__label">Your name</span>
+          <input
+            class="field__input"
+            type="text"
+            name="from_name"
+            id="contact-name"
+            required
+            autocomplete="name"
+            maxlength="120"
+          />
+        </label>
+        <label class="field">
+          <span class="field__label">Your email</span>
+          <input
+            class="field__input"
+            type="email"
+            name="reply_to"
+            id="contact-email"
+            required
+            autocomplete="email"
+            maxlength="200"
+          />
+        </label>
+        {/* Honeypot — leave empty; bots that fill it are rejected client-side */}
+        <label class="field field--hp" aria-hidden="true">
+          <span class="field__label">Company</span>
+          <input
+            class="field__input"
+            type="text"
+            name="company"
+            id="contact-hp"
+            tabindex="-1"
+            autocomplete="off"
+          />
+        </label>
+        <label class="field">
+          <span class="field__label">Message</span>
+          <textarea
+            class="field__input"
+            name="message"
+            id="contact-message"
+            rows="5"
+            required
+            maxlength="2000"
+          />
+        </label>
+        <p class="contact-status" id="contact-status" role="status" aria-live="polite" hidden></p>
+        <button class="btn btn--primary" type="submit" id="contact-submit">
+          Send message
+        </button>
+      </form>
+      <p class="contact-alt">
+        Prefer email? Write to <a href={mailtoHref}>{siteConfig.contactEmail}</a>.
+      </p>
+      <noscript>
+        <p class="contact-alt">
+          JavaScript is off — email <a href={mailtoHref}>{siteConfig.contactEmail}</a> directly.
+        </p>
+      </noscript>
+    ) : (
+      <p class="contact-alt contact-alt--primary">
+        Email <a href={mailtoHref}>{siteConfig.contactEmail}</a> with the details above. We reply when we can.
+      </p>
+    )
+  }
 </BaseLayout>
+
+{
+  emailjsReady && (
+    <script is:inline>
+      (function () {
+        var form = document.querySelector('[data-emailjs-form]');
+        if (!form) return;
+
+        var statusEl = document.getElementById('contact-status');
+        var submitBtn = document.getElementById('contact-submit');
+        var throttleKey = 'feecalc-contact-last-send';
+        var throttleMs = Number(form.getAttribute('data-throttle-ms') || 60000);
+        var maxMessage = Number(form.getAttribute('data-max-message') || 2000);
+        var endpoint = 'https://api.emailjs.com/api/v1.0/email/send';
+
+        function showStatus(kind, text) {
+          if (!statusEl) return;
+          statusEl.hidden = false;
+          statusEl.className = 'contact-status contact-status--' + kind;
+          statusEl.textContent = text;
+        }
+
+        function setSending(on) {
+          if (!submitBtn) return;
+          submitBtn.disabled = on;
+          submitBtn.textContent = on ? 'Sending…' : 'Send message';
+        }
+
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          var hp = form.querySelector('#contact-hp');
+          if (hp && String(hp.value || '').trim() !== '') {
+            showStatus('ok', 'Thanks — your message was received.');
+            form.reset();
+            return;
+          }
+
+          var name = String((form.querySelector('#contact-name') || {}).value || '').trim();
+          var email = String((form.querySelector('#contact-email') || {}).value || '').trim();
+          var message = String((form.querySelector('#contact-message') || {}).value || '').trim();
+
+          if (!name) {
+            showStatus('err', 'Please enter your name.');
+            return;
+          }
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showStatus('err', 'Please enter a valid email address.');
+            return;
+          }
+          if (!message) {
+            showStatus('err', 'Please enter a message.');
+            return;
+          }
+          if (message.length > maxMessage) {
+            showStatus('err', 'Message is too long (max ' + maxMessage + ' characters).');
+            return;
+          }
+
+          try {
+            var last = Number(localStorage.getItem(throttleKey) || 0);
+            var wait = throttleMs - (Date.now() - last);
+            if (last && wait > 0) {
+              showStatus('err', 'Please wait ' + Math.ceil(wait / 1000) + 's before sending again.');
+              return;
+            }
+          } catch (_) {}
+
+          setSending(true);
+          showStatus('ok', 'Sending…');
+
+          var body = {
+            service_id: form.getAttribute('data-service-id'),
+            template_id: form.getAttribute('data-template-id'),
+            user_id: form.getAttribute('data-public-key'),
+            template_params: {
+              from_name: name,
+              reply_to: email,
+              message: message,
+              page_url: form.getAttribute('data-page-url') || location.href,
+              site_name: form.getAttribute('data-site-name') || '',
+            },
+          };
+
+          fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          })
+            .then(function (res) {
+              if (!res.ok) {
+                return res.text().then(function (t) {
+                  throw new Error(t || 'Send failed');
+                });
+              }
+              try {
+                localStorage.setItem(throttleKey, String(Date.now()));
+              } catch (_) {}
+              form.reset();
+              showStatus('ok', 'Message sent. We will reply when we can.');
+            })
+            .catch(function () {
+              var mail = form.getAttribute('data-page-url')
+                ? ' Or email us directly using the address above.'
+                : '';
+              showStatus('err', 'Could not send right now.' + mail);
+            })
+            .finally(function () {
+              setSending(false);
+            });
+        });
+      })();
+    </script>
+  )
+}
 
 <style>
   .contact-form {
@@ -85,5 +278,39 @@ const jsonLd = [
   }
   textarea.field__input {
     min-height: 140px;
+  }
+  .field--hp {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .contact-status {
+    margin: 0;
+    font-size: 0.95rem;
+    min-height: 1.4em;
+  }
+  .contact-status--ok {
+    color: var(--color-ink, #0b3d2e);
+  }
+  .contact-status--err {
+    color: #8b1e1e;
+  }
+  .contact-alt {
+    margin-top: 1rem;
+    max-width: 480px;
+  }
+  .contact-alt--primary {
+    margin-top: 1.25rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    max-width: 480px;
+  }
+  #contact-submit:disabled {
+    opacity: 0.65;
+    cursor: wait;
   }
 </style>

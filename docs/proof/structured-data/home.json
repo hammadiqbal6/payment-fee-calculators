@@ -1,22 +1,48 @@
 [
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "FeeCalc Tools",
-    "url": "https://feecalculator.example",
-    "description": "Calculate Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify Payments and Wise fees. Forward and reverse calculators with dated fee schedules.",
-    "publisher": {
-      "@type": "Organization",
-      "name": "FeeCalc Tools",
-      "url": "https://feecalculator.example"
-    }
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "FeeCalc Tools",
-    "url": "https://feecalculator.example",
-    "email": "hammadiqbal117@gmail.com",
-    "foundingDate": "2026"
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#website",
+        "name": "FeeCalc Tools",
+        "alternateName": [
+          "FeeCalc"
+        ],
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/",
+        "inLanguage": "en",
+        "description": "Calculate Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify Payments and Wise fees. Forward and reverse calculators with dated fee schedules.",
+        "publisher": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#organization"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#organization",
+        "name": "FeeCalc Tools",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/",
+        "email": "hammadiqbal117@gmail.com",
+        "foundingDate": "2026",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/logo-512.png",
+          "width": 512,
+          "height": 512
+        },
+        "founder": {
+          "@id": "https://github.com/hammadiqbal6#person"
+        },
+        "publishingPrinciples": "https://payment-fee-calculators.hammadiqbal117.workers.dev/methodology/"
+      },
+      {
+        "@type": "Person",
+        "@id": "https://github.com/hammadiqbal6#person",
+        "name": "Hammad Iqbal",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/",
+        "sameAs": [
+          "https://github.com/hammadiqbal6"
+        ]
+      }
+    ]
   }
 ]
