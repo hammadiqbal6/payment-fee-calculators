@@ -29,6 +29,13 @@ One primary keyword + secondary cluster per URL. Do not create duplicate-intent 
 | `/guides/stripe-vs-paypal-fees/` | stripe vs paypal fees | which is cheaper stripe or paypal |
 | `/guides/patreon-vs-kofi-vs-bmac/` | patreon vs ko-fi fees | buy me a coffee vs patreon fees |
 | `/guides/hidden-payment-fees/` | hidden payment processing fees | freelancer payment fees instant payout |
+| `/guides/venmo-vs-cash-app-vs-zelle/` | venmo vs cash app vs zelle fees | venmo business vs zelle; cash app business fees |
+| `/guides/square-vs-stripe-vs-shopify/` | square vs stripe vs shopify payments | shopify payments vs stripe fees |
+| `/guides/gumroad-vs-kofi-fees/` | gumroad vs ko-fi fees | gumroad fees vs ko-fi gold |
+| `/guides/wise-vs-paypal-international/` | wise vs paypal international fees | wise vs paypal for international transfers |
+| `/guides/passing-fees-to-customers/` | passing payment fees to customers | surcharge vs fee-inclusive pricing |
+| `/guides/paypal-goods-services-vs-friends-family/` | paypal goods and services vs friends and family | paypal g&s vs f&f fees |
+| `/guides/chargeback-fees-by-processor/` | chargeback fees by processor | stripe paypal square dispute fees |
 
 **Redirects (do not recreate):**
 - `/guides/what-does-ebay-not-cover/` → `/guides/hidden-payment-fees/`

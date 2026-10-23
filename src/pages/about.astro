@@ -1,43 +1,53 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { siteConfig, PERSON_ID } from '@/config/site';
 import { sisterSiteCatalog } from '@/config/sisterSites';
+import { breadcrumbList } from '@/lib/breadcrumbs';
 
 /** Other niches only (exclude this payment-fees site). */
 const otherSites = sisterSiteCatalog.filter((s) => s.key !== 'paymentFees');
 
 const aboutModified = '2026-10-20T00:00:00+05:00';
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about/' },
+];
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfilePage',
-  dateCreated: siteConfig.dateCreated,
-  dateModified: aboutModified,
-  mainEntity: {
-    '@type': 'Person',
-    '@id': PERSON_ID,
-    name: siteConfig.authorName,
-    description: siteConfig.authorBio,
-    url: `${siteConfig.siteUrl}/about/`,
-    knowsAbout: [
-      'payment processor fees',
-      'Stripe fees',
-      'PayPal fees',
-      'creator platform fees',
-      'reverse fee pricing',
-    ],
-    sameAs: [...siteConfig.authorSameAs],
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    dateCreated: siteConfig.dateCreated,
+    dateModified: aboutModified,
+    mainEntity: {
+      '@type': 'Person',
+      '@id': PERSON_ID,
+      name: siteConfig.authorName,
+      description: siteConfig.authorBio,
+      url: `${siteConfig.siteUrl}/about/`,
+      knowsAbout: [
+        'payment processor fees',
+        'Stripe fees',
+        'PayPal fees',
+        'creator platform fees',
+        'reverse fee pricing',
+      ],
+      sameAs: [...siteConfig.authorSameAs],
+    },
   },
-};
+  breadcrumbList(crumbs),
+];
 ---
 
 <BaseLayout
   title={`About ${siteConfig.siteName}`}
-  description={`${siteConfig.siteName} is a free set of payment and creator fee calculators built and maintained by ${siteConfig.authorName}. Client-side math, dated sources, no invented credentials.`}
+  description={`${siteConfig.siteName}: free payment and creator fee calculators by ${siteConfig.authorName}. Client-side math, dated sources, no invented credentials.`}
   canonicalPath="/about/"
   modified="2026-10-20"
   jsonLd={jsonLd}
 >
+  <Breadcrumbs items={crumbs} />
   <h1>About {siteConfig.siteName}</h1>
 
   <p class="answer-first">

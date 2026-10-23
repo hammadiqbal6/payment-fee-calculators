@@ -1,15 +1,13 @@
-<!-- progress: 100 -->
+<!-- progress: 95 -->
 # Build progress
-Status: Complete — audits and Lighthouse passed; PR ready for review
-Updated: 2026-10-19T06:39:00Z
+Status: Local build/test/audit green; waiting on CI
+Updated: 2026-10-23
 
-- [x] Project scaffold & config
-- [x] Tools implemented (13 of 13)
-- [x] Tool page content written (13 of 13)
-- [x] Guides/articles (5 of 5)
-- [x] Required pages (About, Contact, Privacy, Terms, Methodology)
-- [x] Technical SEO (sitemap, robots, schema, canonicals, OG)
-- [x] Mobile & performance (Lighthouse >= 95)
-- [x] Docs (README, DEPLOYMENT, SEO-GUIDE, ADSENSE, AGENTS.md, ideas)
-- [x] Skills, rules, agents, auditors & CI
-- [x] Final verification & PR ready for review
+- [x] Expand 4 guides + write 7 new guides (~1000+ words)
+- [x] relatedGuides map + Learn more on tools; examples on Stripe/PayPal/Square
+- [x] Worker FILE_EXT for .webmanifest; PUBLIC_SITE_URL documented
+- [x] Breadcrumbs + schema on hubs/guides/about/contact/methodology/privacy/terms
+- [x] llms.txt full listing; embed canonicals; disclaimer out of FAQ
+- [x] docs/SEO-GUARDRAILS.md + AGENTS.md + CLAUDE.md + rules/skills
+- [x] Local build + test + audit green
+- [ ] PR + CI green — https://github.com/hammadiqbal6/payment-fee-calculators/pull/8

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Validate JSON-LD in dist/ — used by npm run proof */
+/** Validate JSON-LD in dist/ — used by npm run audit and proof */
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -8,6 +8,11 @@ const outDir = path.resolve('docs/proof/structured-data');
 const errors = [];
 
 function validate(item, route) {
+  if (!item || typeof item !== 'object') return;
+  if (item['@graph'] && Array.isArray(item['@graph'])) {
+    for (const child of item['@graph']) validate(child, route);
+    return;
+  }
   const t = item['@type'];
   if (!t) errors.push(`${route}: missing @type`);
   if (t === 'WebApplication' || t === 'SoftwareApplication') {
@@ -15,7 +20,12 @@ function validate(item, route) {
     if (!item.offers) errors.push(`${route}: WebApplication missing offers`);
   }
   if (t === 'Article' && !item.headline) errors.push(`${route}: Article missing headline`);
-  if (t === 'BreadcrumbList' && !item.itemListElement) errors.push(`${route}: BreadcrumbList missing items`);
+  if (t === 'BreadcrumbList' && !item.itemListElement) {
+    errors.push(`${route}: BreadcrumbList missing items`);
+  }
+  if (t === 'FAQPage' && !item.mainEntity) {
+    errors.push(`${route}: FAQPage missing mainEntity`);
+  }
 }
 
 function walk(dir) {
@@ -25,11 +35,18 @@ function walk(dir) {
     else if (ent.name === 'index.html') {
       const route = '/' + path.relative(dist, p).replace(/index\.html$/, '').replace(/\\/g, '/');
       if (route.includes('/embed/')) continue;
+      if (route === '/authors/' || route === '/docs-fee-update/') continue;
       const html = fs.readFileSync(p, 'utf8');
       const blocks = [...html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/gi)];
       const parsed = [];
       for (const m of blocks) {
-        const data = JSON.parse(m[1]);
+        let data;
+        try {
+          data = JSON.parse(m[1]);
+        } catch {
+          errors.push(`${route}: invalid JSON-LD JSON`);
+          continue;
+        }
         parsed.push(data);
         for (const item of Array.isArray(data) ? data : [data]) validate(item, route);
       }

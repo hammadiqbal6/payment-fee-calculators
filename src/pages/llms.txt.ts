@@ -1,22 +1,43 @@
 import type { APIRoute } from 'astro';
 import { siteConfig } from '@/config/site';
+import { guides } from '@/data/guides';
+import { allTools, hubCategories } from '@/lib/tools';
 
 export const GET: APIRoute = () => {
-  const body = `# Optional llms.txt for ${siteConfig.siteName}
-# Note: Google ignores llms.txt. Kept as a cheap optional hint for other tools.
+  const base = siteConfig.siteUrl;
+  const toolLines = allTools
+    .map((t) => `- [${t.h1}](${base}${t.path}): ${t.description}`)
+    .join('\n');
+  const guideLines = guides
+    .map((g) => `- [${g.title}](${base}/guides/${g.slug}/): ${g.description}`)
+    .join('\n');
+  const hubLines = hubCategories
+    .map((h) => `- [${h.title}](${base}${h.path}): ${h.description}`)
+    .join('\n');
+  const exampleAmounts = [50, 100, 500, 1000];
+  const exampleLines = exampleAmounts
+    .map((n) => `- [Fee on $${n}](${base}/examples/fee-on-${n}/): Example fees across processors on a $${n} charge`)
+    .join('\n');
 
-Name: ${siteConfig.siteName}
-Description: Free payment processor and creator fee calculators (Stripe, PayPal, Square, Venmo, Cash App, Zelle, Patreon, Ko-fi, Buy Me a Coffee, Gumroad, Shopify Payments, Wise) with forward/reverse math and dated fee schedules.
-Website: ${siteConfig.siteUrl}/
-Contact: ${siteConfig.contactEmail}
-Disclaimer: Not financial advice. Verify fees on provider sites.
+  const body = `# ${siteConfig.siteName}
+> ${siteConfig.description}
 
-Key pages:
-- /tools/stripe-fee-calculator/
-- /tools/paypal-fee-calculator/
-- /tools/compare-payment-fees/
-- /methodology/
-- /guides/
+## Tools
+${toolLines}
+
+## Guides
+${guideLines}
+
+## Hubs
+${hubLines}
+
+## Examples
+${exampleLines}
+
+## About
+- [Methodology](${base}/methodology/): How schedules are sourced, verified, and updated
+- [About](${base}/about/): Maintainer, independence, and funding
+- [Contact](${base}/contact/): Corrections and questions (${siteConfig.contactEmail})
 `;
 
   return new Response(body, {

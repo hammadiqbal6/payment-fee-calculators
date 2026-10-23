@@ -65,7 +65,7 @@ export const toolContent: Record<string, ToolContent> = {
   },
   paypal: {
     answerFirst:
-      'PayPal US Goods & Services fees are commonly 3.49% + $0.49. On $100 that is about $3.98 in fees ($96.02 net). Friends & Family from balance/bank is often free, while international and micropayments use different schedules.',
+      'PayPal US Goods & Services fees are commonly 3.49% + $0.49. On $100 that is about $3.98 in fees ($96.02 net). Friends & Family from balance/bank is often free, while international and micropayments use different schedules—confirm your live rate before invoicing.',
     howItWorks: [
       'Select G&S, Friends & Family, international, UK, AUD, India, or micropayments.',
       'Enter the payment amount or the net you need.',
@@ -188,7 +188,7 @@ export const toolContent: Record<string, ToolContent> = {
   },
   cashapp: {
     answerFirst:
-      'Cash App for Business commonly charges about 2.75% per payment with no fixed cents fee on that schedule. On $100 you would pay about $2.75 and keep $97.25. Instant deposits are a separate percentage on the deposit amount.',
+      'Cash App for Business commonly charges about 2.75% per payment with no fixed cents fee on that schedule. On $100 you would pay about $2.75 and keep $97.25. Instant deposits are a separate percentage on the deposit amount, so model both cuts when you need fast access to funds.',
     howItWorks: [
       'Select Business card fee or Instant deposit.',
       'Calculate fee on amount or reverse price to a net target.',
@@ -304,7 +304,7 @@ export const toolContent: Record<string, ToolContent> = {
   },
   kofi: {
     answerFirst:
-      'Ko-fi’s free plan commonly takes about 5% platform commission on tips and sales, while Ko-fi Gold can remove the platform cut on donations (card processing may still apply). Use forward/reverse modes to price commissions and shop items.',
+      'Ko-fi’s free plan commonly takes about 5% platform commission on tips and sales, while Ko-fi Gold can remove the platform cut on donations (card processing may still apply). Use forward/reverse modes to price commissions and shop items before you publish a tip goal.',
     howItWorks: [
       'Select free plan, Gold, or shop estimate.',
       'Enter donation/sale amount or target net.',

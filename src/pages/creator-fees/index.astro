@@ -1,28 +1,41 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { hubCategories, getRelatedTools } from '@/lib/tools';
+import { breadcrumbList } from '@/lib/breadcrumbs';
 import { siteConfig } from '@/config/site';
 
 const hub = hubCategories[2];
 const tools = getRelatedTools([...hub.toolIds]);
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Creator fees', href: hub.path },
+];
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: hub.title,
+    url: siteConfig.siteUrl + hub.path,
+    description: hub.description,
+  },
+  breadcrumbList(crumbs),
+];
 ---
 
 <BaseLayout
   title="Creator Platform Fee Calculators"
   description="Patreon, Ko-fi, Buy Me a Coffee and Gumroad fee calculators to estimate creator earnings after platform and processing fees."
   canonicalPath={hub.path}
-  jsonLd={{
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: hub.title,
-    url: siteConfig.siteUrl + hub.path,
-  }}
+  jsonLd={jsonLd}
 >
-  <nav class="breadcrumbs"><a href="/">Home</a> <span>/</span> <span>Creator fees</span></nav>
+  <Breadcrumbs items={crumbs} />
   <h1>{hub.title}</h1>
   <p class="answer-first">
     Creator platforms take a platform commission on top of card processing. Patreon varies by plan, Ko-fi Gold can remove
-    donation commission, and Gumroad’s direct sales fee is higher but includes storefront tooling.
+    donation commission, and Gumroad’s direct sales fee is higher but includes storefront tooling. Compare{' '}
+    <a href="/guides/patreon-vs-kofi-vs-bmac/">Patreon vs Ko-fi</a> and{' '}
+    <a href="/guides/gumroad-vs-kofi-fees/">Gumroad vs Ko-fi</a> before you pick a stack.
   </p>
   <div class="tool-grid">
     {
@@ -34,5 +47,7 @@ const tools = getRelatedTools([...hub.toolIds]);
       ))
     }
   </div>
-  <p>Read <a href="/guides/patreon-vs-kofi-vs-bmac/">Patreon vs Ko-fi vs Buy Me a Coffee fees</a>.</p>
+  <p>
+    Read <a href="/guides/patreon-vs-kofi-vs-bmac/">Patreon vs Ko-fi vs Buy Me a Coffee fees</a>.
+  </p>
 </BaseLayout>

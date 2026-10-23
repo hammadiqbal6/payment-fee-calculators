@@ -2,10 +2,12 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import AdSlot from '@/components/AdSlot.astro';
 import SisterSites from '@/components/SisterSites.astro';
-import { guides } from '@/data/guides';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { guides, getGuide } from '@/data/guides';
 import { getRelatedTools } from '@/lib/tools';
 import { sisterLinksByContext } from '@/lib/sisterLinks';
-import { siteConfig } from '@/config/site';
+import { breadcrumbList } from '@/lib/breadcrumbs';
+import { siteConfig, PERSON_ID } from '@/config/site';
 
 export function getStaticPaths() {
   return guides.map((g) => ({ params: { slug: g.slug }, props: { guide: g } }));
@@ -13,9 +15,19 @@ export function getStaticPaths() {
 
 const { guide } = Astro.props;
 const related = getRelatedTools(guide.relatedTools);
+const relatedGuideLinks = (guide.relatedGuides ?? [])
+  .map((slug) => getGuide(slug))
+  .filter((g): g is NonNullable<typeof g> => Boolean(g));
 const path = `/guides/${guide.slug}/`;
+const pageUrl = new URL(path, siteConfig.siteUrl).toString();
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Guides', href: '/guides/' },
+  { name: guide.title, href: path },
+];
 const sister =
   guide.slug === 'how-to-price-after-fees' ? (sisterLinksByContext['guide-price'] ?? []) : [];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -24,24 +36,24 @@ const jsonLd = [
     description: guide.description,
     datePublished: guide.published,
     dateModified: guide.modified,
-    author: [
-      {
-        '@type': 'Person',
-        name: siteConfig.authorName,
-        url: siteConfig.siteUrl + '/about/',
-      },
-    ],
+    author: {
+      '@type': 'Person',
+      '@id': PERSON_ID,
+      name: siteConfig.authorName,
+      url: `${siteConfig.siteUrl}/about/`,
+    },
     publisher: { '@type': 'Organization', name: siteConfig.siteName, url: siteConfig.siteUrl },
-    mainEntityOfPage: siteConfig.siteUrl + path,
+    mainEntityOfPage: pageUrl,
   },
+  breadcrumbList(crumbs),
   {
     '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.siteUrl + '/' },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: siteConfig.siteUrl + '/guides/' },
-      { '@type': 'ListItem', position: 3, name: guide.title, item: siteConfig.siteUrl + path },
-    ],
+    '@type': 'FAQPage',
+    mainEntity: guide.faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
   },
 ];
 ---
@@ -55,16 +67,13 @@ const jsonLd = [
   modified={guide.modified}
   jsonLd={jsonLd}
 >
-  <nav class="breadcrumbs">
-    <a href="/">Home</a> <span>/</span> <a href="/guides/">Guides</a> <span>/</span> <span>{guide.primaryKeyword}</span>
-  </nav>
+  <Breadcrumbs items={crumbs} />
   <h1>{guide.title}</h1>
-  <div class="meta-row">
-    <span>Published: <time datetime={guide.published}>{guide.published}</time></span>
-    <span>Updated: <time datetime={guide.modified}>{guide.modified}</time></span>
-    <span>By <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a></span>
-  </div>
   <p class="answer-first">{guide.answerFirst}</p>
+  <p class="byline meta-row--compact">
+    By <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a>
+    · Updated <time datetime={guide.modified}>{guide.modified}</time>
+  </p>
   <AdSlot />
   {
     guide.sections.map((section) => (
@@ -83,6 +92,44 @@ const jsonLd = [
       </>
     ))
   }
+  {
+    guide.feeTable && (
+      <div class="table-wrap">
+        <table>
+          <caption>{guide.feeTable.caption}</caption>
+          <thead>
+            <tr>
+              {guide.feeTable.headers.map((h) => (
+                <th scope="col">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {guide.feeTable.rows.map((row) => (
+              <tr>
+                {row.map((cell) => (
+                  <td>{cell}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+  <h2>Sources</h2>
+  <ul>
+    {
+      guide.sources.map((s) => (
+        <li>
+          <a href={s.url} rel="noopener noreferrer" target="_blank">
+            {s.label}
+          </a>{' '}
+          (as of {s.asOf})
+        </li>
+      ))
+    }
+  </ul>
   <h2>FAQ</h2>
   <div class="faq">
     {
@@ -94,7 +141,6 @@ const jsonLd = [
       ))
     }
   </div>
-  <SisterSites links={sister} />
   <h2>Related calculators</h2>
   <div class="related">
     {related.map((t) => <a href={t.path}>{t.h1}</a>)}
@@ -102,4 +148,29 @@ const jsonLd = [
       <a href="/tools/compare-payment-fees/">Open the side-by-side fee comparison tool</a>
     )}
   </div>
+  {
+    relatedGuideLinks.length > 0 && (
+      <>
+        <h2>Related guides</h2>
+        <div class="related">
+          {relatedGuideLinks.map((g) => (
+            <a href={`/guides/${g.slug}/`}>{g.title}</a>
+          ))}
+        </div>
+      </>
+    )
+  }
+  {
+    guide.relatedHubs && guide.relatedHubs.length > 0 && (
+      <>
+        <h2>Related hubs</h2>
+        <div class="related">
+          {guide.relatedHubs.map((h) => (
+            <a href={h.href}>{h.label}</a>
+          ))}
+        </div>
+      </>
+    )
+  }
+  <SisterSites links={sister} />
 </BaseLayout>

@@ -1,17 +1,26 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { hubCategories, getRelatedTools } from '@/lib/tools';
+import { breadcrumbList } from '@/lib/breadcrumbs';
 import { siteConfig } from '@/config/site';
 
 const hub = hubCategories[0];
 const tools = getRelatedTools([...hub.toolIds]);
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: hub.title,
-  url: siteConfig.siteUrl + hub.path,
-  description: hub.description,
-};
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Payment processors', href: hub.path },
+];
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: hub.title,
+    url: siteConfig.siteUrl + hub.path,
+    description: hub.description,
+  },
+  breadcrumbList(crumbs),
+];
 ---
 
 <BaseLayout
@@ -20,11 +29,14 @@ const jsonLd = {
   canonicalPath={hub.path}
   jsonLd={jsonLd}
 >
-  <nav class="breadcrumbs"><a href="/">Home</a> <span>/</span> <span>Payment processors</span></nav>
+  <Breadcrumbs items={crumbs} />
   <h1>{hub.title}</h1>
   <p class="answer-first">
-    Card processors charge a percent plus a fixed fee per successful payment. Start with Stripe or PayPal if you sell
-    online, Square for in-person, and Shopify Payments if your store already runs on Shopify.
+    Card processors typically charge a percent plus a fixed fee per successful payment. Start with Stripe or PayPal for
+    online checkout, Square for in-person sales, and Shopify Payments if your store already runs on Shopify. Compare list
+    rates with our{' '}
+    <a href="/guides/square-vs-stripe-vs-shopify/">Square vs Stripe vs Shopify</a> and{' '}
+    <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal</a> guides before you commit.
   </p>
   <p class="lead">{hub.description}</p>
   <div class="tool-grid">
@@ -37,5 +49,8 @@ const jsonLd = {
       ))
     }
   </div>
-  <p>Also see the <a href="/tools/compare-payment-fees/">full comparison calculator</a> and <a href="/creator-fees/">creator platforms</a>.</p>
+  <p>
+    Also see the <a href="/tools/compare-payment-fees/">full comparison calculator</a> and{' '}
+    <a href="/creator-fees/">creator platforms</a>.
+  </p>
 </BaseLayout>

@@ -6,11 +6,14 @@ import AdSlot from '@/components/AdSlot.astro';
 import Disclaimer from '@/components/Disclaimer.astro';
 import TrustBlock from '@/components/TrustBlock.astro';
 import SisterSites from '@/components/SisterSites.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { processors } from '@/data/fees';
 import { toolContent } from '@/data/toolContent';
 import { toolDepth } from '@/data/toolDepth';
 import { getToolMeta, getRelatedTools } from '@/lib/tools';
+import { getGuidesForTool, exampleLinkToolIds } from '@/data/relatedGuides';
 import { sisterLinksByContext } from '@/lib/sisterLinks';
+import { breadcrumbList } from '@/lib/breadcrumbs';
 import { siteConfig, PERSON_ID } from '@/config/site';
 import { FEE_DATA_UPDATED, FEE_DATA_VERSION } from '@/data/fees';
 import { calculateForward, calculateReverse, formatMoney } from '@/lib/fees/calculate';
@@ -26,6 +29,8 @@ const { processor } = Astro.props;
 const meta = getToolMeta(processor);
 const content = toolContent[processor.id];
 const related = getRelatedTools(meta.related);
+const learnMoreGuides = getGuidesForTool(processor.id);
+const showExampleLinks = exampleLinkToolIds.has(processor.id);
 const defaultRate = processor.rates.find((r) => r.id === processor.defaultRateId) ?? processor.rates[0];
 const sampleForward = calculateForward(100, defaultRate);
 const sampleReverse = calculateReverse(100, defaultRate);
@@ -35,6 +40,11 @@ const pageUrl = new URL(meta.path, siteConfig.siteUrl).toString();
 const diagramUrl = new URL('/images/fee-breakdown.png', siteConfig.siteUrl).toString();
 const sister = sisterLinksByContext[processor.id] ?? [];
 const citationUrls = [...new Set(processor.rates.map((r) => r.sourceUrl))];
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Tools', href: '/payment-processors/' },
+  { name: meta.h1, href: meta.path },
+];
 
 const jsonLd = [
   {
@@ -81,25 +91,7 @@ const jsonLd = [
       },
     ],
   },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.siteUrl + '/' },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Tools',
-        item: siteConfig.siteUrl + '/payment-processors/',
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: meta.h1,
-        item: pageUrl,
-      },
-    ],
-  },
+  breadcrumbList(crumbs),
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -123,18 +115,28 @@ const embedSnippet = `<iframe src="${siteConfig.siteUrl}/embed/${processor.slug}
   published={published}
   jsonLd={jsonLd}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <a href="/">Home</a> <span aria-hidden="true">/</span>
-    <a href="/payment-processors/">Tools</a> <span aria-hidden="true">/</span>
-    <span>{processor.name}</span>
-  </nav>
+  <Breadcrumbs items={crumbs} />
 
   <h1>{meta.h1}</h1>
-  <p class="lead lead--tight">{processor.description}</p>
+  <p class="answer-first">{content.answerFirst}</p>
 
   <section class="hero-tool" aria-label="Calculator">
     <FeeCalculator processor={processor} />
   </section>
+
+  {
+    showExampleLinks && (
+      <>
+        <h2>See fees on common amounts</h2>
+        <div class="compare-with">
+          <a href="/examples/fee-on-50/">$50</a>
+          <a href="/examples/fee-on-100/">$100</a>
+          <a href="/examples/fee-on-500/">$500</a>
+          <a href="/examples/fee-on-1000/">$1,000</a>
+        </div>
+      </>
+    )
+  }
 
   <p class="byline meta-row--compact">
     Built by <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a>
@@ -146,7 +148,7 @@ const embedSnippet = `<iframe src="${siteConfig.siteUrl}/embed/${processor.slug}
 
   <AdSlot slot={`${processor.id}-top`} />
 
-  <p class="answer-first">{content.answerFirst}</p>
+  <p>{processor.description}</p>
 
   <figure class="figure">
     <img
@@ -262,13 +264,19 @@ const embedSnippet = `<iframe src="${siteConfig.siteUrl}/embed/${processor.slug}
     <a href="/tools/compare-payment-fees/">Side-by-side comparison</a>
   </div>
 
+  <h2>Learn more</h2>
+  <div class="related">
+    {learnMoreGuides.map((g) => (
+      <a href={`/guides/${g.slug}/`}>{g.title}</a>
+    ))}
+    <a href="/guides/">More fee guides</a>
+  </div>
+
   <SisterSites links={sister} />
 
   <h2>Related tools</h2>
   <div class="related">
     {related.map((t) => <a href={t.path}>{t.h1}</a>)}
-    <a href="/guides/how-to-price-after-fees/">Guide: how to price after fees</a>
-    <a href="/guides/">More fee guides</a>
   </div>
 
   <AdSlot slot={`${processor.id}-bottom`} format="rectangle" />

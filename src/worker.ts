@@ -7,7 +7,8 @@ export interface Env {
   ASSETS: Fetcher;
 }
 
-const FILE_EXT = /\.[a-zA-Z0-9]{1,8}$/;
+/** Allow long extensions (e.g. .webmanifest = 11 chars). Cap at 16. */
+const FILE_EXT = /\.[a-zA-Z0-9]{1,16}$/;
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {

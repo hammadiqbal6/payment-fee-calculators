@@ -1,42 +1,53 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { guides } from '@/data/guides';
+import { breadcrumbList } from '@/lib/breadcrumbs';
+import { siteConfig } from '@/config/site';
 
-const guides = [
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Guides', href: '/guides/' },
+];
+
+const pageUrl = `${siteConfig.siteUrl}/guides/`;
+
+const jsonLd = [
   {
-    href: '/guides/how-to-price-after-fees/',
-    title: 'How to price so you still receive what you need after fees',
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Guides: Payment & Creator Fees',
     description:
-      'Use reverse fee math to set list prices — including how much to charge to receive $100 after Stripe, PayPal and creator fees.',
+      'Practical guides on pricing after fees, Stripe vs PayPal, creator platforms, P2P apps, and reverse fee math for freelancers.',
+    url: pageUrl,
   },
   {
-    href: '/guides/stripe-vs-paypal-fees/',
-    title: 'Stripe vs PayPal fees: which is cheaper?',
-    description: 'Compare common US online rates, international add-ons, and when each wins. Links to the side-by-side tool.',
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: guides.map((g, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: g.title,
+      url: `${siteConfig.siteUrl}/guides/${g.slug}/`,
+    })),
   },
-  {
-    href: '/guides/patreon-vs-kofi-vs-bmac/',
-    title: 'Patreon vs Ko-fi vs Buy Me a Coffee fees',
-    description: 'Platform commissions, processing, and when Gold or higher Patreon plans pay off.',
-  },
-  {
-    href: '/guides/hidden-payment-fees/',
-    title: 'Payment fees freelancers forget to budget',
-    description: 'Chargebacks, instant payouts, currency conversion, and platform commissions.',
-  },
+  breadcrumbList(crumbs),
 ];
 ---
 
 <BaseLayout
-  title="Guides: Payment & Creator Fees Explained"
-  description="Practical guides on pricing after payment fees, Stripe vs PayPal, and creator platform fee comparisons."
+  title="Guides: Payment & Creator Fees"
+  description="Practical guides on pricing after fees, Stripe vs PayPal, creator platforms, P2P apps, and reverse fee math for freelancers."
   canonicalPath="/guides/"
+  jsonLd={jsonLd}
 >
+  <Breadcrumbs items={crumbs} />
   <h1>Guides</h1>
   <p class="lead">Explainers that interlink with the calculators — written for freelancers, sellers, and creators.</p>
   <div class="tool-grid">
     {
       guides.map((g) => (
-        <a class="card-link" href={g.href}>
+        <a class="card-link" href={`/guides/${g.slug}/`}>
           <h2>{g.title}</h2>
           <p>{g.description}</p>
         </a>

@@ -1,13 +1,39 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { siteConfig } from '@/config/site';
+import { breadcrumbList } from '@/lib/breadcrumbs';
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Contact', href: '/contact/' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact',
+    url: `${siteConfig.siteUrl}/contact/`,
+    description: `Contact ${siteConfig.siteName} about fee corrections, partnerships, or privacy questions.`,
+    mainEntity: {
+      '@type': 'Organization',
+      name: siteConfig.siteName,
+      email: siteConfig.contactEmail,
+      url: siteConfig.siteUrl,
+    },
+  },
+  breadcrumbList(crumbs),
+];
 ---
 
 <BaseLayout
   title="Contact"
   description={`Contact ${siteConfig.siteName} about fee corrections, partnerships, or privacy questions.`}
   canonicalPath="/contact/"
+  jsonLd={jsonLd}
 >
+  <Breadcrumbs items={crumbs} />
   <h1>Contact</h1>
   <p class="answer-first">
     Email us at <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>. For fee corrections, include

@@ -6,17 +6,18 @@ description: Repo-specific write seo article workflow for payment fee calculator
 # write-seo-article
 
 ## When to use
-Apply when working on this repository's fee calculators, SEO, or AdSense readiness.
+Writing or expanding guides under `/guides/`.
 
 ## Steps
-1. Read `AGENTS.md` and `docs/SEO-PLAYBOOK.md`.
-2. Run `npm run build` and relevant audit (`npm run audit`).
-3. For fee changes: edit `src/data/fees.ts`, follow `docs/FEE-UPDATE.md`, run `npm test`.
-4. Update `docs/KEYWORD-MAP.md` if adding URLs.
-5. Commit with clear message; update `PROGRESS.md` on long builds.
+1. Read `docs/SEO-GUARDRAILS.md`, `docs/KEYWORD-MAP.md`, and `src/data/fees.ts` for accurate rates.
+2. Add/update a `Guide` in `src/data/guides.ts`:
+   - Title ≤58 chars; description 120–160 chars; `answerFirst` 40–60 words
+   - ~1000+ words (CI ≥800): worked example, `feeTable`, FAQ (4–6), `sources` with as-of dates
+   - `relatedTools`, `relatedGuides`, optional `relatedHubs`
+3. Wire tools in `src/data/relatedGuides.ts`; update KEYWORD-MAP.
+4. Guides index, sitemap, and llms.txt pick up data automatically.
+5. Run `npm run build && npm run audit`.
 
-## Repo paths
-- Fees: `src/data/fees.ts`
-- Math: `src/lib/fees/calculate.ts`
-- Tools: `src/pages/tools/[slug].astro`
-- Config: `src/config/site.ts`
+## Do not
+- Invent fee statistics — copy from `fees.ts` / official pricing URLs only.
+- Omit FAQPage (rendered from `faqs` in `guides/[slug].astro`).
