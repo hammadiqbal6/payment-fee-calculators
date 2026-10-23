@@ -1,1 +1,99 @@
-[]
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Guides: Payment & Creator Fees",
+    "description": "Practical guides on pricing after fees, Stripe vs PayPal, creator platforms, P2P apps, and reverse fee math for freelancers.",
+    "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "How to Price After Payment Fees",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/how-to-price-after-fees/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Stripe vs PayPal Fees in 2026",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/stripe-vs-paypal-fees/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Patreon vs Ko-fi vs Buy Me a Coffee",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/patreon-vs-kofi-vs-bmac/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "Hidden Payment Fees Freelancers Miss",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/hidden-payment-fees/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "name": "Venmo vs Cash App vs Zelle fees",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/venmo-vs-cash-app-vs-zelle/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 6,
+        "name": "Square vs Stripe vs Shopify Payments",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/square-vs-stripe-vs-shopify/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 7,
+        "name": "Gumroad fees vs Ko-fi",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/gumroad-vs-kofi-fees/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 8,
+        "name": "Wise vs PayPal for international",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/wise-vs-paypal-international/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 9,
+        "name": "Passing fees to customers (where allowed)",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/passing-fees-to-customers/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 10,
+        "name": "PayPal G&S vs Friends & Family",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/paypal-goods-services-vs-friends-family/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 11,
+        "name": "Chargeback/dispute fees by processor",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/chargeback-fees-by-processor/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Guides",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/"
+      }
+    ]
+  }
+]

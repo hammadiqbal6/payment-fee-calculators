@@ -1,23 +1,65 @@
 [
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "PayPal Fee Calculator",
-    "url": "https://feecalculator.example/tools/paypal-fee-calculator/",
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "PayPal fee calculator for Goods & Services, Friends & Family, international, UK, AUD, India and micropayments. Forward and reverse fees.",
-    "dateModified": "2026-10-19",
-    "author": {
-      "@type": "Organization",
-      "name": "FeeCalc Tools"
-    }
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/paypal-fee-calculator/#app",
+        "name": "PayPal Fee Calculator",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/paypal-fee-calculator/",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Calculate PayPal Goods & Services, Friends & Family and international fees. See what you keep, or find how much to invoice to receive an exact amount.",
+        "dateModified": "2026-10-19",
+        "author": {
+          "@type": "Person",
+          "@id": "https://github.com/hammadiqbal6#person",
+          "name": "Hammad Iqbal",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+        },
+        "publisher": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#organization"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/paypal-fee-calculator/#webpage",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/paypal-fee-calculator/",
+        "name": "PayPal Fee Calculator 2026: G&S, Friends & International",
+        "isPartOf": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#website"
+        },
+        "mainEntity": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/paypal-fee-calculator/#app"
+        },
+        "datePublished": "2026-10-19T00:00:00+05:00",
+        "dateModified": "2026-10-19T00:00:00+05:00",
+        "lastReviewed": "2026-10-19",
+        "author": {
+          "@id": "https://github.com/hammadiqbal6#person"
+        },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/images/fee-breakdown.png",
+          "width": 800,
+          "height": 450
+        },
+        "citation": [
+          "https://www.paypal.com/us/business/paypal-business-fees",
+          "https://www.paypal.com/us/webapps/mpp/paypal-fees",
+          "https://www.paypal.com/uk/business/paypal-business-fees",
+          "https://www.paypal.com/au/business/paypal-business-fees",
+          "https://www.paypal.com/in/webapps/mpp/merchant-fees"
+        ]
+      }
+    ]
   },
   {
     "@context": "https://schema.org",
@@ -27,19 +69,49 @@
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://feecalculator.example/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Tools",
-        "item": "https://feecalculator.example/payment-processors/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/payment-processors/"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "PayPal Fee Calculator",
-        "item": "https://feecalculator.example/tools/paypal-fee-calculator/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/paypal-fee-calculator/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does PayPal take on Goods & Services?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "In the US, a common published rate is 3.49% + $0.49 per transaction; regional rates differ."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is PayPal Friends & Family free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Often yes when funded from PayPal balance or a linked bank. Card-funded F&F can incur a fee."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What about PayPal fees in India, UK, or Australia?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use the regional schedules in this calculator, then verify on the PayPal business fees page for that country."
+        }
       }
     ]
   }

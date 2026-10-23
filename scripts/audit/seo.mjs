@@ -48,6 +48,31 @@ function decodeEntities(s) {
     .replace(/&#39;/g, "'");
 }
 
+/** Visible FAQ UI (heading and/or .faq with details) — must emit matching FAQPage JSON-LD. */
+function hasVisibleFaq(html) {
+  const hasHeading = /<h2[^>]*>\s*(FAQ|Frequently asked questions)\s*<\/h2>/i.test(html);
+  const hasFaqBlock = /class="[^"]*\bfaq\b[^"]*"/i.test(html) && /<details[\s>]/i.test(html);
+  return hasHeading || hasFaqBlock;
+}
+
+function hasFaqPageJsonLd(blocks) {
+  for (const block of blocks) {
+    try {
+      const data = JSON.parse(block);
+      const items = Array.isArray(data) ? data : [data];
+      for (const item of items) {
+        if (!item || typeof item !== 'object') continue;
+        if (item['@type'] === 'FAQPage') return true;
+        const graph = item['@graph'];
+        if (Array.isArray(graph) && graph.some((g) => g && g['@type'] === 'FAQPage')) return true;
+      }
+    } catch {
+      /* invalid JSON-LD reported separately */
+    }
+  }
+  return false;
+}
+
 function walkHtml(file) {
   const rel = '/' + path.relative(dist, file).replace(/index\.html$/, '').replace(/\\/g, '/');
   const html = fs.readFileSync(file, 'utf8');
@@ -76,11 +101,17 @@ function walkHtml(file) {
   const ogImage = html.match(/<meta\s+property="og:image"\s+content="([^"]*)"/i)?.[1] ?? '';
 
   if (!title) errors.push(`${rel}: missing title`);
-  else if (title.length > 60) errors.push(`${rel}: title too long (${title.length} > 60)`);
+  else if (title.length < 25 || title.length > 65) {
+    errors.push(`${rel}: title length ${title.length} outside 25–65`);
+  }
 
   if (!desc) errors.push(`${rel}: missing meta description`);
-  else if (desc.length < 50 || desc.length > 165) {
-    errors.push(`${rel}: meta description length ${desc.length} outside 50–165`);
+  else if (desc.length < 70 || desc.length > 160) {
+    errors.push(`${rel}: meta description length ${desc.length} outside 70–160`);
+  }
+
+  if (hasVisibleFaq(html) && !hasFaqPageJsonLd(jsonLd)) {
+    errors.push(`${rel}: visible FAQ without FAQPage JSON-LD`);
   }
 
   if (h1s.length !== 1) errors.push(`${rel}: expected 1 H1, found ${h1s.length}`);

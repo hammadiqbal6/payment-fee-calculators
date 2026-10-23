@@ -75,6 +75,13 @@ export const siteConfig = {
   bingSiteVerification: env('PUBLIC_BING_VERIFICATION', ''),
   /** IndexNow key; must match public/<key>.txt (committed; public by design) */
   indexNowKey: env('PUBLIC_INDEXNOW_KEY', 'cded36863aa6be8ac5bf690ab6889910'),
+  /**
+   * EmailJS (contact form). All three must be set to enable the form;
+   * otherwise /contact/ falls back to a mailto link. Public key only — never a private key.
+   */
+  emailjsServiceId: env('PUBLIC_EMAILJS_SERVICE_ID', ''),
+  emailjsTemplateId: env('PUBLIC_EMAILJS_TEMPLATE_ID', ''),
+  emailjsPublicKey: env('PUBLIC_EMAILJS_PUBLIC_KEY', ''),
   defaultOgImage: '/og-default.png',
   ogImageWidth: 1200,
   ogImageHeight: 630,

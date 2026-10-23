@@ -3,7 +3,25 @@
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Payment Processor Fee Calculators",
-    "url": "https://feecalculator.example/payment-processors/",
+    "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/payment-processors/",
     "description": "Card and checkout fees for Stripe, PayPal, Square and Shopify Payments."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Payment processors",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/payment-processors/"
+      }
+    ]
   }
 ]

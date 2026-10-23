@@ -1,23 +1,67 @@
 [
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Stripe Fee Calculator",
-    "url": "https://feecalculator.example/tools/stripe-fee-calculator/",
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Calculate Stripe fees for US, UK, Canada, Australia, EU cards, international, Connect and Invoicing. Forward and reverse: how much to charge to receive a net amount.",
-    "dateModified": "2026-10-19",
-    "author": {
-      "@type": "Organization",
-      "name": "FeeCalc Tools"
-    }
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/stripe-fee-calculator/#app",
+        "name": "Stripe Fee Calculator",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/stripe-fee-calculator/",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free Stripe fee calculator: see the 2.9% + 30¢ fee and your net payout, or work backward to the price to charge. Covers US, UK, EU, Connect and Invoicing.",
+        "dateModified": "2026-10-19",
+        "author": {
+          "@type": "Person",
+          "@id": "https://github.com/hammadiqbal6#person",
+          "name": "Hammad Iqbal",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+        },
+        "publisher": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#organization"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/stripe-fee-calculator/#webpage",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/stripe-fee-calculator/",
+        "name": "Stripe Fee Calculator 2026: US, UK, EU & Reverse Fees",
+        "isPartOf": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#website"
+        },
+        "mainEntity": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/stripe-fee-calculator/#app"
+        },
+        "datePublished": "2026-10-19T00:00:00+05:00",
+        "dateModified": "2026-10-19T00:00:00+05:00",
+        "lastReviewed": "2026-10-19",
+        "author": {
+          "@id": "https://github.com/hammadiqbal6#person"
+        },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/images/fee-breakdown.png",
+          "width": 800,
+          "height": 450
+        },
+        "citation": [
+          "https://stripe.com/pricing",
+          "https://stripe.com/gb/pricing",
+          "https://stripe.com/en-ca/pricing",
+          "https://stripe.com/au/pricing",
+          "https://stripe.com/en-eu/pricing",
+          "https://stripe.com/connect/pricing",
+          "https://stripe.com/invoicing/pricing"
+        ]
+      }
+    ]
   },
   {
     "@context": "https://schema.org",
@@ -27,19 +71,57 @@
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://feecalculator.example/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Tools",
-        "item": "https://feecalculator.example/payment-processors/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/payment-processors/"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Stripe Fee Calculator",
-        "item": "https://feecalculator.example/tools/stripe-fee-calculator/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/stripe-fee-calculator/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the Stripe fee on $100 in the US?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "At 2.9% + $0.30, the fee is $3.20 and you receive $96.80 on a $100 charge."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much should I charge to receive $100 after Stripe fees?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "About $103.30 using the US domestic card rate (2.9% + $0.30), then verify on Stripe’s pricing page."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Stripe charge more for international cards?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. International cards typically add an extra percentage (often about 1%) on top of the domestic rate."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are Stripe Connect fees included?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This calculator includes base card processing. Platform application fees you configure in Connect are additional."
+        }
       }
     ]
   }

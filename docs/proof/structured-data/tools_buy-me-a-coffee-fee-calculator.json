@@ -1,23 +1,61 @@
 [
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Buy Me a Coffee Fee Calculator",
-    "url": "https://feecalculator.example/tools/buy-me-a-coffee-fee-calculator/",
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Estimate Buy Me a Coffee platform and processing fees on tips and memberships. See net earnings and reverse pricing in seconds.",
-    "dateModified": "2026-10-19",
-    "author": {
-      "@type": "Organization",
-      "name": "FeeCalc Tools"
-    }
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/buy-me-a-coffee-fee-calculator/#app",
+        "name": "Buy Me a Coffee Fee Calculator",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/buy-me-a-coffee-fee-calculator/",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Estimate Buy Me a Coffee platform and processing fees on tips and memberships. See net earnings, chargeback notes, and reverse pricing in seconds.",
+        "dateModified": "2026-10-19",
+        "author": {
+          "@type": "Person",
+          "@id": "https://github.com/hammadiqbal6#person",
+          "name": "Hammad Iqbal",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+        },
+        "publisher": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#organization"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/buy-me-a-coffee-fee-calculator/#webpage",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/buy-me-a-coffee-fee-calculator/",
+        "name": "Buy Me a Coffee Fee Calculator",
+        "isPartOf": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#website"
+        },
+        "mainEntity": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/buy-me-a-coffee-fee-calculator/#app"
+        },
+        "datePublished": "2026-10-19T00:00:00+05:00",
+        "dateModified": "2026-10-19T00:00:00+05:00",
+        "lastReviewed": "2026-10-19",
+        "author": {
+          "@id": "https://github.com/hammadiqbal6#person"
+        },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/images/fee-breakdown.png",
+          "width": 800,
+          "height": 450
+        },
+        "citation": [
+          "https://help.buymeacoffee.com/en/articles/8105744-how-to-calculate-charges-on-your-payment"
+        ]
+      }
+    ]
   },
   {
     "@context": "https://schema.org",
@@ -27,19 +65,49 @@
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://feecalculator.example/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Tools",
-        "item": "https://feecalculator.example/payment-processors/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/payment-processors/"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Buy Me a Coffee Fee Calculator",
-        "item": "https://feecalculator.example/tools/buy-me-a-coffee-fee-calculator/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/buy-me-a-coffee-fee-calculator/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the Buy Me a Coffee fee percentage?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Platform fees are commonly around 5%, plus processing. Check Buy Me a Coffee’s help article on calculating charges for current details."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do chargebacks work on Buy Me a Coffee?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Disputes can reverse a support and may include processor fees. Keep delivery records for shop and membership products, and read BMaC’s chargeback help article before large launches."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are memberships priced the same as one-off coffees?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Platform percent is similar in our blended estimate, but monthly recurrence multiplies small gaps. Model ARPU × patron count, not only a single $5 tip."
+        }
       }
     ]
   }

@@ -1,0 +1,92 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Chargeback/dispute fees by processor",
+    "description": "How chargebacks and disputes affect Stripe, PayPal, and Square sellers—why dollar fees vary, how to budget reserves, and where to verify official dispute costs.",
+    "datePublished": "2026-10-23",
+    "dateModified": "2026-10-23",
+    "author": {
+      "@type": "Person",
+      "@id": "https://github.com/hammadiqbal6#person",
+      "name": "Hammad Iqbal",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev"
+    },
+    "mainEntityOfPage": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/chargeback-fees-by-processor/"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Guides",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Chargeback/dispute fees by processor",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/chargeback-fees-by-processor/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much is a Stripe chargeback fee?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It varies and changes—check Stripe’s official dispute documentation for your country and product. Do not rely on memorized dollar amounts from old articles. Budget a reserve based on your own history plus Stripe’s current published fee."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does PayPal charge for disputes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PayPal’s dispute and chargeback-related costs vary by product and outcome. Confirm on PayPal’s official help and fee pages. Processing for US G&S remains commonly 3.49% + $0.49 as of 2026-10-15, separate from dispute fees."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What about Square?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Square likewise publishes dispute-related fees that can change. Verify on Square’s official support/pricing materials. Card-present vs online activity can show different dispute patterns even when online processing lists 2.9% + $0.30."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should dispute fees decide my processor?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "They are one factor beside processing rates, conversion, payout timing, and category fit. Model processing with our calculators, then add your measured dispute loss rate—not a generic internet rumor."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I price after both fees and chargebacks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Reverse-calculate processing fees for your target net, then increase prices to cover your historical dispute/refund loss rate. See how to price after fees for the processing algebra."
+        }
+      }
+    ]
+  }
+]

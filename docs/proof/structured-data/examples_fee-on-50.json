@@ -1,0 +1,41 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Payment Fees on $50: Stripe, PayPal, Square & More",
+    "description": "Estimated fees and net on a $50 charge across Stripe, PayPal, Square, Venmo, Cash App and more. Dated default schedules plus reverse pricing to receive $50.",
+    "datePublished": "2026-10-20T00:00:00+05:00",
+    "dateModified": "2026-10-19T00:00:00+05:00",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "Hammad Iqbal",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+      }
+    ],
+    "publisher": {
+      "@type": "Organization",
+      "name": "FeeCalc Tools",
+      "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev"
+    },
+    "mainEntityOfPage": "https://payment-fee-calculators.hammadiqbal117.workers.dev/examples/fee-on-50/"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Fees on $50",
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/examples/fee-on-50/"
+      }
+    ]
+  }
+]

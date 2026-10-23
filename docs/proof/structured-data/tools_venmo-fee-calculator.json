@@ -1,23 +1,61 @@
 [
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Venmo Business Fee Calculator",
-    "url": "https://feecalculator.example/tools/venmo-fee-calculator/",
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Estimate Venmo Business Profile and Goods & Services fees, plus instant transfer costs. Free forward and reverse fee calculator for sellers.",
-    "dateModified": "2026-10-19",
-    "author": {
-      "@type": "Organization",
-      "name": "FeeCalc Tools"
-    }
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/#app",
+        "name": "Venmo Business Fee Calculator",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Estimate Venmo Business Profile and Goods & Services fees, plus instant transfer costs. Free forward and reverse fee calculator for sellers.",
+        "dateModified": "2026-10-19",
+        "author": {
+          "@type": "Person",
+          "@id": "https://github.com/hammadiqbal6#person",
+          "name": "Hammad Iqbal",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+        },
+        "publisher": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#organization"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/#webpage",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/",
+        "name": "Venmo Fee Calculator for Business & G&S",
+        "isPartOf": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#website"
+        },
+        "mainEntity": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/#app"
+        },
+        "datePublished": "2026-10-19T00:00:00+05:00",
+        "dateModified": "2026-10-19T00:00:00+05:00",
+        "lastReviewed": "2026-10-19",
+        "author": {
+          "@id": "https://github.com/hammadiqbal6#person"
+        },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/images/fee-breakdown.png",
+          "width": 800,
+          "height": 450
+        },
+        "citation": [
+          "https://venmo.com/resources/our-fees"
+        ]
+      }
+    ]
   },
   {
     "@context": "https://schema.org",
@@ -27,19 +65,41 @@
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://feecalculator.example/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Tools",
-        "item": "https://feecalculator.example/payment-processors/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/payment-processors/"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Venmo Business Fee Calculator",
-        "item": "https://feecalculator.example/tools/venmo-fee-calculator/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does Venmo charge sellers fees?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Business Profiles typically pay a per-payment fee (often 1.9% + $0.10). Personal P2P is usually free."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do Venmo Goods & Services fees compare to PayPal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "When G&S is available, rates often align closely with PayPal commercial pricing — verify in-app."
+        }
       }
     ]
   }

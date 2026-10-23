@@ -1,23 +1,61 @@
 [
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Patreon Fee Calculator",
-    "url": "https://feecalculator.example/tools/patreon-fee-calculator/",
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Estimate Patreon Lite, Pro and Premium platform plus processing fees. Calculate what you keep from pledges and how much patrons must pay for you to receive X.",
-    "dateModified": "2026-10-19",
-    "author": {
-      "@type": "Organization",
-      "name": "FeeCalc Tools"
-    }
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/#app",
+        "name": "Patreon Fee Calculator",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Estimate Patreon Lite, Pro and Premium platform plus processing fees. Calculate what you keep from pledges and how much patrons must pay for you to receive X.",
+        "dateModified": "2026-10-19",
+        "author": {
+          "@type": "Person",
+          "@id": "https://github.com/hammadiqbal6#person",
+          "name": "Hammad Iqbal",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/about/"
+        },
+        "publisher": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#organization"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/#webpage",
+        "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/",
+        "name": "Patreon Fee Calculator – Creator Earnings",
+        "isPartOf": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#website"
+        },
+        "mainEntity": {
+          "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/#app"
+        },
+        "datePublished": "2026-10-19T00:00:00+05:00",
+        "dateModified": "2026-10-19T00:00:00+05:00",
+        "lastReviewed": "2026-10-19",
+        "author": {
+          "@id": "https://github.com/hammadiqbal6#person"
+        },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/images/fee-breakdown.png",
+          "width": 800,
+          "height": 450
+        },
+        "citation": [
+          "https://www.patreon.com/pricing"
+        ]
+      }
+    ]
   },
   {
     "@context": "https://schema.org",
@@ -27,19 +65,41 @@
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://feecalculator.example/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Tools",
-        "item": "https://feecalculator.example/payment-processors/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/payment-processors/"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Patreon Fee Calculator",
-        "item": "https://feecalculator.example/tools/patreon-fee-calculator/"
+        "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does Patreon take from creators?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Platform fees commonly range about 5–12% by plan, plus payment processing. Use Patreon’s fee policy for authoritative numbers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this calculator exact?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It uses dated blended estimates for planning. Processing varies by method and country."
+        }
       }
     ]
   }
