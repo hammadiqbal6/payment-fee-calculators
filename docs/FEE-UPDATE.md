@@ -1,60 +1,78 @@
 # Fee schedule update process
 
-Payment and creator platform fees change without warning. Fresh, cited schedules are the moat for this site. Follow this checklist whenever a provider updates pricing or you receive a correction.
+Payment and creator platform fees change without warning. Fresh, cited schedules are the moat for this site. Follow this checklist whenever a provider updates pricing, you receive a correction, or the weekly rate watcher opens a PR.
 
-## 1. Verify the change
+## Single source of truth
 
-1. Open the official pricing or fee policy URL (linked from `src/data/fees.ts` for that schedule).
-2. Screenshot or copy the relevant rate table (date-stamped).
-3. Note currency, percent, fixed fee, and any footnotes (international, micropayments, plan tier).
+**File:** `src/data/fees.ts`
 
-## 2. Edit the data file
+Every calculator, comparison tool, example page, guide fee table, visible “last verified” stamp, and `/fee-changelog/` entry must read from this file. Do not invent rates in `toolContent.ts`, `guides.ts`, or page copy — derive figures from the schedules (or update the schedule first, then the prose).
 
-File: `src/data/fees.ts`
+Each `FeeComponent` carries:
 
-For each affected `FeeComponent`:
-
-| Field | Action |
-|-------|--------|
+| Field | Meaning |
+|-------|---------|
 | `percent` | Decimal (e.g. `0.029` = 2.9%) |
 | `fixed` | Fixed amount in schedule currency |
 | `currency` | ISO code |
 | `notes` | Caveats (international, blended estimate) |
 | `sourceUrl` | Official page URL |
-| `lastVerified` | `YYYY-MM-DD` (today when confirmed) |
+| `lastVerified` | `YYYY-MM-DD` when confirmed |
+| `verificationStatus` | `verified` \| `unverified` \| `estimated` |
 
-Bump when material:
+Also bump when material:
 
-- `FEE_DATA_VERSION` — semver-ish tag (e.g. `2026.11.01`)
+- `FEE_DATA_VERSION` — e.g. `2026.10.24`
 - `FEE_DATA_UPDATED` — ISO date for site-wide “last updated”
+- `feeChangelog` — human summary + before/after rows (powers `/fee-changelog/` and methodology)
+
+## 1. Verify the change
+
+1. Open the official pricing or fee policy URL (linked from the schedule).
+2. Screenshot or copy the relevant rate table (date-stamped).
+3. Note currency, percent, fixed fee, and footnotes (international, micropayments, plan tier).
+4. Treat third-party research (including attached audits) as a **lead**, not gospel.
+
+## 2. Edit the data file
+
+Update the affected `FeeComponent` fields, set `lastVerified` to today, set `verificationStatus` appropriately, and append a `feeChangelog` entry.
 
 ## 3. Update visible content
 
-- Tool page intro / key takeaways if the default example changed materially.
-- Guides that cite specific dollar examples (e.g. “charge $103.30 to receive $100”).
-- Comparison page static table (rebuild updates automatically; spot-check copy).
+- Tool intros / key takeaways if the default example changed materially (`src/data/toolContent.ts`).
+- Guides that cite specific dollar examples (`src/data/guides.ts`).
+- Comparison page rebuilds from fees automatically; spot-check copy.
 
 ## 4. Test and audit
 
 ```bash
-npm test          # every rate forward + reverse
+npm test          # formulas + freshness + no invented schedules
 npm run build
-npm run audit     # SEO word counts, links, AdSense pages
+npm run audit
 ```
 
-## 5. SEO / indexing
+Freshness: verified/estimated rates must have `lastVerified` within ~60 days (`FEE_MAX_AGE_DAYS`).
 
-- Update `<lastmod>` via build (sitemap integration uses build date; for surgical updates, rebuild after content change).
-- Optional: `npm run indexnow` after deploy (submits all sitemap URLs to Bing/Yandex — not Google), or `scripts/indexnow/post.mjs` for specific paths.
+## 5. Weekly GitHub Action (no local machines required)
 
-## 6. Communicate
+`.github/workflows/rate-watcher.yml` runs Mondays and on `workflow_dispatch`:
 
-- Add a line to the PR description: processor, old → new rate, source URL.
-- If you maintain a public changelog later, link the commit.
+- Fetches each source (Playwright when JS-rendered)
+- Compares using `scripts/rate-watcher/extract-rules.json`
+- Opens/updates a **single PR** with before/after + source links
+- Flags fetch/parse failures in the PR or an issue — **never guesses**
+- **Never** auto-merges or commits to `main`
+
+Local dry run: `npm run rate-watch:dry`
+
+## 6. SEO / indexing
+
+- Rebuild after content change (sitemap lastmod follows build).
+- Optional: `npm run indexnow` after deploy.
 
 ## Blended / estimated schedules
 
-Patreon, Ko-fi, Buy Me a Coffee, Gumroad (processing layer), and Wise corridors use **estimates** when providers split platform vs processing. Label `notes` clearly. Prefer updating the blend when either layer changes.
+Patreon, Ko-fi, Buy Me a Coffee, Gumroad (processing layer), and Wise corridors use **estimates** when providers split platform vs processing. Label `notes` and `verificationStatus: 'estimated'` (or `'unverified'` when the page cannot be read). Prefer updating the blend when either layer changes.
 
 ## Skill
 

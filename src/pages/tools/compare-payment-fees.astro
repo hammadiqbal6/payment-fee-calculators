@@ -133,10 +133,11 @@ const jsonLd = [
     <a href="/">Home</a> <span>/</span> <span>Compare</span>
   </nav>
   <h1>{meta.h1}</h1>
-  <p class="lead lead--tight">
-    Side-by-side default schedules on any amount. Lower fee is not always better — consider protections, payout speed,
-    and regional availability. For a narrative Stripe vs PayPal comparison, see the{' '}
-    <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal fees guide</a>.
+  <p class="answer-first">
+    Side-by-side default schedules on any amount. On $100, the cheapest default in this table is{' '}
+    {formatMoney(rows[0].result.fee, rows[0].rate.currency)} ({rows[0].processor.name}); the highest is{' '}
+    {formatMoney(rows[rows.length - 1].result.fee, rows[rows.length - 1].rate.currency)} (
+    {rows[rows.length - 1].processor.name}). Lower fee is not always better — weigh protections and payout speed.
   </p>
 
   <section class="hero-tool" aria-label="Interactive comparison">
@@ -170,6 +171,23 @@ const jsonLd = [
       </div>
     </div>
   </section>
+
+  <div class="takeaways">
+    <h2>Key takeaways</h2>
+    <ul>
+      <li>
+        On $100, {rows[0].processor.name} is the lowest default fee at{' '}
+        {formatMoney(rows[0].result.fee, rows[0].rate.currency)}.
+      </li>
+      <li>
+        Creator platforms (Patreon, Gumroad, etc.) blend platform commissions — they are not 1:1 with card processors.
+      </li>
+      <li>
+        Open each tool to reverse-price a target net; see the{' '}
+        <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal fees guide</a> for narrative context.
+      </li>
+    </ul>
+  </div>
 
   <p class="byline">
     Built by <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a>

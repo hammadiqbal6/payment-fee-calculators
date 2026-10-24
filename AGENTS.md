@@ -59,20 +59,35 @@ flowchart TB
 ## Add / expand a guide
 
 1. Add or expand entry in `src/data/guides.ts` (~1000+ words; CI requires ≥800).
-2. Include worked example, `feeTable`, FAQ (FAQPage), `sources` with as-of dates, `relatedTools` / `relatedGuides` / hubs.
+2. Include `answerFirst`, `takeaways` (3–5 bullets with numbers), worked example, `feeTable`, FAQ (FAQPage), `sources` with as-of dates, `relatedTools` / `relatedGuides` / hubs.
 3. Reuse fee numbers from `src/data/fees.ts` only.
 4. Wire tools via `relatedGuides.ts`; update KEYWORD-MAP.
 5. Follow `.cursor/skills/write-seo-article/SKILL.md` and `docs/SEO-GUARDRAILS.md`.
 
 ## Content / SEO rules
 
-- Governing docs: `docs/SEO-PLAYBOOK.md`, **`docs/SEO-GUARDRAILS.md`**, `.cursor/rules/seo-guardrails.mdc`
+- Governing docs: `docs/SEO-PLAYBOOK.md`, **`docs/SEO-GUARDRAILS.md`**, `.cursor/rules/seo-guardrails.mdc`, **`.cursor/rules/seo-pages.mdc`**
+- **Research first** for any new page (keyword, intent, SERP format, cannibalization) — see seo-pages checklist
 - One primary keyword per URL: `docs/KEYWORD-MAP.md`
 - Tool pages: calculator above fold, 600–1200 words, formula, worked example, FAQ, sources, **Learn more** guides
-- Direct-answer intro 40–60 words; disclaimer is not an FAQ item
+- Direct-answer intro 40–60 words with a worked number; guides need a takeaways box before the byline
+- Hubs/home: tool cards directly under the lead (above the fold on mobile)
+- Disclaimer is not an FAQ item; footer labels must not be heading elements
 - Visible breadcrumbs + BreadcrumbList on hubs, guides, about, contact, methodology, privacy, terms
 - Worker `FILE_EXT` must allow `.webmanifest` (11+ char extensions)
 - Fee freshness: `docs/FEE-UPDATE.md` + content-refresh skill
+- Local gate: `npm run audit:pages` (also part of `npm run audit` and `.github/workflows/page-audit.yml`)
+
+## Per-page checklist (required)
+
+Before shipping a new or reworked page, confirm:
+
+1. Keyword + intent researched; no near-duplicate URL
+2. One H1; answer-first block with a number; tool ≤450px on mobile
+3. Title 30–60 / meta 70–155 / absolute canonical / viewport
+4. Valid JSON-LD (BreadcrumbList; WebApplication or Article; FAQPage iff visible FAQ)
+5. Sources from `fees.ts` or primary URLs; byline after the answer
+6. In sitemap; `npm run build && npm test && npm run audit` green
 
 ## AdSense
 

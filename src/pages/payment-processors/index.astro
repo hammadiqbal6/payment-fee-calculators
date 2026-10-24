@@ -2,6 +2,8 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { hubCategories, getRelatedTools } from '@/lib/tools';
+import { processors } from '@/data/fees';
+import { calculateForward, formatMoney, formatPercent } from '@/lib/fees/calculate';
 import { breadcrumbList } from '@/lib/breadcrumbs';
 import { siteConfig } from '@/config/site';
 
@@ -11,6 +13,17 @@ const crumbs = [
   { name: 'Home', href: '/' },
   { name: 'Payment processors', href: hub.path },
 ];
+
+const compareRows = tools
+  .map((t) => {
+    const p = processors.find((x) => x.id === t.id);
+    if (!p) return null;
+    const rate = p.rates.find((r) => r.id === p.defaultRateId) ?? p.rates[0];
+    const fwd = calculateForward(100, rate);
+    return { tool: t, rate, fwd };
+  })
+  .filter(Boolean);
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -32,13 +45,10 @@ const jsonLd = [
   <Breadcrumbs items={crumbs} />
   <h1>{hub.title}</h1>
   <p class="answer-first">
-    Card processors typically charge a percent plus a fixed fee per successful payment. Start with Stripe or PayPal for
-    online checkout, Square for in-person sales, and Shopify Payments if your store already runs on Shopify. Compare list
-    rates with our{' '}
-    <a href="/guides/square-vs-stripe-vs-shopify/">Square vs Stripe vs Shopify</a> and{' '}
-    <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal</a> guides before you commit.
+    Card processors typically charge a percent plus a fixed fee. On $100, Stripe US is $3.20 (2.9% + $0.30); PayPal US
+    G&S is $2.99 (2.99%); Square Free online is $3.60 (3.3% + $0.30). Start with the calculator that matches your
+    checkout, then compare with our guides.
   </p>
-  <p class="lead">{hub.description}</p>
   <div class="tool-grid">
     {
       tools.map((t) => (
@@ -49,8 +59,43 @@ const jsonLd = [
       ))
     }
   </div>
-  <p>
-    Also see the <a href="/tools/compare-payment-fees/">full comparison calculator</a> and{' '}
-    <a href="/creator-fees/">creator platforms</a>.
-  </p>
+
+  <h2>Which tool do I need?</h2>
+  <div class="table-wrap">
+    <table>
+      <caption>$100 default-schedule snapshot</caption>
+      <thead>
+        <tr>
+          <th>Processor</th>
+          <th>Default schedule</th>
+          <th>Fee on $100</th>
+          <th>Calculator</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          compareRows.map((row) => (
+            <tr>
+              <td>{row!.tool.name}</td>
+              <td>
+                {row!.rate.label}: {formatPercent(row!.rate.percent)} + {row!.rate.fixed.toFixed(2)}
+              </td>
+              <td>{formatMoney(row!.fwd.fee, row!.rate.currency)}</td>
+              <td>
+                <a href={row!.tool.path}>Open</a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Related guides</h2>
+  <ul>
+    <li><a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal fees</a></li>
+    <li><a href="/guides/square-vs-stripe-vs-shopify/">Square vs Stripe vs Shopify Payments</a></li>
+    <li><a href="/guides/how-to-price-after-fees/">How to price after payment fees</a></li>
+    <li><a href="/tools/compare-payment-fees/">Interactive comparison calculator</a></li>
+  </ul>
 </BaseLayout>

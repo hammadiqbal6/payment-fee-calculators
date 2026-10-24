@@ -70,6 +70,27 @@ const jsonLd = [
   <Breadcrumbs items={crumbs} />
   <h1>{guide.title}</h1>
   <p class="answer-first">{guide.answerFirst}</p>
+  {
+    guide.takeaways && guide.takeaways.length > 0 && (
+      <div class="takeaways">
+        <h2>Key takeaways</h2>
+        <ul>
+          {guide.takeaways.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+  {
+    related.length > 0 && (
+      <p class="compare-with">
+        {related.slice(0, 2).map((t) => (
+          <a href={t.path}>Calculate with {t.name ?? t.h1} →</a>
+        ))}
+      </p>
+    )
+  }
   <p class="byline meta-row--compact">
     By <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a>
     · Updated <time datetime={guide.modified}>{guide.modified}</time>

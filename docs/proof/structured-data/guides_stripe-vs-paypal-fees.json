@@ -3,9 +3,9 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": "Stripe vs PayPal Fees in 2026",
-    "description": "Compare typical US online Stripe (2.9%+$0.30) and PayPal Goods & Services (3.49%+$0.49) fees, $100 examples, FX notes, and when each processor wins.",
+    "description": "Compare typical US online Stripe (2.9%+$0.30), PayPal G&S (2.99%), and PayPal Checkout (3.49%+$0.49) fees, $100 examples, FX notes, and when each wins.",
     "datePublished": "2026-10-19",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -52,7 +52,7 @@
         "name": "Is Stripe always cheaper than PayPal?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Not always. On common US online list rates, Stripe’s 2.9% + $0.30 beats PayPal G&S 3.49% + $0.49 on a like-for-like card charge, but custom pricing, regions, international cards, and product mix can flip the result. Compare with your average order value in /tools/compare-payment-fees/."
+          "text": "Not always. On common US online list rates, Stripe’s 2.9% + $0.30 beats PayPal G&S 2.99% on a like-for-like card charge, but custom pricing, regions, international cards, and product mix can flip the result. Compare with your average order value in /tools/compare-payment-fees/."
         }
       },
       {

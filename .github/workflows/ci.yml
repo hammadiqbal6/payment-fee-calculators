@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-test-audit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # Same PUBLIC_* pattern as Cloudflare Workers Builds (baked into static HTML).
       PUBLIC_SITE_URL: https://payment-fee-calculators.hammadiqbal117.workers.dev
@@ -17,8 +17,8 @@ jobs:
       PUBLIC_SITE_URL_FIBER_ARTS: https://fiber-arts-calculators.hammadiqbal117.workers.dev
       PUBLIC_SITE_URL_PET: https://pet-calculators.hammadiqbal117.workers.dev
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: npm
@@ -27,7 +27,7 @@ jobs:
       - run: npm test
       - run: npm run audit
       - run: npm run proof:verify
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: docs-proof
           path: docs/proof/

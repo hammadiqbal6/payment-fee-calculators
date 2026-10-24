@@ -5,7 +5,7 @@
       {
         "@type": "WebApplication",
         "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/#app",
-        "name": "Venmo Business Fee Calculator",
+        "name": "Venmo Fee Calculator: Business, G&S & Instant",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Any",
@@ -17,7 +17,7 @@
           "priceCurrency": "USD"
         },
         "description": "Estimate Venmo Business Profile and Goods & Services fees, plus instant transfer costs. Free forward and reverse fee calculator for sellers.",
-        "dateModified": "2026-10-19",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },
@@ -76,7 +76,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Venmo Business Fee Calculator",
+        "name": "Venmo Fee Calculator: Business, G&S & Instant",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/"
       }
     ]

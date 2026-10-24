@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "PayPal G&S vs Friends & Family",
-    "description": "Understand PayPal Goods & Services fees (3.49%+$0.49 US) versus Friends & Family $0 personal payments—protections, risks, and when each is appropriate.",
+    "headline": "PayPal Goods & Services Fee (2.99%) vs F&F",
+    "description": "PayPal Goods & Services (2.99% US) vs Friends & Family $0: protections, risks, and when each payment type is appropriate.",
     "datePublished": "2026-10-23",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -38,7 +38,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "PayPal G&S vs Friends & Family",
+        "name": "PayPal Goods & Services Fee (2.99%) vs F&F",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/paypal-goods-services-vs-friends-family/"
       }
     ]
@@ -60,7 +60,7 @@
         "name": "How much is Goods & Services on $100?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "About $3.98 in fees (3.49% + $0.49), net about $96.02, using US list G&S as of 2026-10-15. Confirm in /tools/paypal-fee-calculator/."
+          "text": "About $2.99 in fees (2.99%, no fixed), net about $97.01, using US G&S Send/Receive Money as of 2026-10-24. Checkout on $100 is about $3.98 (net ~$96.02). Confirm in /tools/paypal-fee-calculator/."
         }
       },
       {

@@ -17,7 +17,7 @@
           "priceCurrency": "USD"
         },
         "description": "Calculate Square payment fees for online, in-person, keyed entry, UK and Australia. Forward fee math and reverse pricing to receive a target net amount.",
-        "dateModified": "2026-10-19",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/square-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },
@@ -54,7 +54,7 @@
         "citation": [
           "https://squareup.com/us/en/pricing",
           "https://squareup.com/gb/en/pricing",
-          "https://squareup.com/au/en/pricing"
+          "https://squareup.com/au/en/payments/our-fees"
         ]
       }
     ]
@@ -92,7 +92,7 @@
         "name": "What is Square’s online fee?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "A common US online rate is 2.9% + $0.30 per transaction; confirm on Square pricing."
+          "text": "Free plan online/invoice is 3.3% + $0.30; Plus/API online is commonly 2.9% + $0.30. Confirm on Square pricing."
         }
       },
       {
@@ -100,7 +100,7 @@
         "name": "Is in-person Square cheaper?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Usually yes versus online — many US in-person rates are around 2.6% + $0.10."
+          "text": "Usually yes versus online — US in-person is 2.6% + $0.15 on the Free plan."
         }
       }
     ]

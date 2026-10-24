@@ -16,8 +16,8 @@
           "price": "0",
           "priceCurrency": "USD"
         },
-        "description": "Estimate Patreon Lite, Pro and Premium platform plus processing fees. Calculate what you keep from pledges and how much patrons must pay for you to receive X.",
-        "dateModified": "2026-10-19",
+        "description": "Estimate Patreon new-creator 10% and legacy Founders/Pro/Pro+Merch fees. See what you keep from pledges or reverse-price a target net.",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -32,7 +32,7 @@
         "@type": "WebPage",
         "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/#webpage",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/",
-        "name": "Patreon Fee Calculator – Creator Earnings",
+        "name": "Patreon Fee Calculator 2026: New 10% & Legacy Plans",
         "isPartOf": {
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#website"
         },
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },
@@ -52,7 +52,8 @@
           "height": 450
         },
         "citation": [
-          "https://www.patreon.com/pricing"
+          "https://www.patreon.com/pricing",
+          "https://support.patreon.com/hc/en-us/articles/11111747095181-Creator-fees-overview"
         ]
       }
     ]
@@ -90,7 +91,7 @@
         "name": "How much does Patreon take from creators?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Platform fees commonly range about 5–12% by plan, plus payment processing. Use Patreon’s fee policy for authoritative numbers."
+          "text": "New creators: 10% platform + processing. Legacy Founders/Pro/Pro+Merch: 5%/8%/11% platform + processing. Confirm on patreon.com/pricing."
         }
       },
       {

@@ -2,7 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { siteConfig } from '@/config/site';
-import { FEE_DATA_VERSION, FEE_DATA_UPDATED } from '@/data/fees';
+import { FEE_DATA_VERSION, FEE_DATA_UPDATED, feeChangelog } from '@/data/fees';
 import { breadcrumbList } from '@/lib/breadcrumbs';
 
 const crumbs = [
@@ -60,6 +60,27 @@ const jsonLd = [
     </li>
   </ul>
 
+  <h2>Per-tool sources</h2>
+  <p>
+    Every calculator lists official URLs and last-verified dates in its Sources block. Open each tool:
+  </p>
+  <ul>
+    <li><a href="/tools/stripe-fee-calculator/#sources-h">Stripe fee calculator — sources</a></li>
+    <li><a href="/tools/paypal-fee-calculator/#sources-h">PayPal fee calculator — sources</a></li>
+    <li><a href="/tools/square-fee-calculator/#sources-h">Square fee calculator — sources</a></li>
+    <li><a href="/tools/shopify-payments-fee-calculator/#sources-h">Shopify Payments — sources</a></li>
+    <li><a href="/tools/venmo-fee-calculator/#sources-h">Venmo — sources</a></li>
+    <li><a href="/tools/cash-app-fee-calculator/#sources-h">Cash App — sources</a></li>
+    <li><a href="/tools/zelle-fee-calculator/#sources-h">Zelle — sources</a></li>
+    <li><a href="/tools/patreon-fee-calculator/#sources-h">Patreon — sources</a></li>
+    <li><a href="/tools/kofi-fee-calculator/#sources-h">Ko-fi — sources</a></li>
+    <li><a href="/tools/buy-me-a-coffee-fee-calculator/#sources-h">Buy Me a Coffee — sources</a></li>
+    <li><a href="/tools/gumroad-fee-calculator/#sources-h">Gumroad — sources</a></li>
+    <li><a href="/tools/wise-transfer-fee-calculator/#sources-h">Wise — sources</a></li>
+    <li><a href="/tools/compare-payment-fees/">Compare payment fees</a></li>
+    <li><a href="/fee-changelog/">Fee changelog</a> (dated schedule diffs)</li>
+  </ul>
+
   <h2>What the calculators leave out</h2>
   <ul>
     <li>Custom negotiated rates, volume discounts, and unpublished enterprise pricing.</li>
@@ -89,13 +110,21 @@ const jsonLd = [
   </ol>
 
   <h2 id="changelog">Changelog</h2>
+  <p>
+    Fee schedule changes are generated from <code>feeChangelog</code> in the data file. Full table:{' '}
+    <a href="/fee-changelog/">Fee changelog</a>.
+  </p>
   <ul>
+    {
+      feeChangelog.map((entry) => (
+        <li>
+          <time datetime={entry.date}>{entry.date}</time> — {entry.summary}
+        </li>
+      ))
+    }
     <li>
       <time datetime="2026-10-20">2026-10-20</time> — Mobile SEO audit fixes; named maintainer (Hammad Iqbal); TrustBlock
       sources; favicon/manifest set; Consent Mode GA4; guide slug fixes.
-    </li>
-    <li>
-      <time datetime="2026-10-19">2026-10-19</time> — Initial public fee data version {FEE_DATA_VERSION} published.
     </li>
   </ul>
 

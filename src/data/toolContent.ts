@@ -29,7 +29,7 @@ export const toolContent: Record<string, ToolContent> = {
       body: 'Desired net = $100, percent = 2.9%, fixed = $0.30. Charge = (100 + 0.30) ÷ (1 − 0.029) = 100.30 ÷ 0.971 ≈ $103.30. Fee ≈ $3.30, net ≈ $100.00.',
     },
     tips: [
-      'International cards and currency conversion usually add about 1% each on top of the domestic rate.',
+      'International cards add 1.5% and currency conversion adds 1% on top of the domestic US rate (4.4% or 5.4% + $0.30 combined).',
       'Stripe Connect platform application fees are separate from card processing — model them as an extra percent if you charge one.',
       'Invoicing product fees (if any) are not the same as card processing; check Stripe Invoicing pricing for your volume.',
     ],
@@ -49,7 +49,7 @@ export const toolContent: Record<string, ToolContent> = {
       },
       {
         q: 'Does Stripe charge more for international cards?',
-        a: 'Yes. International cards typically add an extra percentage (often about 1%) on top of the domestic rate.',
+        a: 'Yes. US accounts add 1.5% for international cards (4.4% + $0.30 total) and another 1% if currency conversion applies.',
       },
       {
         q: 'Are Stripe Connect fees included?',
@@ -59,15 +59,15 @@ export const toolContent: Record<string, ToolContent> = {
     extraSections: [
       {
         h2: 'Regional Stripe rates in this tool',
-        body: 'US and Canada commonly use 2.9% + $0.30. UK and many EU card rates are lower on domestic cards (for example 1.5% + a fixed amount). Australia often uses 1.75% + A$0.30 for domestic cards. Always confirm the live table for your country account.',
+        body: 'US and Canada commonly use 2.9% + $0.30. UK and many EU card rates are lower on domestic cards (for example 1.5% + a fixed amount). Australia uses 1.65% + A$0.30 for domestic cards (international cards 3.5% + A$0.30). Always confirm the live table for your country account.',
       },
     ],
   },
   paypal: {
     answerFirst:
-      'PayPal US Goods & Services fees are commonly 3.49% + $0.49. On $100 that is about $3.98 in fees ($96.02 net). Friends & Family from balance/bank is often free, while international and micropayments use different schedules—confirm your live rate before invoicing.',
+      'PayPal US Send/Receive Money for Goods & Services is 2.99% with no fixed fee ($2.99 on $100, net $97.01). PayPal Checkout is a separate product at 3.49% + $0.49 (~$3.98 on $100). Friends & Family from balance/bank is often free—confirm your live rate before invoicing.',
     howItWorks: [
-      'Select G&S, Friends & Family, international, UK, AUD, India, or micropayments.',
+      'Select G&S, Checkout, Friends & Family, international, UK, AUD, India, or micropayments.',
       'Enter the payment amount or the net you need.',
       'Compare the fee and effective rate before you invoice a customer.',
     ],
@@ -75,22 +75,24 @@ export const toolContent: Record<string, ToolContent> = {
       'Same percent-plus-fixed model as card processors: fee = amount × percent + fixed. Reverse charge = (net + fixed) ÷ (1 − percent).',
     workedExample: {
       title: 'Worked example: PayPal US G&S on $50',
-      body: 'Fee = 50 × 0.0349 + 0.49 = 1.745 + 0.49 = $2.24 (rounded). Net ≈ $47.76.',
+      body: 'Fee = 50 × 0.0299 = $1.50 (rounded). Net ≈ $48.50. Checkout on $50 would be 50 × 0.0349 + 0.49 ≈ $2.24.',
     },
     tips: [
+      'Do not confuse Send/Receive Money G&S (2.99%) with PayPal Checkout (3.49% + $0.49).',
       'Goods & Services includes purchase protection for buyers; Friends & Family usually does not.',
       'Micropayments pricing can be cheaper under a low amount threshold when enabled on the account.',
       'Cross-border fees stack on top of domestic commercial rates — use the international schedule for estimates.',
     ],
     mistakes: [
       'Asking customers to send business payments as Friends & Family to dodge fees (policy and protection risk).',
+      'Using the Checkout rate when modeling personal G&S Send/Receive Money (or vice versa).',
       'Ignoring currency conversion markups on cross-border balances.',
       'Using US rates for a UK or AU merchant account.',
     ],
     faqs: [
       {
         q: 'How much does PayPal take on Goods & Services?',
-        a: 'In the US, a common published rate is 3.49% + $0.49 per transaction; regional rates differ.',
+        a: 'In the US, Send/Receive Money for Goods & Services is 2.99% with no fixed fee. PayPal Checkout is 3.49% + $0.49.',
       },
       {
         q: 'Is PayPal Friends & Family free?',
@@ -104,43 +106,45 @@ export const toolContent: Record<string, ToolContent> = {
   },
   square: {
     answerFirst:
-      'Square’s common US online/invoice rate is 2.9% + $0.30 — the same headline shape as many online processors. In-person tap/chip/swipe is often lower (for example 2.6% + $0.10). Use this calculator to compare channels before you pick a checkout method.',
+      'Square Free-plan US online/invoice pricing is 3.3% + $0.30. Plus/API online is often 2.9% + $0.30. In-person tap/chip/swipe is 2.6% + $0.15. Use this calculator to compare channels and plans before you pick a checkout method.',
     howItWorks: [
-      'Pick online, in-person, keyed, UK, or Australia schedules.',
+      'Pick Free online, Plus/API online, in-person, keyed, UK, or Australia schedules.',
       'Run forward or reverse calculations.',
       'Check the fee table sources dated on this page.',
     ],
     formula: 'fee = charge × percent + fixed; reverse charge = (net + fixed) ÷ (1 − percent).',
     workedExample: {
       title: 'Worked example: $75 in-person US',
-      body: 'At 2.6% + $0.10: fee = 75 × 0.026 + 0.10 = $2.05; net = $72.95.',
+      body: 'At 2.6% + $0.15: fee = 75 × 0.026 + 0.15 = $2.10; net = $72.90.',
     },
     tips: [
       'Keyed-in cards usually cost more than dipped or tapped cards.',
+      'Free-plan online (3.3% + 30¢) is not the same as Plus/API online (2.9% + 30¢).',
       'Square subscriptions and hardware are separate from per-transaction fees.',
     ],
     mistakes: [
       'Comparing only online rates when most of your volume is in person.',
+      'Assuming Free-plan online matches Stripe’s 2.9% + $0.30.',
       'Forgetting chargeback or dispute costs outside the base rate.',
     ],
     extraSections: [
       {
         h2: 'Online vs in-person Square fees',
-        body: 'Online and invoice payments usually cost more than tap/chip/swipe because card-not-present risk is higher. If most of your volume is in a cafe or market stall, model the in-person schedule. If you email invoices, use the online schedule. Keyed entry (typing card numbers) is typically the most expensive card-present style rate — avoid it when a chip reader works.',
+        body: 'Online and invoice payments usually cost more than tap/chip/swipe because card-not-present risk is higher. If most of your volume is in a cafe or market stall, model the in-person schedule (2.6% + 15¢). If you email invoices on the Free plan, use 3.3% + 30¢. Keyed entry is typically the most expensive card-present style rate.',
       },
       {
         h2: 'When Square beats shipping customers to PayPal',
-        body: 'Square shines when hardware, POS, and online invoices live in one dashboard. Fee-wise, US online Square often mirrors other 2.9% + $0.30 processors, so choose on product fit. Run identical order amounts through our Square, Stripe, and PayPal calculators before you migrate a stack.',
+        body: 'Square shines when hardware, POS, and online invoices live in one dashboard. Plus/API online often mirrors other 2.9% + $0.30 processors; Free-plan online is higher. Run identical order amounts through our Square, Stripe, and PayPal calculators before you migrate a stack.',
       },
     ],
     faqs: [
       {
         q: 'What is Square’s online fee?',
-        a: 'A common US online rate is 2.9% + $0.30 per transaction; confirm on Square pricing.',
+        a: 'Free plan online/invoice is 3.3% + $0.30; Plus/API online is commonly 2.9% + $0.30. Confirm on Square pricing.',
       },
       {
         q: 'Is in-person Square cheaper?',
-        a: 'Usually yes versus online — many US in-person rates are around 2.6% + $0.10.',
+        a: 'Usually yes versus online — US in-person is 2.6% + $0.15 on the Free plan.',
       },
     ],
   },
@@ -188,16 +192,16 @@ export const toolContent: Record<string, ToolContent> = {
   },
   cashapp: {
     answerFirst:
-      'Cash App for Business commonly charges about 2.75% per payment with no fixed cents fee on that schedule. On $100 you would pay about $2.75 and keep $97.25. Instant deposits are a separate percentage on the deposit amount, so model both cuts when you need fast access to funds.',
+      'Cash App for Business charges 2.6% + $0.15 per payment. On $100 that is $2.75 in fees (net $97.25). Instant deposits are a separate 0.5%–2.5% on the deposit amount (min $0.25–$1, max $75), so model both cuts when you need fast access to funds.',
     howItWorks: [
       'Select Business card fee or Instant deposit.',
       'Calculate fee on amount or reverse price to a net target.',
       'Confirm live Cash App Help Center rates for your account type.',
     ],
-    formula: 'Business: fee = amount × 0.0275 (when using that schedule). Instant deposit: fee = amount × instant percent.',
+    formula: 'Business: fee = amount × 0.026 + 0.15 (when using that schedule). Instant deposit: fee = amount × instant percent.',
     workedExample: {
       title: 'Worked example: $40 Business payment',
-      body: 'Fee = 40 × 0.0275 = $1.10; net = $38.90.',
+      body: 'Fee = 40 × 0.026 + 0.15 = $1.19; net = $38.81.',
     },
     tips: [
       'Standard bank deposits are often free; instant deposits trade speed for a fee.',
@@ -210,7 +214,7 @@ export const toolContent: Record<string, ToolContent> = {
     extraSections: [
       {
         h2: 'Cash App for Business basics',
-        body: 'Cash App for Business is aimed at accepting customer payments with a business account feature set. The common published processing percentage is straightforward (no fixed cents on that schedule in our dataset), which can look attractive on small tickets compared with 2.9% + $0.30 style pricing — still verify your account’s live rate.',
+        body: 'Cash App for Business is aimed at accepting customer payments with a business account feature set. The published rate is 2.6% + $0.15 (Tap to Pay 3%), which can look attractive on mid-size tickets compared with 2.9% + $0.30 style pricing — still verify your account’s live rate.',
       },
       {
         h2: 'Deposits and cash-out',
@@ -220,7 +224,7 @@ export const toolContent: Record<string, ToolContent> = {
     faqs: [
       {
         q: 'What is the Cash App Business fee?',
-        a: 'A commonly published rate is 2.75% per transaction; verify in Cash App Help for your region.',
+        a: 'A commonly published rate is 2.6% + $0.15 per transaction; verify in Cash App Help for your region.',
       },
       {
         q: 'Does Cash App charge to cash out?',
@@ -230,13 +234,13 @@ export const toolContent: Record<string, ToolContent> = {
   },
   zelle: {
     answerFirst:
-      'Zelle transfers through most participating banks have no Zelle network fee. You usually send and receive at face value, subject to bank send limits and fraud rules. This calculator documents that zero-fee baseline and rare credit-card funding caveats — it is not a classic processor fee tool.',
+      'Zelle transfers through most participating banks have no Zelle network fee (Zelle states 99.4%+ of enrolled accounts charge none). On a $100 send the fee is $0 and the recipient gets $100 at face value, subject to bank send limits and fraud rules. This calculator documents that zero-fee baseline — it is not a classic processor fee tool.',
     howItWorks: [
-      'Select standard Zelle (0%) or a bank-specific credit-funded caveat schedule.',
+      'Select the standard Zelle (0%) schedule.',
       'Enter an amount to see that fees stay $0 on the standard schedule.',
       'Compare with Venmo/Cash App if you need seller tools.',
     ],
-    formula: 'Standard schedule: fee = 0; net = amount. Credit-funded caveats may behave like a percent cash-advance cost at the bank.',
+    formula: 'Standard schedule: fee = 0; net = amount. Your bank may still set send limits or other account fees.',
     workedExample: {
       title: 'Worked example: $250 standard Zelle',
       body: 'Fee = $0; recipient receives $250 (timing depends on bank enrollment).',
@@ -255,8 +259,8 @@ export const toolContent: Record<string, ToolContent> = {
         body: 'Zelle moves money between enrolled bank accounts, usually without a network fee. It is not a full merchant acquirer: you do not get the same chargeback flow as a Visa/Mastercard checkout. That makes it suitable for trusted counterparts and a poor fit for selling to strangers without another contract layer.',
       },
       {
-        h2: 'Bank limits and credit funding',
-        body: 'Banks set send limits that can change with history and channel (app vs web). Rare credit-card funding paths may look like cash advances. Our optional credit-funded schedule is a cautionary estimate — your issuer’s rules control.',
+        h2: 'Bank limits',
+        body: 'Banks set send limits that can change with history and channel (app vs web). Zelle itself is bank-account based; any extra cost would come from your bank’s policies, not a Zelle network processing schedule.',
       },
     ],
     faqs: [
@@ -265,36 +269,37 @@ export const toolContent: Record<string, ToolContent> = {
         a: 'The Zelle network generally does not charge send/receive fees at participating banks; your bank may have other account fees.',
       },
       {
-        q: 'Why might a Zelle payment cost money?',
-        a: 'Funding from a credit card (if allowed) can trigger cash-advance interest or fees from the issuer.',
+        q: 'Why might a bank transfer still cost money?',
+        a: 'Your bank — not the Zelle network — may charge for certain account types or services. Confirm with your bank.',
       },
     ],
   },
   patreon: {
     answerFirst:
-      'Patreon takes a platform percentage that depends on your plan (commonly about 5%, 8%, or 12%) plus payment processing. This calculator uses blended estimates so creators can see approximate net pledges — always check Patreon’s fee policy for exact processing.',
+      'New Patreon creators (pages published after Aug 4, 2025) pay a 10% platform fee plus payment processing — about 12.9% + $0.30 blended. Legacy Founders/Pro/Pro+Merch pages keep 5%/8%/11% platform plus processing. Always check Patreon’s fee policy for exact processing.',
     howItWorks: [
-      'Choose Lite, Pro, or Premium blended estimate.',
+      'Choose new-creator (10%) or a legacy Founders/Pro/Pro+Merch blended estimate.',
       'Enter pledge/charge amount or desired net.',
       'Review the fee table with source links and last-verified dates.',
     ],
     formula: 'Approximate fee = pledge × blendedPercent + fixedProcessing; net = pledge − fee.',
     workedExample: {
-      title: 'Worked example: $10 pledge on Pro (blended ~11% + $0.10)',
-      body: 'Fee ≈ 10 × 0.11 + 0.10 = $1.20; net ≈ $8.80.',
+      title: 'Worked example: $10 pledge on new-creator plan (blended ~12.9% + $0.30)',
+      body: 'Fee ≈ 10 × 0.129 + 0.30 = $1.59; net ≈ $8.41.',
     },
     tips: [
-      'Higher plans cost more percent but unlock features — model revenue before upgrading.',
+      'Unpublishing a legacy page can move you onto the 10% standard plan — pause instead if you need to keep legacy rates.',
       'Currency conversion and local payment methods can change processing.',
     ],
     mistakes: [
       'Comparing Patreon percent alone without processing.',
+      'Using discontinued Lite/Premium labels — those plans are gone for new creators.',
       'Ignoring chargebacks/failed payments in revenue forecasts.',
     ],
     faqs: [
       {
         q: 'How much does Patreon take from creators?',
-        a: 'Platform fees commonly range about 5–12% by plan, plus payment processing. Use Patreon’s fee policy for authoritative numbers.',
+        a: 'New creators: 10% platform + processing. Legacy Founders/Pro/Pro+Merch: 5%/8%/11% platform + processing. Confirm on patreon.com/pricing.',
       },
       {
         q: 'Is this calculator exact?',
@@ -304,43 +309,45 @@ export const toolContent: Record<string, ToolContent> = {
   },
   kofi: {
     answerFirst:
-      'Ko-fi’s free plan commonly takes about 5% platform commission on tips and sales, while Ko-fi Gold can remove the platform cut on donations (card processing may still apply). Use forward/reverse modes to price commissions and shop items before you publish a tip goal.',
+      'Ko-fi Free takes 0% platform fee on one-time tips (processing via PayPal/Stripe still applies). Memberships, shop, and commissions are 5%. Standard mode charges 5% on everything including tips. Gold can remove the tip platform cut. Use forward/reverse modes before you publish a tip goal.',
     howItWorks: [
-      'Select free plan, Gold, or shop estimate.',
+      'Select free-plan tips, Standard mode, Gold, or shop estimate.',
       'Enter donation/sale amount or target net.',
       'Confirm against Ko-fi’s current help docs.',
     ],
     formula: 'fee = amount × percent + fixed; reverse charge = (net + fixed) ÷ (1 − percent).',
     workedExample: {
-      title: 'Worked example: $20 tip on free plan at 5%',
-      body: 'Fee = $1.00; net = $19.00 (processing may apply depending on payout setup).',
+      title: 'Worked example: $20 tip on Free plan (0% Ko-fi + Stripe est.)',
+      body: 'Ko-fi platform fee = $0. With Stripe-shaped processing (~2.9% + $0.30): fee ≈ $0.88; net ≈ $19.12.',
     },
     tips: [
-      'Gold is often worth it above a modest monthly tip volume — run the numbers here.',
-      'Shop and commissions may have different rules than simple donations.',
+      'Free plan: 0% on one-time tips; 5% on memberships, shop, and commissions.',
+      'New creators often start in Standard mode (5% on tips too) — you can opt out in Settings → Payment.',
+      'Gold can remove the tip platform cut; processing still applies.',
     ],
     mistakes: [
+      'Assuming Free plan still takes 5% of one-time tips (it does not).',
       'Assuming Gold means zero cost end-to-end (processing can remain).',
       'Not updating prices after a plan change.',
     ],
     extraSections: [
       {
         h2: 'Payout timing on Ko-fi',
-        body: 'Ko-fi payouts depend on your connected PayPal or Stripe balance and that processor’s deposit schedule — often a few business days after the tip clears, not instant. If supporters expect same-day cash, model an instant-transfer fee on the payout rail separately from Ko-fi’s platform cut.',
+        body: 'Ko-fi payouts go directly to your connected PayPal or Stripe account. Deposit timing follows that processor — often a few business days after the tip clears, not instant.',
       },
       {
         h2: 'Donations vs shop vs commissions',
-        body: 'Donation buttons, shop sales, and commissions can hit different commission rules on free vs Gold. Gold’s headline benefit is removing Ko-fi’s donation commission; shop and commission products may still carry platform or processing costs. Run each mode on your real average order before promising a net goal on a launch page.',
+        body: 'One-time tips on Free are 0% platform. Memberships, shop, and commissions are 5% on Free. Standard mode applies 5% to tips as well. Run each mode on your real average order before promising a net goal.',
       },
       {
         h2: 'Regional quirks',
-        body: 'Currency conversion and local payout eligibility vary by country. A US-centric 5% + processing estimate can understate costs when supporters pay in another currency. Confirm Ko-fi’s help docs for your payout country before relying on the Gold break-even math.',
+        body: 'Currency conversion and local payout eligibility vary by country. Confirm Ko-fi’s help docs for your payout country before relying on break-even math.',
       },
     ],
     faqs: [
       {
         q: 'Does Ko-fi take a fee?',
-        a: 'Yes on the free plan (commonly ~5%). Gold can remove Ko-fi’s commission on donations.',
+        a: 'Free plan: 0% on one-time tips; 5% on memberships, shop, and commissions. Standard mode: 5% on all payment types. Gold can remove tip platform fees.',
       },
       {
         q: 'Are PayPal/Stripe payout fees included?',
@@ -348,13 +355,13 @@ export const toolContent: Record<string, ToolContent> = {
       },
       {
         q: 'When does Gold pay for itself?',
-        a: 'When monthly donation volume × 5% exceeds what you pay for Gold. Plug your monthly tips into the free-plan schedule, then compare.',
+        a: 'When monthly tip volume × avoided 5% exceeds Gold’s monthly price. Plug your tips into the Standard vs Gold schedules to compare.',
       },
     ],
   },
   bmac: {
     answerFirst:
-      'Buy Me a Coffee commonly charges about 5% platform fees plus payment processing. On a $5 “coffee” with a blended 5% + $0.30 model, the fee is about $0.55 and you keep about $4.45 — useful for membership and shop planning too.',
+      'Buy Me a Coffee takes a 5% platform fee plus Stripe processing (~2.9% + $0.30) and a 0.5% payout fee — about 8.4% + $0.30 blended. On a $5 coffee that is roughly $0.72 in fees (net ~$4.28). Memberships can add another 0.5% subscription surcharge.',
     howItWorks: [
       'Pick standard or membership estimate.',
       'Calculate fee on amount or reverse to a net goal.',
@@ -363,20 +370,22 @@ export const toolContent: Record<string, ToolContent> = {
     formula: 'fee = amount × percent + fixed; reverse as (net + fixed) ÷ (1 − percent).',
     workedExample: {
       title: 'Worked example: $5 support',
-      body: 'At 5% + $0.30: fee = 0.25 + 0.30 = $0.55; net = $4.45.',
+      body: 'At ~8.4% + $0.30: fee ≈ 5 × 0.084 + 0.30 = $0.72; net ≈ $4.28.',
     },
     tips: [
+      'Itemize platform vs Stripe vs payout when comparing to Ko-fi or Patreon.',
       'Memberships compound monthly — small fee differences matter at scale.',
-      'Compare with Ko-fi Gold and Patreon if you are choosing a stack.',
+      'International supporters can add ~1% more.',
     ],
     mistakes: [
+      'Quoting only the 5% platform fee and ignoring Stripe + payout.',
       'Quoting supporters a gross goal without fee drag.',
       'Ignoring regional processing differences.',
     ],
     extraSections: [
       {
         h2: 'Support buttons vs memberships',
-        body: 'One-off “coffee” tips and recurring memberships behave differently at scale. Memberships multiply small percent differences across months. Use the calculator on your average tip and on your monthly membership ARPU before you promise net funding goals publicly.',
+        body: 'One-off “coffee” tips and recurring memberships behave differently at scale. Memberships can add a 0.5% subscription processing surcharge. Use the calculator on your average tip and on your monthly membership ARPU before you promise net funding goals publicly.',
       },
       {
         h2: 'Compare adjacent platforms',
@@ -386,7 +395,7 @@ export const toolContent: Record<string, ToolContent> = {
     faqs: [
       {
         q: 'What is the Buy Me a Coffee fee percentage?',
-        a: 'Platform fees are commonly around 5%, plus processing. Check Buy Me a Coffee’s help article on calculating charges for current details.',
+        a: '5% platform + Stripe ~2.9% + $0.30 + 0.5% payout (≈8.4% + $0.30 blended). Intl +1% and subscriptions +0.5% may apply. See BMAC’s help article on calculating charges.',
       },
       {
         q: 'How do chargebacks work on Buy Me a Coffee?',
@@ -394,15 +403,15 @@ export const toolContent: Record<string, ToolContent> = {
       },
       {
         q: 'Are memberships priced the same as one-off coffees?',
-        a: 'Platform percent is similar in our blended estimate, but monthly recurrence multiplies small gaps. Model ARPU × patron count, not only a single $5 tip.',
+        a: 'Platform percent is the same 5%, but subscriptions can add 0.5% processing. Model ARPU × patron count, not only a single $5 tip.',
       },
     ],
   },
   gumroad: {
     answerFirst:
-      'Gumroad’s direct sales fee is commonly 10% + $0.50 plus card processing. A blended estimate of ~12.9% + $0.80 on $100 means roughly $13.70 in total fees and about $86.30 net. Use platform-only mode if you want to isolate Gumroad’s cut.',
+      'Gumroad’s direct sales fee is commonly 10% + $0.50 plus card processing. A blended estimate of ~12.9% + $0.80 on $100 means roughly $13.70 in total fees and about $86.30 net. Discover marketplace sales are 30%. Use platform-only mode if you want to isolate Gumroad’s cut.',
     howItWorks: [
-      'Choose direct sales (with processing estimate) or platform-only.',
+      'Choose direct sales (with processing estimate), platform-only, or Discover.',
       'Run forward or reverse calculations for product pricing.',
       'Verify on Gumroad pricing before publishing.',
     ],
@@ -432,9 +441,9 @@ export const toolContent: Record<string, ToolContent> = {
   },
   shopify: {
     answerFirst:
-      'Shopify Payments online rates in the US often start near 2.9% + $0.30 on Basic and fall as you move to Shopify or Advanced plans. If you use a third-party gateway, Shopify may add an extra percentage on top of that gateway’s fees.',
+      'Shopify Payments online rates in the US start at 2.9% + $0.30 on Basic, then Grow 2.7% + $0.30, Advanced 2.5% + $0.30, and Plus 2.25% + $0.30. If you use a third-party gateway, Shopify may add an extra percentage on top of that gateway’s fees.',
     howItWorks: [
-      'Select Basic, Shopify, Advanced, or third-party gateway add-on.',
+      'Select Basic, Grow, Advanced, Plus, or third-party gateway add-on.',
       'Calculate fees on an order total or reverse to a margin target.',
       'Remember subscription plan costs are separate from card rates.',
     ],
@@ -464,7 +473,7 @@ export const toolContent: Record<string, ToolContent> = {
   },
   wise: {
     answerFirst:
-      'Wise uses mid-market exchange rates and a transparent transfer fee that varies by corridor and amount. This calculator applies simple percent + fixed estimates for common routes (for example USD→GBP). Always generate a live quote in Wise before you send money.',
+      'Wise uses mid-market exchange rates and a transparent transfer fee that varies by corridor and amount. On a $1,000 USD→GBP estimate at 0.43% + $0.50 the fee is about $4.80. Always generate a live quote in Wise before you send money — these figures are planning estimates only.',
     howItWorks: [
       'Pick a corridor estimate (USD/GBP/EUR/AUD pairs).',
       'Enter send amount or desired receive amount.',

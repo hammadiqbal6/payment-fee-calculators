@@ -15,13 +15,16 @@
     "audit:budget": "node scripts/audit/budget.mjs",
     "audit:links": "node scripts/audit/links.mjs",
     "audit:structured-data": "node scripts/audit/structured-data.mjs",
+    "audit:pages": "node scripts/audit/page-checklist.mjs",
     "lhci": "lhci autorun",
     "proof": "node scripts/proof/run.mjs",
     "proof:verify": "node scripts/proof/verify.mjs",
     "check": "npm run build && npm run test && npm run audit && npm run proof:verify",
     "deploy": "npx wrangler deploy",
     "indexnow": "node scripts/indexnow.mjs",
-    "deploy:indexnow": "npm run deploy && node scripts/indexnow.mjs"
+    "deploy:indexnow": "npm run deploy && node scripts/indexnow.mjs",
+    "rate-watch": "node scripts/rate-watcher/watch.mjs",
+    "rate-watch:dry": "node scripts/rate-watcher/watch.mjs --dry-run"
   },
   "engines": {
     "node": ">=20"

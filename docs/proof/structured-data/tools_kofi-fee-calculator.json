@@ -17,7 +17,7 @@
           "priceCurrency": "USD"
         },
         "description": "Calculate Ko-fi free plan and Gold fees on donations and shop sales. See payout timing notes, forward and reverse net math, and dated schedule sources.",
-        "dateModified": "2026-10-19",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/kofi-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },
@@ -52,9 +52,8 @@
           "height": 450
         },
         "citation": [
-          "https://ko-fi.com/home/coffeeshop",
-          "https://ko-fi.com/gold",
-          "https://help.ko-fi.com/hc/en-us/articles/360003987114"
+          "https://ko-fi.com/pricing",
+          "https://help.ko-fi.com/hc/en-us/articles/360002506494-Does-Ko-fi-take-a-fee"
         ]
       }
     ]
@@ -92,7 +91,7 @@
         "name": "Does Ko-fi take a fee?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes on the free plan (commonly ~5%). Gold can remove Ko-fi’s commission on donations."
+          "text": "Free plan: 0% on one-time tips; 5% on memberships, shop, and commissions. Standard mode: 5% on all payment types. Gold can remove tip platform fees."
         }
       },
       {
@@ -108,7 +107,7 @@
         "name": "When does Gold pay for itself?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "When monthly donation volume × 5% exceeds what you pay for Gold. Plug your monthly tips into the free-plan schedule, then compare."
+          "text": "When monthly tip volume × avoided 5% exceeds Gold’s monthly price. Plug your tips into the Standard vs Gold schedules to compare."
         }
       }
     ]

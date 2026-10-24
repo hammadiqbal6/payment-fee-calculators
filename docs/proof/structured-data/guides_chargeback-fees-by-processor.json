@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Chargeback/dispute fees by processor",
+    "headline": "Chargeback Fees by Processor (2026 Guide)",
     "description": "How chargebacks and disputes affect Stripe, PayPal, and Square sellers—why dollar fees vary, how to budget reserves, and where to verify official dispute costs.",
     "datePublished": "2026-10-23",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -38,7 +38,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Chargeback/dispute fees by processor",
+        "name": "Chargeback Fees by Processor (2026 Guide)",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/chargeback-fees-by-processor/"
       }
     ]
@@ -60,7 +60,7 @@
         "name": "Does PayPal charge for disputes?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "PayPal’s dispute and chargeback-related costs vary by product and outcome. Confirm on PayPal’s official help and fee pages. Processing for US G&S remains commonly 3.49% + $0.49 as of 2026-10-15, separate from dispute fees."
+          "text": "PayPal’s dispute and chargeback-related costs vary by product and outcome. Confirm on PayPal’s official help and fee pages. Processing for US G&S is 2.99% (no fixed) as of 2026-10-24; Checkout is 3.49% + $0.49, separate from dispute fees."
         }
       },
       {

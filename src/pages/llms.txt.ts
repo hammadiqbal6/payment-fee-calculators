@@ -36,6 +36,7 @@ ${exampleLines}
 
 ## About
 - [Methodology](${base}/methodology/): How schedules are sourced, verified, and updated
+- [Fee changelog](${base}/fee-changelog/): Versioned rate corrections with before/after and source links
 - [About](${base}/about/): Maintainer, independence, and funding
 - [Contact](${base}/contact/): Corrections and questions (${siteConfig.contactEmail})
 `;

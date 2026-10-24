@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Passing fees to customers (where allowed)",
+    "headline": "Passing Card Fees to Customers (2026 Rules)",
     "description": "How to build processor fees into prices or surcharges where rules allow—with Stripe and PayPal reverse math, compliance cautions, and customer-friendly framing.",
     "datePublished": "2026-10-23",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -38,7 +38,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Passing fees to customers (where allowed)",
+        "name": "Passing Card Fees to Customers (2026 Rules)",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/passing-fees-to-customers/"
       }
     ]
@@ -68,7 +68,7 @@
         "name": "What about PayPal?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "For US Goods & Services at 3.49% + $0.49, charge (desiredNet + 0.49) ÷ (1 − 0.0349). Example: net $100 → about $104.14. Use /tools/paypal-fee-calculator/."
+          "text": "For US Goods & Services at 2.99% (no fixed), charge desiredNet ÷ (1 − 0.0299). Example: net $100 → about $103.08. Checkout uses (net + 0.49) ÷ (1 − 0.0349) ≈ $104.14. Use /tools/paypal-fee-calculator/."
         }
       },
       {

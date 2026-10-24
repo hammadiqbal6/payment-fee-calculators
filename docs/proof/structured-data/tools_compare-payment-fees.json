@@ -16,7 +16,7 @@
           "priceCurrency": "USD"
         },
         "description": "Compare Stripe, PayPal, Square, Venmo, Cash App, Shopify and Wise fees side by side on any amount. Free calculator ranks processors by fee and net payout.",
-        "dateModified": "2026-10-19",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -33,8 +33,8 @@
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/compare-payment-fees/",
         "name": "Payment Processor Fee Comparison: Stripe vs PayPal & More",
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },

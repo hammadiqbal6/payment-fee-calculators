@@ -17,7 +17,7 @@
           "priceCurrency": "USD"
         },
         "description": "Calculate Cash App for Business card fees and instant deposit costs. See what you keep and how much to charge to receive a target amount.",
-        "dateModified": "2026-10-19",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/cash-app-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },
@@ -52,8 +52,8 @@
           "height": 450
         },
         "citation": [
-          "https://cash.app/help/us/en-us/3102-business-account",
-          "https://cash.app/help/us/en-us/3111-instant-deposit"
+          "https://cash.app/help/us/en-us/6521-cash-app-business-fees",
+          "https://cash.app/us/en/legal/tos"
         ]
       }
     ]
@@ -91,7 +91,7 @@
         "name": "What is the Cash App Business fee?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "A commonly published rate is 2.75% per transaction; verify in Cash App Help for your region."
+          "text": "A commonly published rate is 2.6% + $0.15 per transaction; verify in Cash App Help for your region."
         }
       },
       {

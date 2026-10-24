@@ -221,7 +221,7 @@ const gaId = siteConfig.ga4MeasurementId;
     <footer class="site-footer">
       <div class="site-footer__inner">
         <div>
-          <h2>{siteConfig.siteName}</h2>
+          <p class="site-footer__heading">{siteConfig.siteName}</p>
           <p>{siteConfig.tagline}. Client-side calculators — amounts never leave your browser.</p>
           <p>
             Maintained by <a href={`/about/${siteConfig.authorHash}`}>{siteConfig.authorName}</a> ·{' '}
@@ -229,7 +229,7 @@ const gaId = siteConfig.ga4MeasurementId;
           </p>
         </div>
         <div>
-          <h2>Tools</h2>
+          <p class="site-footer__heading">Tools</p>
           <ul>
             <li><a href="/tools/stripe-fee-calculator/">Stripe</a></li>
             <li><a href="/tools/paypal-fee-calculator/">PayPal</a></li>
@@ -238,10 +238,11 @@ const gaId = siteConfig.ga4MeasurementId;
           </ul>
         </div>
         <div>
-          <h2>Site</h2>
+          <p class="site-footer__heading">Site</p>
           <ul>
             <li><a href="/about/">About</a></li>
             <li><a href="/methodology/">Methodology</a></li>
+            <li><a href="/fee-changelog/">Fee changelog</a></li>
             <li><a href="/privacy/">Privacy</a></li>
             <li><a href="/terms/">Terms</a></li>
             <li><a href="/contact/">Contact</a></li>

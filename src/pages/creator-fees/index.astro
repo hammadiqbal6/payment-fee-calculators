@@ -2,6 +2,8 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { hubCategories, getRelatedTools } from '@/lib/tools';
+import { processors } from '@/data/fees';
+import { calculateForward, formatMoney, formatPercent } from '@/lib/fees/calculate';
 import { breadcrumbList } from '@/lib/breadcrumbs';
 import { siteConfig } from '@/config/site';
 
@@ -11,6 +13,17 @@ const crumbs = [
   { name: 'Home', href: '/' },
   { name: 'Creator fees', href: hub.path },
 ];
+
+const compareRows = tools
+  .map((t) => {
+    const p = processors.find((x) => x.id === t.id);
+    if (!p) return null;
+    const rate = p.rates.find((r) => r.id === p.defaultRateId) ?? p.rates[0];
+    const fwd = calculateForward(100, rate);
+    return { tool: t, rate, fwd };
+  })
+  .filter(Boolean);
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -32,10 +45,9 @@ const jsonLd = [
   <Breadcrumbs items={crumbs} />
   <h1>{hub.title}</h1>
   <p class="answer-first">
-    Creator platforms take a platform commission on top of card processing. Patreon varies by plan, Ko-fi Gold can remove
-    donation commission, and Gumroad’s direct sales fee is higher but includes storefront tooling. Compare{' '}
-    <a href="/guides/patreon-vs-kofi-vs-bmac/">Patreon vs Ko-fi</a> and{' '}
-    <a href="/guides/gumroad-vs-kofi-fees/">Gumroad vs Ko-fi</a> before you pick a stack.
+    Creator platforms take a platform commission on top of card processing. New Patreon pages land near 12.9% + $0.30
+    blended; Ko-fi Free takes 0% on one-time tips (processing separate); Gumroad direct sales blend near 12.9% + $0.80.
+    Pick a calculator, then read the comparison guides.
   </p>
   <div class="tool-grid">
     {
@@ -47,7 +59,41 @@ const jsonLd = [
       ))
     }
   </div>
-  <p>
-    Read <a href="/guides/patreon-vs-kofi-vs-bmac/">Patreon vs Ko-fi vs Buy Me a Coffee fees</a>.
-  </p>
+
+  <h2>Default blend on $100</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Default schedule</th>
+          <th>Est. fee on $100</th>
+          <th>Tool</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          compareRows.map((row) => (
+            <tr>
+              <td>{row!.tool.name}</td>
+              <td>
+                {row!.rate.label} ({formatPercent(row!.rate.percent)} + {row!.rate.fixed.toFixed(2)})
+              </td>
+              <td>{formatMoney(row!.fwd.fee, row!.rate.currency)}</td>
+              <td>
+                <a href={row!.tool.path}>Calculate</a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Related guides</h2>
+  <ul>
+    <li><a href="/guides/patreon-vs-kofi-vs-bmac/">Patreon vs Ko-fi vs Buy Me a Coffee</a></li>
+    <li><a href="/guides/gumroad-vs-kofi-fees/">Gumroad vs Ko-fi fees</a></li>
+    <li><a href="/guides/how-to-price-after-fees/">How to price after fees</a></li>
+  </ul>
 </BaseLayout>
