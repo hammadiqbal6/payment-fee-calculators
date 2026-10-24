@@ -14,7 +14,7 @@ One primary keyword + secondary cluster per URL. Do not create duplicate-intent 
 | `/tools/venmo-fee-calculator/` | venmo fee calculator | venmo business profile goods and services fee |
 | `/tools/cash-app-fee-calculator/` | cash app fee calculator | cash app for business fee instant deposit |
 | `/tools/zelle-fee-calculator/` | does zelle charge fees | is zelle free zelle business limits |
-| `/tools/patreon-fee-calculator/` | patreon fee calculator | patreon lite pro premium fees creator earnings |
+| `/tools/patreon-fee-calculator/` | patreon fee calculator | patreon 10% fees legacy founders pro merch creator earnings |
 | `/tools/kofi-fee-calculator/` | ko-fi fee calculator | ko-fi gold fees donation shop |
 | `/tools/buy-me-a-coffee-fee-calculator/` | buy me a coffee fee calculator | bmac membership fees |
 | `/tools/gumroad-fee-calculator/` | gumroad fee calculator | gumroad what percentage does gumroad take |
@@ -43,4 +43,4 @@ One primary keyword + secondary cluster per URL. Do not create duplicate-intent 
 - `/docs-fee-update/` → `/methodology/`
 - `/authors/` → `/about/#maintainer`
 
-Supporting (trust / policy, not head terms): `/about/`, `/methodology/`, `/privacy/`, `/terms/`, `/contact/`.
+Supporting (trust / policy, not head terms): `/about/`, `/methodology/`, `/fee-changelog/`, `/privacy/`, `/terms/`, `/contact/`.

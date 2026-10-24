@@ -68,7 +68,7 @@
         "name": "What PayPal rate should I use for US domestic baselines?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "US Goods & Services list pricing commonly 3.49% + $0.49 as of 2026-10-15. International products differ—select the international schedule in /tools/paypal-fee-calculator/."
+          "text": "US Goods & Services (Send/Receive Money) is 2.99% with no fixed fee as of 2026-10-24. International products differ—select the international schedule in /tools/paypal-fee-calculator/."
         }
       },
       {

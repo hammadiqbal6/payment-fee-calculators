@@ -60,7 +60,7 @@
         "name": "Does Square beat Stripe for cafés?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Often on fee mix when most volume is in-person at 2.6% + $0.10 versus online-shaped 2.9% + $0.30. Hardware, software, and payout features still matter—run both calculators on your ticket size."
+          "text": "Often on fee mix when most volume is in-person at 2.6% + $0.15 versus online-shaped 2.9% + $0.30. Hardware, software, and payout features still matter—run both calculators on your ticket size."
         }
       },
       {
@@ -68,7 +68,7 @@
         "name": "What is the fee on a $100 online charge?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Stripe and Square online: $3.20 (net $96.80). Shopify Basic: same shape. Shopify plan: $3.00. Advanced: $2.80. Confirm on official pricing and our calculators."
+          "text": "Stripe and Square online: $3.20 (net $96.80). Shopify Basic: same shape. Grow plan: $3.00. Advanced: $2.80. Confirm on official pricing and our calculators."
         }
       },
       {

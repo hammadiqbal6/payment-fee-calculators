@@ -17,7 +17,7 @@
           "priceCurrency": "USD"
         },
         "description": "Free Stripe fee calculator: see the 2.9% + 30¢ fee and your net payout, or work backward to the price to charge. Covers US, UK, EU, Connect and Invoicing.",
-        "dateModified": "2026-10-19",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/stripe-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },
@@ -112,7 +112,7 @@
         "name": "Does Stripe charge more for international cards?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. International cards typically add an extra percentage (often about 1%) on top of the domestic rate."
+          "text": "Yes. US accounts add 1.5% for international cards (4.4% + $0.30 total) and another 1% if currency conversion applies."
         }
       },
       {

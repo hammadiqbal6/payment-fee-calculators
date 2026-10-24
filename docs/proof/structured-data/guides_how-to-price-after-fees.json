@@ -84,7 +84,7 @@
         "name": "How much should I charge to receive exactly $100?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Approximate US list figures as of 2026-10-15: Stripe ≈ $103.30; PayPal Goods & Services ≈ $104.14; Square online ≈ $103.30. Confirm in each calculator and on official pricing pages before you publish."
+          "text": "Approximate US list figures as of 2026-10-24: Stripe ≈ $103.30; PayPal G&S ≈ $103.08; PayPal Checkout ≈ $104.14; Square Plus/API online ≈ $103.30; Free-plan online is higher. Confirm in each calculator and on official pricing pages before you publish."
         }
       },
       {

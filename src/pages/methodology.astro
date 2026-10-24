@@ -2,7 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { siteConfig } from '@/config/site';
-import { FEE_DATA_VERSION, FEE_DATA_UPDATED } from '@/data/fees';
+import { FEE_DATA_VERSION, FEE_DATA_UPDATED, feeChangelog } from '@/data/fees';
 import { breadcrumbList } from '@/lib/breadcrumbs';
 
 const crumbs = [
@@ -89,13 +89,21 @@ const jsonLd = [
   </ol>
 
   <h2 id="changelog">Changelog</h2>
+  <p>
+    Fee schedule changes are generated from <code>feeChangelog</code> in the data file. Full table:{' '}
+    <a href="/fee-changelog/">Fee changelog</a>.
+  </p>
   <ul>
+    {
+      feeChangelog.map((entry) => (
+        <li>
+          <time datetime={entry.date}>{entry.date}</time> — {entry.summary}
+        </li>
+      ))
+    }
     <li>
       <time datetime="2026-10-20">2026-10-20</time> — Mobile SEO audit fixes; named maintainer (Hammad Iqbal); TrustBlock
       sources; favicon/manifest set; Consent Mode GA4; guide slug fixes.
-    </li>
-    <li>
-      <time datetime="2026-10-19">2026-10-19</time> — Initial public fee data version {FEE_DATA_VERSION} published.
     </li>
   </ul>
 

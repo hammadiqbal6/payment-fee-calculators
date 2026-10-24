@@ -17,7 +17,7 @@
           "priceCurrency": "USD"
         },
         "description": "Calculate Gumroad direct sales fees (platform + processing estimate). Find net payout and the price to set to receive a target amount after fees.",
-        "dateModified": "2026-10-19",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/gumroad-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },

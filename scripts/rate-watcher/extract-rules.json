@@ -1,0 +1,250 @@
+{
+  "$schemaNote": "Per-rate extraction rules for the weekly fee watcher. Fix patterns here when a pricing page layout changes — do not guess rates.",
+  "defaults": {
+    "userAgent": "FeeCalcRateWatcher/1.0 (+https://github.com/hammadiqbal6/payment-fee-calculators; fee freshness check)",
+    "timeoutMs": 45000
+  },
+  "rules": [
+    {
+      "rateId": "paypal-us-gs",
+      "sourceUrl": "https://www.paypal.com/us/business/paypal-business-fees",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "Send/Receive Money for Goods and Services[\\s\\S]{0,500}?>([0-9.]+)%",
+        "percentGroup": 1,
+        "fixed": 0
+      }
+    },
+    {
+      "rateId": "paypal-us-checkout",
+      "sourceUrl": "https://www.paypal.com/us/business/paypal-business-fees",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "PayPal Checkout[\\s\\S]{0,500}?>([0-9.]+)%\\s*\\+",
+        "percentGroup": 1,
+        "fixed": 0.49
+      },
+      "fixedFallback": 0.49
+    },
+    {
+      "rateId": "paypal-uk",
+      "sourceUrl": "https://www.paypal.com/uk/business/paypal-business-fees",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "All Other Commercial Transactions[\\s\\S]{0,500}?>([0-9.]+)%\\s*\\+",
+        "percentGroup": 1,
+        "fixed": 0.3
+      }
+    },
+    {
+      "rateId": "paypal-au",
+      "sourceUrl": "https://www.paypal.com/au/business/paypal-business-fees",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "Commercial Transactions[\\s\\S]{0,500}?>([0-9.]+)%\\s*\\+",
+        "percentGroup": 1,
+        "fixed": 0.3
+      }
+    },
+    {
+      "rateId": "stripe-us",
+      "sourceUrl": "https://stripe.com/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "([0-9.]+)%\\s*\\+\\s*30[¢c]",
+        "percentGroup": 1,
+        "fixed": 0.3,
+        "occurrence": 0
+      }
+    },
+    {
+      "rateId": "stripe-us-intl",
+      "sourceUrl": "https://stripe.com/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "\\+\\s*([0-9.]+)%\\s*for international cards",
+        "percentGroup": 1,
+        "combineWithRateId": "stripe-us",
+        "fixed": 0.3
+      }
+    },
+    {
+      "rateId": "stripe-au",
+      "sourceUrl": "https://stripe.com/au/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "([0-9.]+)%\\s*\\+\\s*A\\$0\\.30",
+        "percentGroup": 1,
+        "fixed": 0.3,
+        "occurrence": 0
+      }
+    },
+    {
+      "rateId": "square-us-online",
+      "sourceUrl": "https://squareup.com/us/en/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "Online[\\s\\S]{0,200}?([0-9.]+)%\\s*\\+\\s*30[¢c]",
+        "percentGroup": 1,
+        "fixed": 0.3,
+        "occurrence": 0
+      }
+    },
+    {
+      "rateId": "square-us-inperson",
+      "sourceUrl": "https://squareup.com/us/en/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "([0-9.]+)%\\s*\\+\\s*15[¢c]",
+        "percentGroup": 1,
+        "fixed": 0.15,
+        "occurrence": 0
+      }
+    },
+    {
+      "rateId": "square-uk",
+      "sourceUrl": "https://squareup.com/gb/en/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "([0-9.]+)%\\s*\\+\\s*25p\\s*for transactions with UK cards",
+        "percentGroup": 1,
+        "fixed": 0.25
+      }
+    },
+    {
+      "rateId": "square-au",
+      "sourceUrl": "https://squareup.com/au/en/payments/our-fees",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "Square charges\\s*<strong>\\s*([0-9.]+)%\\s*</strong>\\s*for card-not-present",
+        "percentGroup": 1,
+        "fixed": 0
+      }
+    },
+    {
+      "rateId": "venmo-business",
+      "sourceUrl": "https://venmo.com/resources/our-fees",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "([0-9.]+)%\\s*\\+\\s*\\$0\\.10",
+        "percentGroup": 1,
+        "fixed": 0.1,
+        "occurrence": 0
+      }
+    },
+    {
+      "rateId": "venmo-gs",
+      "sourceUrl": "https://venmo.com/resources/our-fees",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "([0-9.]+)%[\\s\\S]{0,400}?seller transaction fee when you receive a payment that is identified by the sender as for goods and services",
+        "percentGroup": 1,
+        "fixed": 0
+      }
+    },
+    {
+      "rateId": "cashapp-business",
+      "sourceUrl": "https://cash.app/help/us/en-us/6521-cash-app-business-fees",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "([0-9.]+)%\\s*\\+\\s*\\$0\\.15\\s*processing fee",
+        "percentGroup": 1,
+        "fixed": 0.15
+      }
+    },
+    {
+      "rateId": "shopify-basic",
+      "sourceUrl": "https://www.shopify.com/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "Basic[\\s\\S]{0,200}?([0-9.]+)%\\s*\\+\\s*30[¢c]",
+        "percentGroup": 1,
+        "fixed": 0.3
+      }
+    },
+    {
+      "rateId": "shopify-grow",
+      "sourceUrl": "https://www.shopify.com/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "Grow[\\s\\S]{0,200}?([0-9.]+)%\\s*\\+\\s*30[¢c]",
+        "percentGroup": 1,
+        "fixed": 0.3
+      }
+    },
+    {
+      "rateId": "patreon-standard",
+      "sourceUrl": "https://www.patreon.com/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "##\\s*10%|\\b10%\\s*of the income",
+        "platformPercent": 0.1,
+        "note": "Platform fee only; blended schedule includes processing estimate and is not auto-updated"
+      },
+      "compareMode": "platformOnly"
+    },
+    {
+      "rateId": "kofi-free-tips",
+      "sourceUrl": "https://help.ko-fi.com/hc/en-us/articles/360002506494-Does-Ko-fi-take-a-fee",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "0%\\s*on one-time tips|One-off tips[\\s\\S]{0,80}?0%",
+        "percent": 0,
+        "fixed": 0
+      }
+    },
+    {
+      "rateId": "bmac-standard",
+      "sourceUrl": "https://help.buymeacoffee.com/en/articles/8105744-how-to-calculate-charges-on-your-payment",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "5%\\s*platform fee",
+        "platformPercent": 0.05,
+        "note": "Blended schedule; watcher flags platform fee presence only"
+      },
+      "compareMode": "platformOnly"
+    },
+    {
+      "rateId": "gumroad-platform-only",
+      "sourceUrl": "https://gumroad.com/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "10%\\s*\\+\\s*\\$0\\.50|10%\\s*\\+\\s*50[¢c]",
+        "percent": 0.1,
+        "fixed": 0.5
+      }
+    },
+    {
+      "rateId": "wise-usd-gbp",
+      "sourceUrl": "https://wise.com/pricing",
+      "strategy": "playwright",
+      "extract": {
+        "type": "regex",
+        "pattern": "UNPARSEABLE_PLACEHOLDER_FORCE_FLAG",
+        "percentGroup": 1
+      },
+      "expectUnverified": true,
+      "note": "Wise is JS/corridor-quoted; do not guess — flag if page cannot yield a stable domestic USD→GBP list rate"
+    }
+  ]
+}

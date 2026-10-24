@@ -68,7 +68,7 @@
         "name": "What about PayPal?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "For US Goods & Services at 3.49% + $0.49, charge (desiredNet + 0.49) ÷ (1 − 0.0349). Example: net $100 → about $104.14. Use /tools/paypal-fee-calculator/."
+          "text": "For US Goods & Services at 2.99% (no fixed), charge desiredNet ÷ (1 − 0.0299). Example: net $100 → about $103.08. Checkout uses (net + 0.49) ÷ (1 − 0.0349) ≈ $104.14. Use /tools/paypal-fee-calculator/."
         }
       },
       {

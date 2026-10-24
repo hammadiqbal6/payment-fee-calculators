@@ -1,0 +1,170 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import {
+  FEE_DATA_UPDATED,
+  FEE_DATA_VERSION,
+  feeChangelog,
+  processors,
+  allRates,
+} from '@/data/fees';
+import { formatSchedule } from '@/lib/fees/format';
+import { breadcrumbList } from '@/lib/breadcrumbs';
+import { siteConfig } from '@/config/site';
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Fee changelog', href: '/fee-changelog/' },
+];
+
+const rates = allRates();
+const verifiedCount = rates.filter((r) => r.verificationStatus === 'verified').length;
+const unverified = rates.filter((r) => r.verificationStatus === 'unverified');
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Payment fee changelog',
+    url: `${siteConfig.siteUrl}/fee-changelog/`,
+    description:
+      'Versioned changelog of payment processor and creator fee schedule updates used by FeeCalc Tools calculators.',
+    dateModified: `${FEE_DATA_UPDATED}T00:00:00+05:00`,
+  },
+  breadcrumbList(crumbs),
+];
+---
+
+<BaseLayout
+  title="Payment fee changelog"
+  description="Versioned changelog of payment processor and creator fee schedule updates — every rate change with before/after values and official source links."
+  canonicalPath="/fee-changelog/"
+  modified={FEE_DATA_UPDATED}
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs items={crumbs} />
+  <h1>Payment fee changelog</h1>
+  <p class="answer-first">
+    Every calculator on this site reads from one fee data file (version {FEE_DATA_VERSION}, updated{' '}
+    {FEE_DATA_UPDATED}). This page lists material rate corrections and the current schedule snapshot.
+    {verifiedCount} of {rates.length} rates are marked verified against official pricing pages.
+  </p>
+
+  <h2>Recent changes</h2>
+  {
+    feeChangelog.map((entry) => (
+      <section class="changelog-entry">
+        <h3>
+          <time datetime={entry.date}>{entry.date}</time>
+        </h3>
+        <p>{entry.summary}</p>
+        {entry.changes.length > 0 && (
+          <ul>
+            {entry.changes.map((c) => (
+              <li>
+                <code>{c.rateId}</code> — {c.field}
+                {c.before && (
+                  <>
+                    : <strong>{c.before}</strong> → <strong>{c.after}</strong>
+                  </>
+                )}
+                {!c.before && c.after && (
+                  <>
+                    : <strong>{c.after}</strong>
+                  </>
+                )}
+                {c.sourceUrl && (
+                  <>
+                    {' '}
+                    (
+                    <a href={c.sourceUrl} rel="noopener noreferrer">
+                      source
+                    </a>
+                    )
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))
+  }
+
+  <h2>Current schedules</h2>
+  <p>
+    Generated from <code>src/data/fees.ts</code>. See also{' '}
+    <a href="/methodology/">methodology</a> and the weekly GitHub Action rate watcher.
+  </p>
+  {
+    processors.map((p) => (
+      <section>
+        <h3>
+          <a href={`/tools/${p.slug}/`}>{p.name}</a>
+        </h3>
+        <div class="table-wrap">
+          <table>
+            <caption>{p.name} rates in fee data {FEE_DATA_VERSION}</caption>
+            <thead>
+              <tr>
+                <th>Schedule</th>
+                <th>Rate</th>
+                <th>Status</th>
+                <th>Verified</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {p.rates.map((r) => (
+                <tr>
+                  <td>{r.label}</td>
+                  <td>{formatSchedule(r)}</td>
+                  <td>{r.verificationStatus ?? 'verified'}</td>
+                  <td>
+                    <time datetime={r.lastVerified}>{r.lastVerified}</time>
+                  </td>
+                  <td>
+                    <a href={r.sourceUrl} rel="noopener noreferrer">
+                      Official
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ))
+  }
+
+  {
+    unverified.length > 0 && (
+      <>
+        <h2>Unverified rates</h2>
+        <p>
+          These schedules could not be confirmed automatically (for example JS-rendered pages) and
+          remain flagged until a manual check:
+        </p>
+        <ul>
+          {unverified.map((r) => (
+            <li>
+              <code>{r.id}</code> — {r.label} ({formatSchedule(r)}) ·{' '}
+              <a href={r.sourceUrl} rel="noopener noreferrer">
+                source
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .changelog-entry {
+    margin-bottom: 1.5rem;
+  }
+  .changelog-entry h3 {
+    margin-bottom: 0.35rem;
+  }
+</style>

@@ -84,7 +84,7 @@
         "name": "Does Wise eliminate hidden FX fees?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Wise is often more transparent on corridor pricing (planning estimates ~0.37–0.45% + fixed as of 2026-10-15), but it is still a fee. Compare the full path against PayPal or bank wires for your corridor using /tools/wise-transfer-fee-calculator/."
+          "text": "Wise is often more transparent on corridor pricing (planning estimates ~0.37–0.45% + fixed as of 2026-10-24), but it is still a fee. Compare the full path against PayPal or bank wires for your corridor using /tools/wise-transfer-fee-calculator/."
         }
       }
     ]

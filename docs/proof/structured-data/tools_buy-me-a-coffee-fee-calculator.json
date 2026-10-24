@@ -17,7 +17,7 @@
           "priceCurrency": "USD"
         },
         "description": "Estimate Buy Me a Coffee platform and processing fees on tips and memberships. See net earnings, chargeback notes, and reverse pricing in seconds.",
-        "dateModified": "2026-10-19",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/buy-me-a-coffee-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },
@@ -90,7 +90,7 @@
         "name": "What is the Buy Me a Coffee fee percentage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Platform fees are commonly around 5%, plus processing. Check Buy Me a Coffee’s help article on calculating charges for current details."
+          "text": "5% platform + Stripe ~2.9% + $0.30 + 0.5% payout (≈8.4% + $0.30 blended). Intl +1% and subscriptions +0.5% may apply. See BMAC’s help article on calculating charges."
         }
       },
       {
@@ -106,7 +106,7 @@
         "name": "Are memberships priced the same as one-off coffees?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Platform percent is similar in our blended estimate, but monthly recurrence multiplies small gaps. Model ARPU × patron count, not only a single $5 tip."
+          "text": "Platform percent is the same 5%, but subscriptions can add 0.5% processing. Model ARPU × patron count, not only a single $5 tip."
         }
       }
     ]

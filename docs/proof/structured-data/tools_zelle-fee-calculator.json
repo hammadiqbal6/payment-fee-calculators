@@ -17,7 +17,7 @@
           "priceCurrency": "USD"
         },
         "description": "Zelle is usually free through your bank. See when fees can apply, typical send limits, and how Zelle compares with Venmo and Cash App on the same payment.",
-        "dateModified": "2026-10-19",
+        "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/zelle-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-19T00:00:00+05:00",
-        "lastReviewed": "2026-10-19",
+        "dateModified": "2026-10-24T00:00:00+05:00",
+        "lastReviewed": "2026-10-24",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },
@@ -52,7 +52,7 @@
           "height": 450
         },
         "citation": [
-          "https://www.zelle.com/help-center"
+          "https://www.zellepay.com/faq/will-i-get-charged-fee-send-receive-money-zelle"
         ]
       }
     ]
@@ -95,10 +95,10 @@
       },
       {
         "@type": "Question",
-        "name": "Why might a Zelle payment cost money?",
+        "name": "Why might a bank transfer still cost money?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Funding from a credit card (if allowed) can trigger cash-advance interest or fees from the issuer."
+          "text": "Your bank — not the Zelle network — may charge for certain account types or services. Confirm with your bank."
         }
       }
     ]
