@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Hidden Payment Fees Freelancers Miss",
+    "headline": "Hidden Payment Fees Freelancers Miss (2026)",
     "description": "Beyond the headline percent: instant payouts, FX, chargebacks, platform commissions, and fixed per-transaction fees that quietly erase freelancer margins.",
     "datePublished": "2026-10-19",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -38,7 +38,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Hidden Payment Fees Freelancers Miss",
+        "name": "Hidden Payment Fees Freelancers Miss (2026)",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/hidden-payment-fees/"
       }
     ]

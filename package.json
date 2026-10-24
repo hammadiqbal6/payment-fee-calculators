@@ -15,6 +15,7 @@
     "audit:budget": "node scripts/audit/budget.mjs",
     "audit:links": "node scripts/audit/links.mjs",
     "audit:structured-data": "node scripts/audit/structured-data.mjs",
+    "audit:pages": "node scripts/audit/page-checklist.mjs",
     "lhci": "lhci autorun",
     "proof": "node scripts/proof/run.mjs",
     "proof:verify": "node scripts/proof/verify.mjs",

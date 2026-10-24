@@ -234,7 +234,7 @@ export const toolContent: Record<string, ToolContent> = {
   },
   zelle: {
     answerFirst:
-      'Zelle transfers through most participating banks have no Zelle network fee (Zelle states 99.4%+ of enrolled accounts charge none). You usually send and receive at face value, subject to bank send limits and fraud rules. This calculator documents that zero-fee baseline — it is not a classic processor fee tool.',
+      'Zelle transfers through most participating banks have no Zelle network fee (Zelle states 99.4%+ of enrolled accounts charge none). On a $100 send the fee is $0 and the recipient gets $100 at face value, subject to bank send limits and fraud rules. This calculator documents that zero-fee baseline — it is not a classic processor fee tool.',
     howItWorks: [
       'Select the standard Zelle (0%) schedule.',
       'Enter an amount to see that fees stay $0 on the standard schedule.',
@@ -473,7 +473,7 @@ export const toolContent: Record<string, ToolContent> = {
   },
   wise: {
     answerFirst:
-      'Wise uses mid-market exchange rates and a transparent transfer fee that varies by corridor and amount. This calculator applies simple percent + fixed estimates for common routes (for example USD→GBP). Always generate a live quote in Wise before you send money.',
+      'Wise uses mid-market exchange rates and a transparent transfer fee that varies by corridor and amount. On a $1,000 USD→GBP estimate at 0.43% + $0.50 the fee is about $4.80. Always generate a live quote in Wise before you send money — these figures are planning estimates only.',
     howItWorks: [
       'Pick a corridor estimate (USD/GBP/EUR/AUD pairs).',
       'Enter send amount or desired receive amount.',

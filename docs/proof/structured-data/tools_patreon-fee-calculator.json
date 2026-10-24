@@ -16,7 +16,7 @@
           "price": "0",
           "priceCurrency": "USD"
         },
-        "description": "Estimate Patreon Lite, Pro and Premium platform plus processing fees. Calculate what you keep from pledges and how much patrons must pay for you to receive X.",
+        "description": "Estimate Patreon new-creator 10% and legacy Founders/Pro/Pro+Merch fees. See what you keep from pledges or reverse-price a target net.",
         "dateModified": "2026-10-24",
         "author": {
           "@type": "Person",
@@ -32,7 +32,7 @@
         "@type": "WebPage",
         "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/#webpage",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/patreon-fee-calculator/",
-        "name": "Patreon Fee Calculator – Creator Earnings",
+        "name": "Patreon Fee Calculator 2026: New 10% & Legacy Plans",
         "isPartOf": {
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/#website"
         },

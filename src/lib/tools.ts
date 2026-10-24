@@ -43,7 +43,7 @@ const keywordMap: Record<string, { title: string; description: string; primaryKe
     description:
       'Estimate Venmo Business Profile and Goods & Services fees, plus instant transfer costs. Free forward and reverse fee calculator for sellers.',
     primaryKeyword: 'venmo fee calculator',
-    h1: 'Venmo Business Fee Calculator',
+    h1: 'Venmo Fee Calculator: Business, G&S & Instant',
     related: ['paypal', 'cashapp', 'zelle', 'comparison'],
   },
   cashapp: {
@@ -63,9 +63,9 @@ const keywordMap: Record<string, { title: string; description: string; primaryKe
     related: ['venmo', 'cashapp', 'wise', 'comparison'],
   },
   patreon: {
-    title: 'Patreon Fee Calculator – Creator Earnings',
+    title: 'Patreon Fee Calculator 2026: New 10% & Legacy Plans',
     description:
-      'Estimate Patreon Lite, Pro and Premium platform plus processing fees. Calculate what you keep from pledges and how much patrons must pay for you to receive X.',
+      'Estimate Patreon new-creator 10% and legacy Founders/Pro/Pro+Merch fees. See what you keep from pledges or reverse-price a target net.',
     primaryKeyword: 'patreon fee calculator',
     h1: 'Patreon Fee Calculator',
     related: ['kofi', 'bmac', 'gumroad', 'comparison'],

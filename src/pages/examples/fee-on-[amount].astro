@@ -33,6 +33,18 @@ const rows = comparisonOrder
   })
   .sort((a, b) => a.forward.fee - b.forward.fee);
 
+const cheapest = rows[0];
+const priciest = rows[rows.length - 1];
+const stripeRow = rows.find((r) => r.processor.id === 'stripe');
+const paypalRow = rows.find((r) => r.processor.id === 'paypal');
+
+const amountBlurb: Record<number, string> = {
+  50: 'Typical tip, micro-invoice, or small digital download.',
+  100: 'Common freelance invoice round number and SERP demo size.',
+  500: 'Mid-size project deposit or product bundle.',
+  1000: 'Larger retainers and storefront orders where fixed fees matter less.',
+};
+
 const title = `Payment Fees on $${amount}: Stripe, PayPal, Square & More`;
 const description = `Estimated fees and net on a $${amount} charge across Stripe, PayPal, Square, Venmo, Cash App and more. Dated default schedules plus reverse pricing to receive $${amount}.`;
 
@@ -64,21 +76,48 @@ const jsonLd = [
     <a href="/">Home</a> <span>/</span> <span>Examples</span> <span>/</span> <span>${amount}</span>
   </nav>
   <h1>Payment fees on ${amount}</h1>
-  <p class="lead">
-    Worked estimates using each product’s default schedule in our dated dataset. Open a calculator to change country,
-    channel, or reverse-price a different net.
+  <p class="answer-first">
+    On a ${amount} charge, default-schedule fees range from about{' '}
+    {formatMoney(cheapest.forward.fee, cheapest.rate.currency)} ({cheapest.processor.name}) to{' '}
+    {formatMoney(priciest.forward.fee, priciest.rate.currency)} ({priciest.processor.name}).{' '}
+    {amountBlurb[amount]} To <em>receive</em> ${amount} after fees, charge the reverse amount in the table.
   </p>
+
+  <div class="takeaways">
+    <h2>Key takeaways</h2>
+    <ul>
+      <li>
+        Cheapest default on ${amount}: {cheapest.processor.name} at{' '}
+        {formatMoney(cheapest.forward.fee, cheapest.rate.currency)} (net{' '}
+        {formatMoney(cheapest.forward.net, cheapest.rate.currency)}).
+      </li>
+      {
+        stripeRow && (
+          <li>
+            Stripe US default fee on ${amount}: {formatMoney(stripeRow.forward.fee, stripeRow.rate.currency)}; charge{' '}
+            {formatMoney(stripeRow.reverse.charge, stripeRow.rate.currency)} to net ${amount}.
+          </li>
+        )
+      }
+      {
+        paypalRow && (
+          <li>
+            PayPal default fee on ${amount}: {formatMoney(paypalRow.forward.fee, paypalRow.rate.currency)}; charge{' '}
+            {formatMoney(paypalRow.reverse.charge, paypalRow.rate.currency)} to net ${amount}.
+          </li>
+        )
+      }
+    </ul>
+  </div>
+
   <p class="byline">
     By <a href={`/about/${siteConfig.authorHash}`} rel="author">{siteConfig.authorName}</a>
     · Last reviewed <time datetime={FEE_DATA_UPDATED}>{FEE_DATA_UPDATED}</time>
   </p>
-
-  <p class="answer-first">
-    On a ${amount} charge, fees range from about{' '}
-    {formatMoney(rows[0].forward.fee, rows[0].rate.currency)} ({rows[0].processor.name}) to{' '}
-    {formatMoney(rows[rows.length - 1].forward.fee, rows[rows.length - 1].rate.currency)} (
-    {rows[rows.length - 1].processor.name}) under default schedules. To <em>receive</em> ${amount} after fees, charge
-    the reverse amount in the table.
+  <p class="lead">
+    Worked estimates using each product’s default schedule in our dated dataset. Open a calculator to change country,
+    channel, or reverse-price a different net. See also{' '}
+    <a href="/guides/how-to-price-after-fees/">how to price after fees</a>.
   </p>
 
   <h2>Fee and net on ${amount} charged</h2>

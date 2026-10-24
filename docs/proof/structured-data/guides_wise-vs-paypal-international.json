@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Wise vs PayPal for international",
+    "headline": "Wise vs PayPal International Fees (2026)",
     "description": "Compare Wise corridor fee estimates with PayPal international pricing for cross-border payouts—worked examples, FX pitfalls, and when each option wins.",
     "datePublished": "2026-10-23",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -38,7 +38,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Wise vs PayPal for international",
+        "name": "Wise vs PayPal International Fees (2026)",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/wise-vs-paypal-international/"
       }
     ]

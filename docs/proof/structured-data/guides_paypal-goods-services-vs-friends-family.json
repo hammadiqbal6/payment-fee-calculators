@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "PayPal G&S vs Friends & Family",
+    "headline": "PayPal Goods & Services Fee (2.99%) vs F&F",
     "description": "PayPal Goods & Services (2.99% US) vs Friends & Family $0: protections, risks, and when each payment type is appropriate.",
     "datePublished": "2026-10-23",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -38,7 +38,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "PayPal G&S vs Friends & Family",
+        "name": "PayPal Goods & Services Fee (2.99%) vs F&F",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/paypal-goods-services-vs-friends-family/"
       }
     ]

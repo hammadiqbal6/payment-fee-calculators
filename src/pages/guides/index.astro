@@ -12,6 +12,30 @@ const crumbs = [
 
 const pageUrl = `${siteConfig.siteUrl}/guides/`;
 
+const groups: { title: string; slugs: string[] }[] = [
+  {
+    title: 'Comparisons',
+    slugs: [
+      'stripe-vs-paypal-fees',
+      'square-vs-stripe-vs-shopify',
+      'venmo-vs-cash-app-vs-zelle',
+      'patreon-vs-kofi-vs-bmac',
+      'gumroad-vs-kofi-fees',
+      'wise-vs-paypal-international',
+    ],
+  },
+  {
+    title: 'Pricing & surcharging',
+    slugs: ['how-to-price-after-fees', 'passing-fees-to-customers', 'hidden-payment-fees'],
+  },
+  {
+    title: 'Product explainers',
+    slugs: ['paypal-goods-services-vs-friends-family', 'chargeback-fees-by-processor'],
+  },
+];
+
+const bySlug = new Map(guides.map((g) => [g.slug, g]));
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -43,15 +67,27 @@ const jsonLd = [
 >
   <Breadcrumbs items={crumbs} />
   <h1>Guides</h1>
-  <p class="lead">Explainers that interlink with the calculators — written for freelancers, sellers, and creators.</p>
-  <div class="tool-grid">
-    {
-      guides.map((g) => (
-        <a class="card-link" href={`/guides/${g.slug}/`}>
-          <h2>{g.title}</h2>
-          <p>{g.description}</p>
-        </a>
-      ))
-    }
-  </div>
+  <p class="answer-first">
+    Explainers that interlink with the calculators — comparisons, reverse pricing, and product rules for freelancers,
+    sellers, and creators. Eleven guides cover Stripe, PayPal, Square, P2P apps, and creator platforms.
+  </p>
+  {
+    groups.map((group) => (
+      <>
+        <h2>{group.title}</h2>
+        <div class="tool-grid">
+          {group.slugs.map((slug) => {
+            const g = bySlug.get(slug);
+            if (!g) return null;
+            return (
+              <a class="card-link" href={`/guides/${g.slug}/`}>
+                <h3>{g.title}</h3>
+                <p>{g.description}</p>
+              </a>
+            );
+          })}
+        </div>
+      </>
+    ))
+  }
 </BaseLayout>

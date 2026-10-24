@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Gumroad fees vs Ko-fi",
+    "headline": "Gumroad vs Ko-fi Fees (2026): $20 Sale Keep",
     "description": "Compare Gumroad’s blended direct fees with Ko-fi free and Gold processing estimates—worked $100 examples, break-evens, and when each creator checkout wins.",
     "datePublished": "2026-10-23",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -38,7 +38,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Gumroad fees vs Ko-fi",
+        "name": "Gumroad vs Ko-fi Fees (2026): $20 Sale Keep",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/gumroad-vs-kofi-fees/"
       }
     ]

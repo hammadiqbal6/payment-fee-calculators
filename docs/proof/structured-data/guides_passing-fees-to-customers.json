@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Passing fees to customers (where allowed)",
+    "headline": "Passing Card Fees to Customers (2026 Rules)",
     "description": "How to build processor fees into prices or surcharges where rules allow—with Stripe and PayPal reverse math, compliance cautions, and customer-friendly framing.",
     "datePublished": "2026-10-23",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -38,7 +38,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Passing fees to customers (where allowed)",
+        "name": "Passing Card Fees to Customers (2026 Rules)",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/passing-fees-to-customers/"
       }
     ]

@@ -31,7 +31,7 @@
       {
         "@type": "ListItem",
         "position": 4,
-        "name": "Hidden Payment Fees Freelancers Miss",
+        "name": "Hidden Payment Fees Freelancers Miss (2026)",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/hidden-payment-fees/"
       },
       {
@@ -49,31 +49,31 @@
       {
         "@type": "ListItem",
         "position": 7,
-        "name": "Gumroad fees vs Ko-fi",
+        "name": "Gumroad vs Ko-fi Fees (2026): $20 Sale Keep",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/gumroad-vs-kofi-fees/"
       },
       {
         "@type": "ListItem",
         "position": 8,
-        "name": "Wise vs PayPal for international",
+        "name": "Wise vs PayPal International Fees (2026)",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/wise-vs-paypal-international/"
       },
       {
         "@type": "ListItem",
         "position": 9,
-        "name": "Passing fees to customers (where allowed)",
+        "name": "Passing Card Fees to Customers (2026 Rules)",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/passing-fees-to-customers/"
       },
       {
         "@type": "ListItem",
         "position": 10,
-        "name": "PayPal G&S vs Friends & Family",
+        "name": "PayPal Goods & Services Fee (2.99%) vs F&F",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/paypal-goods-services-vs-friends-family/"
       },
       {
         "@type": "ListItem",
         "position": 11,
-        "name": "Chargeback/dispute fees by processor",
+        "name": "Chargeback Fees by Processor (2026 Guide)",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/guides/chargeback-fees-by-processor/"
       }
     ]

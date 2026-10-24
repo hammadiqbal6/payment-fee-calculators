@@ -5,7 +5,7 @@
     "headline": "Venmo vs Cash App vs Zelle fees",
     "description": "Compare Venmo Business, Cash App Business, and Zelle fees for freelancers—including instant transfer costs, $100 examples, and when each P2P rail makes sense.",
     "datePublished": "2026-10-23",
-    "dateModified": "2026-10-23",
+    "dateModified": "2026-10-24",
     "author": {
       "@type": "Person",
       "@id": "https://github.com/hammadiqbal6#person",
@@ -60,7 +60,7 @@
         "name": "Which is cheaper for a $100 business payment?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Zelle is usually $0. Between business profiles, Venmo Business (~$2.00 on $100) typically beats Cash App Business ($2.75) on this snapshot—before instant cash-out fees. Verify live rates in the calculators."
+          "text": "Zelle is usually $0. Between business profiles, Venmo Business (~$2.00 on $100) typically beats Cash App Business (~$2.75 at 2.6% + $0.15) on this snapshot—before instant cash-out fees. Verify live rates in the calculators."
         }
       },
       {

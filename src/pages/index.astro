@@ -20,20 +20,13 @@ import { FEE_DATA_UPDATED } from '@/data/fees';
     <h1>Free payment processor & creator fee calculators</h1>
     <p class="answer-first">
       FeeCalc Tools calculates Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify Payments, and Wise
-      fees entirely in your browser. Each calculator applies a dated percent-plus-fixed schedule from official pricing
-      pages so you can see the fee on a charge or the amount to invoice to receive a target net after fees.
+      fees in your browser. On a $100 Stripe US charge the fee is $3.20 (net $96.80); open any calculator to change amount,
+      schedule, or reverse-price a target net.
     </p>
-    <div class="cta-row">
-      <a class="btn btn--primary" href="/tools/stripe-fee-calculator/">Stripe calculator</a>
-      <a class="btn btn--secondary" href="/tools/compare-payment-fees/">Compare processors</a>
-    </div>
   </section>
 
-  <Disclaimer compact />
-  <AdSlot />
-
-  <h2>All fee calculators</h2>
-  <div class="tool-grid">
+  <h2 class="home-tools-heading">All fee calculators</h2>
+  <div class="tool-grid tool-grid--home">
     {
       allTools.map((t) => (
         <a class="card-link" href={t.path}>
@@ -43,6 +36,14 @@ import { FEE_DATA_UPDATED } from '@/data/fees';
       ))
     }
   </div>
+
+  <div class="cta-row">
+    <a class="btn btn--primary" href="/tools/stripe-fee-calculator/">Stripe calculator</a>
+    <a class="btn btn--secondary" href="/tools/compare-payment-fees/">Compare processors</a>
+  </div>
+
+  <Disclaimer compact />
+  <AdSlot />
 
   <h2>Browse by category</h2>
   <div class="tool-grid">
@@ -107,5 +108,12 @@ import { FEE_DATA_UPDATED } from '@/data/fees';
     flex-wrap: wrap;
     gap: 0.5rem;
     margin: 1rem 0;
+  }
+  .home-tools-heading {
+    margin-top: 0.75rem;
+    font-size: 1.15rem;
+  }
+  .tool-grid--home {
+    margin-bottom: 0.5rem;
   }
 </style>

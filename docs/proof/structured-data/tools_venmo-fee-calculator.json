@@ -5,7 +5,7 @@
       {
         "@type": "WebApplication",
         "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/#app",
-        "name": "Venmo Business Fee Calculator",
+        "name": "Venmo Fee Calculator: Business, G&S & Instant",
         "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Any",
@@ -76,7 +76,7 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Venmo Business Fee Calculator",
+        "name": "Venmo Fee Calculator: Business, G&S & Instant",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/venmo-fee-calculator/"
       }
     ]

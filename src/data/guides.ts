@@ -6,6 +6,8 @@ export type Guide = {
   published: string; // YYYY-MM-DD
   modified: string; // use 2026-10-23 for all
   answerFirst: string; // 40–60 words direct answer
+  /** 3–5 answer-first bullets with numbers or decision rules */
+  takeaways: string[];
   sections: { h2: string; paragraphs: string[]; list?: string[] }[];
   faqs: { q: string; a: string }[]; // 4–6 FAQs each
   relatedTools: string[]; // tool ids: stripe,paypal,square,venmo,cashapp,zelle,patreon,kofi,bmac,gumroad,shopify,wise,comparison
@@ -22,8 +24,13 @@ export const guides: Guide[] = [
     description: "Reverse the fee formula so invoices still net what you need after Stripe, PayPal, Square, or creator fees—including how much to charge to receive $100.",
     primaryKeyword: "how to price after payment fees",
     published: "2026-10-19",
-    modified: "2026-10-23",
+    modified: "2026-10-24",
     answerFirst: "To receive a target net after percent-plus-fixed fees, charge (desiredNet + fixed) ÷ (1 − percent). For Stripe US at 2.9% + $0.30 to net $100, charge about $103.30. PayPal US Goods & Services at 2.99% (no fixed fee) needs about $103.08; PayPal Checkout at 3.49% + $0.49 needs about $104.14. Always verify your live rate on the official pricing page before you publish quotes.",
+    takeaways: [
+      "Reverse formula: charge = (net + fixed) ÷ (1 − percent).",
+      "Stripe US to net $100 ≈ $103.30; PayPal G&S (2.99%) ≈ $103.08; Checkout ≈ $104.14.",
+      "Re-run reverse math per ticket size — fixed fees do not scale linearly.",
+    ],
     sections: [
       {
         h2: "Why reverse pricing matters",
@@ -160,13 +167,18 @@ export const guides: Guide[] = [
     description: "Compare typical US online Stripe (2.9%+$0.30), PayPal G&S (2.99%), and PayPal Checkout (3.49%+$0.49) fees, $100 examples, FX notes, and when each wins.",
     primaryKeyword: "stripe vs paypal fees",
     published: "2026-10-19",
-    modified: "2026-10-23",
+    modified: "2026-10-24",
     answerFirst: "On a standard US online card payment, Stripe’s common 2.9% + $0.30 is usually cheaper than PayPal Checkout’s common 3.49% + $0.49 rate (G&S Send/Receive Money is 2.99% with no fixed fee). On a $100 charge, Stripe fees $3.20 (net $96.80) versus PayPal G&S $2.99 (net $97.01) or PayPal Checkout about $3.98 (net about $96.02). PayPal can still win for buyer familiarity or wallet conversion.",
+    takeaways: [
+      "Stripe US online: 2.9% + $0.30 → $3.20 fee on $100 (net $96.80).",
+      "PayPal US G&S: 2.99% → $2.99 on $100; Checkout: 3.49% + $0.49 → ~$3.98.",
+      "Pick Stripe for API control; keep PayPal when wallet conversion covers the fee gap.",
+    ],
     sections: [
       {
         h2: "Headline US rates compared",
         paragraphs: [
-          "As of 2026-10-15, public US list pricing commonly cited for online cards is Stripe at 2.9% + $0.30 and PayPal Goods & Services at 2.99% (Send/Receive Money; Checkout is 3.49% + $0.49). Those are planning baselines from official pricing pages—not a promise that your account sees the same rate forever. Amex mixes, international cards, and custom contracts change the blended take.",
+          "As of 2026-10-24, public US list pricing commonly cited for online cards is Stripe at 2.9% + $0.30 and PayPal Goods & Services at 2.99% (Send/Receive Money; Checkout is 3.49% + $0.49). Those are planning baselines from official pricing pages—not a promise that your account sees the same rate forever. Amex mixes, international cards, and custom contracts change the blended take.",
           "PayPal Friends & Family is a different product: for eligible personal payments funded from PayPal balance or linked bank, the fee can be $0—but F&F is not a substitute for merchant checkout when you sell goods or services to strangers. Misusing F&F for commercial sales creates policy and protection risk. See our PayPal G&S vs Friends & Family guide before you price on $0 assumptions.",
           "Use /tools/stripe-fee-calculator/, /tools/paypal-fee-calculator/, and /tools/compare-payment-fees/ with your average order value. A winner at $25 may still win at $250, but the absolute dollar gap scales with volume and ticket size.",
         ],
@@ -174,8 +186,8 @@ export const guides: Guide[] = [
       {
         h2: "Worked example on $100",
         paragraphs: [
-          "Forward Stripe US: $100 × 0.029 = $2.90, plus $0.30 fixed = $3.20 fee, net $96.80. Forward PayPal US G&S: $100 × 0.0349 = $3.49, plus $0.49 = $3.98 fee, net $96.02. Gap ≈ $0.78 per $100 charge in PayPal’s direction as the more expensive rail on this schedule pair.",
-          "Reverse to keep $100 net: Stripe charge ≈ $103.30; PayPal G&S ≈ $104.14. If your proposal must show a round customer price, Stripe-shaped economics often land on a slightly lower list price for the same net—or more net at the same list price.",
+          "Forward Stripe US: $100 × 0.029 = $2.90, plus $0.30 fixed = $3.20 fee, net $96.80. Forward PayPal US G&S: $100 × 0.0299 = $2.99 fee, net $97.01. Forward PayPal Checkout: $100 × 0.0349 + $0.49 = $3.98 fee, net $96.02. Versus Stripe’s $3.20, G&S is slightly cheaper and Checkout is about $0.78 more expensive on this $100 demo.",
+          "Reverse to keep $100 net: Stripe charge ≈ $103.30; PayPal G&S ≈ $103.08; Checkout ≈ $104.14. If your proposal must show a round customer price, Stripe-shaped economics often land on a slightly lower list price for the same net—or more net at the same list price.",
           "At $50,000 per month processed with a similar mix, a ~0.78% effective gap on $100 demos is hundreds of dollars before disputes, FX, refunds, or instant transfers. Always recompute with your real average ticket in the comparison tool rather than annualizing the $100 demo blindly.",
         ],
       },
@@ -278,8 +290,13 @@ export const guides: Guide[] = [
     description: "Compare creator platform commissions and processing estimates for Patreon, Ko-fi, and Buy Me a Coffee—with worked pledge math and when each platform wins.",
     primaryKeyword: "patreon vs ko-fi fees",
     published: "2026-10-19",
-    modified: "2026-10-23",
+    modified: "2026-10-24",
     answerFirst: "Patreon fees depend on plan: blended estimates near 12.9% + $0.30 for new creators (10% platform) and legacy Founders/Pro/Pro+Merch (~7.9% / 10.9% / 13.9% + $0.30). Ko-fi Free takes 0% on one-time tips (processing separate); Standard is 5% on tips. Buy Me a Coffee lands near 8.4% + $0.30 blended. Run the same pledge through each calculator.",
+    takeaways: [
+      "New Patreon creators: ~10% platform + processing ≈ 12.9% + $0.30 blended.",
+      "Ko-fi Free: 0% on one-time tips (processing separate); Standard is 5% on tips.",
+      "Buy Me a Coffee blended estimate ≈ 8.4% + $0.30 including Stripe and payout.",
+    ],
     sections: [
       {
         h2: "What each platform is optimized for",
@@ -396,12 +413,17 @@ export const guides: Guide[] = [
   },
   {
     slug: "hidden-payment-fees",
-    title: "Hidden Payment Fees Freelancers Miss",
+    title: "Hidden Payment Fees Freelancers Miss (2026)",
     description: "Beyond the headline percent: instant payouts, FX, chargebacks, platform commissions, and fixed per-transaction fees that quietly erase freelancer margins.",
     primaryKeyword: "hidden payment processing fees",
     published: "2026-10-19",
-    modified: "2026-10-23",
-    answerFirst: "Headline percent fees are only part of take-home pay. Instant deposits on Venmo and Cash App, currency conversion, chargebacks, creator platform commissions, and fixed per-transaction fees can erase freelancer margins if you price only on the sticker rate. Model every layer before you publish a quote.",
+    modified: "2026-10-24",
+    answerFirst: "Headline percent fees are only part of take-home pay — a 1.75% Venmo instant transfer or a ~$15–$20 chargeback can erase more margin than the processing cut on a $100 invoice. Instant deposits, FX, platform commissions, and fixed fees stack. Model every layer before you publish a quote.",
+    takeaways: [
+      "Instant Venmo (~1.75%) or Cash App (0.5–2.5%) can erase a thin margin after the payment fee.",
+      "A $15–$30 chargeback fee often costs more than the processing cut on a small invoice.",
+      "Price every layer: percent + fixed + instant + FX + platform commission before you quote.",
+    ],
     sections: [
       {
         h2: "The sticker rate is not the whole story",
@@ -529,8 +551,13 @@ export const guides: Guide[] = [
     description: "Compare Venmo Business, Cash App Business, and Zelle fees for freelancers—including instant transfer costs, $100 examples, and when each P2P rail makes sense.",
     primaryKeyword: "venmo vs cash app vs zelle fees",
     published: "2026-10-23",
-    modified: "2026-10-23",
+    modified: "2026-10-24",
     answerFirst: "Venmo Business lists about 1.9% + $0.10, Cash App Business about 2.6% + $0.15, and Zelle is usually $0 at participating banks as of 2026-10-24. Instant cash-outs add roughly 1.75% on Venmo and 1.5% on Cash App. Zelle’s $0 sticker is attractive, but merchant protection and dispute tooling differ sharply—price risk, not only fees.",
+    takeaways: [
+      "Venmo Business ≈ 1.9% + $0.10 ($2.00 on $100); Cash App Business ≈ 2.6% + $0.15 ($2.75).",
+      "Zelle is usually $0 at participating banks — but not a merchant protection stack.",
+      "Add instant cash-out (Venmo ~1.75%, Cash App ~1.5%) only if you always withdraw immediately.",
+    ],
     sections: [
       {
         h2: "P2P rails are not interchangeable",
@@ -549,8 +576,8 @@ export const guides: Guide[] = [
       {
         h2: "Worked example on $100 and $500",
         paragraphs: [
-          "Venmo Business on $100: fee = $1.90 + $0.10 = $2.00, net = $98.00. Instant on $98 at 1.75% ≈ $1.72, cash ≈ $96.28. Cash App Business on $100: fee = $2.75, net = $97.25; instant 1.5% ≈ $1.46, cash ≈ $95.79. Zelle on $100: fee usually $0, net $100 if the transfer completes—without merchant dispute tooling.",
-          "On $500: Venmo Business fee ≈ $9.60, net ≈ $490.40; with instant ≈ $481.82 cash. Cash App Business fee ≈ $13.75, net ≈ $486.25; with instant ≈ $478.96. Zelle ≈ $500. The $0 rail looks best on fees and worst if you needed seller protections that Zelle does not provide like a merchant processor would.",
+          "Venmo Business on $100: fee = $1.90 + $0.10 = $2.00, net = $98.00. Instant on $98 at 1.75% ≈ $1.72, cash ≈ $96.28. Cash App Business on $100: fee = $2.60 + $0.15 = $2.75, net = $97.25; instant ~1.5% ≈ $1.46, cash ≈ $95.79. Zelle on $100: fee usually $0, net $100 if the transfer completes—without merchant dispute tooling.",
+          "On $500: Venmo Business fee ≈ $9.60, net ≈ $490.40; with instant ≈ $481.82 cash. Cash App Business fee ≈ $13.15 (2.6% × 500 + $0.15), net ≈ $486.85; with instant ≈ $479.55. Zelle ≈ $500. The $0 rail looks best on fees and worst if you needed seller protections that Zelle does not provide like a merchant processor would.",
         ],
       },
       {
@@ -605,7 +632,7 @@ export const guides: Guide[] = [
       },
       {
         q: "Which is cheaper for a $100 business payment?",
-        a: "Zelle is usually $0. Between business profiles, Venmo Business (~$2.00 on $100) typically beats Cash App Business ($2.75) on this snapshot—before instant cash-out fees. Verify live rates in the calculators.",
+        a: "Zelle is usually $0. Between business profiles, Venmo Business (~$2.00 on $100) typically beats Cash App Business (~$2.75 at 2.6% + $0.15) on this snapshot—before instant cash-out fees. Verify live rates in the calculators.",
       },
       {
         q: "Do instant transfers change the winner?",
@@ -646,8 +673,13 @@ export const guides: Guide[] = [
     description: "Compare Square, Stripe, and Shopify Payments US online and in-person rates—with $100 examples, plan tiers, and guidance on when each commerce stack wins.",
     primaryKeyword: "square vs stripe vs shopify payments",
     published: "2026-10-23",
-    modified: "2026-10-23",
-    answerFirst: "For common US online cards as of 2026-10-24, Stripe and Square online both list 2.9% + $0.30; Shopify Payments depends on plan—Basic 2.9% + $0.30, Shopify 2.7% + $0.30, Advanced 2.5% + $0.30. Square in-person lists 2.6% + $0.15. Choose based on online vs in-person mix, not the online headline alone.",
+    modified: "2026-10-24",
+    answerFirst: "For common US online cards as of 2026-10-24, Stripe and Square online both list 2.9% + $0.30; Shopify Payments depends on plan—Basic 2.9% + $0.30, Grow 2.7% + $0.30, Advanced 2.5% + $0.30. Square in-person lists 2.6% + $0.15. Choose based on online vs in-person mix, not the online headline alone.",
+    takeaways: [
+      "Stripe and Square Plus/API online commonly list 2.9% + $0.30; Square Free online is 3.3% + $0.30.",
+      "Shopify Payments: Basic 2.9%, Grow 2.7%, Advanced 2.5% (+ $0.30) online in the US.",
+      "Square in-person 2.6% + $0.15 often beats online card rates when most sales are face-to-face.",
+    ],
     sections: [
       {
         h2: "Three stacks, three jobs",
@@ -776,12 +808,17 @@ export const guides: Guide[] = [
   },
   {
     slug: "gumroad-vs-kofi-fees",
-    title: "Gumroad fees vs Ko-fi",
+    title: "Gumroad vs Ko-fi Fees (2026): $20 Sale Keep",
     description: "Compare Gumroad’s blended direct fees with Ko-fi free and Gold processing estimates—worked $100 examples, break-evens, and when each creator checkout wins.",
     primaryKeyword: "gumroad vs ko-fi fees",
     published: "2026-10-23",
-    modified: "2026-10-23",
-    answerFirst: "Gumroad direct sales plan around a blended ~12.9% + $0.80 as of 2026-10-24. Ko-fi’s free tip plan often takes about 5%, while Gold can remove donation commission and leave processing near ~2.9% + $0.30. Gumroad fits catalog downloads; Ko-fi fits tips and lightweight memberships—compare the job, not only the percent.",
+    modified: "2026-10-24",
+    answerFirst: "Gumroad direct sales plan around a blended ~12.9% + $0.80 as of 2026-10-24. Ko-fi Free takes 0% platform on one-time tips (processing ~2.9% + $0.30 still applies); Standard is 5% on tips, and Gold can remove the tip platform cut. Gumroad fits catalog downloads; Ko-fi fits tips and lightweight memberships—compare the job, not only the percent.",
+    takeaways: [
+      "Gumroad direct blend ≈ 12.9% + $0.80; Discover marketplace is 30%.",
+      "Ko-fi Free tips: 0% platform (processing remains); shop/memberships 5%.",
+      "On a $100 tip, Ko-fi Free keeps far more than Gumroad’s storefront cut — different jobs.",
+    ],
     sections: [
       {
         h2: "Different products behind the fee tables",
@@ -793,15 +830,15 @@ export const guides: Guide[] = [
       {
         h2: "Fee comparison",
         paragraphs: [
-          "On a $100 tip-like payment: Ko-fi free ~$5 fee (net ~$95); Ko-fi Gold processing estimate ~$3.20 (net ~$96.80); Gumroad direct blend ~$12.90 + $0.80 = $13.70 (net ~$86.30). Gumroad is not trying to win the tip-jar fee contest—it is a storefront cut.",
+          "On a $100 tip-like payment: Ko-fi Free platform $0 + ~$3.20 processing estimate (net ~$96.80); Standard 5% platform ≈ $5 plus processing; Gumroad direct blend ~$12.90 + $0.80 = $13.70 (net ~$86.30). Gumroad is not trying to win the tip-jar fee contest—it is a storefront cut.",
           "On a $100 digital product, the relevant question is whether Gumroad’s conversion and features outperform a Ko-fi shop link or a self-hosted Stripe checkout after you include your time. Feed the same $100 through both calculators, then add Gold’s subscription if you model Ko-fi Gold.",
         ],
       },
       {
         h2: "Worked example and reverse pricing",
         paragraphs: [
-          "Forward Gumroad $49 product at ~12.9% + $0.80: percent ≈ $6.32, plus $0.80 ≈ $7.12 fee, net ≈ $41.88. Forward Ko-fi free tip $49 at ~5%: fee ≈ $2.45, net ≈ $46.55—different product category, different expectation.",
-          "Reverse to net $100 on Gumroad: C ≈ (100 + 0.80) ÷ (1 − 0.129) ≈ 100.8 ÷ 0.871 ≈ $115.73. Reverse to net $100 on Ko-fi free at 5%: C ≈ 100 ÷ 0.95 ≈ $105.26. Reverse Ko-fi Gold processing estimate at 2.9% + $0.30: ≈ $103.30, Stripe-like. Publish list prices from reverse math so net goals survive the platform you actually use.",
+          "Forward Gumroad $49 product at ~12.9% + $0.80: percent ≈ $6.32, plus $0.80 ≈ $7.12 fee, net ≈ $41.88. Forward Ko-fi Free tip $49 at 0% platform + ~2.9% + $0.30 processing estimate ≈ $1.72 fee, net ≈ $47.28—different product category than Gumroad’s storefront cut.",
+          "Reverse to net $100 on Gumroad: C ≈ (100 + 0.80) ÷ (1 − 0.129) ≈ 100.8 ÷ 0.871 ≈ $115.73. Reverse to net $100 on Ko-fi Free tips (0% platform, processing ~2.9%+$0.30): ≈ $103.30; on Standard 5% platform alone ≈ $105.26 before processing. Reverse Ko-fi Gold processing estimate at 2.9% + $0.30: ≈ $103.30, Stripe-like. Publish list prices from reverse math so net goals survive the platform you actually use.",
           "Gold break-even sketch for tips: monthly tips × 5% ≈ commission saved if Gold removes it. If that exceeds Gold’s price and you still pay processing, Gold can win. Confirm live Gold pricing on Ko-fi; do not freeze an old blog number into your model.",
         ],
       },
@@ -892,12 +929,17 @@ export const guides: Guide[] = [
   },
   {
     slug: "wise-vs-paypal-international",
-    title: "Wise vs PayPal for international",
+    title: "Wise vs PayPal International Fees (2026)",
     description: "Compare Wise corridor fee estimates with PayPal international pricing for cross-border payouts—worked examples, FX pitfalls, and when each option wins.",
     primaryKeyword: "wise vs paypal international fees",
     published: "2026-10-23",
-    modified: "2026-10-23",
+    modified: "2026-10-24",
     answerFirst: "For moving money across borders, Wise corridor estimates often land around 0.37–0.45% plus a fixed fee depending on route, while PayPal international and FX paths usually cost more than domestic US Goods & Services at 2.99%. Compare the full path—checkout fee plus conversion—using both calculators before you invoice abroad.",
+    takeaways: [
+      "Wise corridor estimates often land near 0.37–0.45% + a fixed fee (confirm live quotes).",
+      "PayPal domestic US G&S is 2.99%; international/FX paths usually cost more than domestic.",
+      "Compare the full path — checkout fee plus conversion — before invoicing abroad.",
+    ],
     sections: [
       {
         h2: "International fees are a path, not a single percent",
@@ -1008,12 +1050,17 @@ export const guides: Guide[] = [
   },
   {
     slug: "passing-fees-to-customers",
-    title: "Passing fees to customers (where allowed)",
+    title: "Passing Card Fees to Customers (2026 Rules)",
     description: "How to build processor fees into prices or surcharges where rules allow—with Stripe and PayPal reverse math, compliance cautions, and customer-friendly framing.",
     primaryKeyword: "passing payment fees to customers",
     published: "2026-10-23",
-    modified: "2026-10-23",
-    answerFirst: "Where surcharging is restricted, the reliable approach is to build processor fees into your list prices using reverse math: charge (net + fixed) ÷ (1 − percent). For Stripe US 2.9% + $0.30 to net $100, charge about $103.30; for PayPal G&S 2.99%, about $104.14. Confirm local card-network and legal rules before adding a checkout surcharge.",
+    modified: "2026-10-24",
+    answerFirst: "Where surcharging is restricted, the reliable approach is to build processor fees into your list prices using reverse math: charge (net + fixed) ÷ (1 − percent). For Stripe US 2.9% + $0.30 to net $100, charge about $103.30; for PayPal G&S 2.99%, about $103.08 (Checkout at 3.49% + $0.49 is about $104.14). Confirm local card-network and legal rules before adding a checkout surcharge.",
+    takeaways: [
+      "Prefer fee-inclusive list prices: charge = (net + fixed) ÷ (1 − percent).",
+      "Stripe US to net $100 ≈ $103.30; PayPal G&S 2.99% ≈ $103.08.",
+      "Confirm local surcharging rules before adding a labeled card-fee line at checkout.",
+    ],
     sections: [
       {
         h2: "Fee-inclusive pricing vs surcharging",
@@ -1025,21 +1072,21 @@ export const guides: Guide[] = [
       {
         h2: "How to calculate fee-inclusive prices",
         paragraphs: [
-          "Use the reverse formula from our how-to-price-after-fees guide: C = (N + f) ÷ (1 − p). Stripe US: p = 0.029, f = 0.30. PayPal US G&S: p = 0.0349, f = 0.49. Run /tools/stripe-fee-calculator/ and /tools/paypal-fee-calculator/ in “charge to receive” mode.",
-          "If you accept both rails at one list price, price for the more expensive rail you still allow—or publish rail-specific prices if your contracts and UX support that clarity. A single $100 list price nets ~$96.80 on Stripe vs ~$96.02 on PayPal G&S; the gap is your silent discount to PayPal users unless you adjust.",
+          "Use the reverse formula from our how-to-price-after-fees guide: C = (N + f) ÷ (1 − p). Stripe US: p = 0.029, f = 0.30. PayPal US G&S: p = 0.0299, f = 0. PayPal Checkout: p = 0.0349, f = 0.49. Run /tools/stripe-fee-calculator/ and /tools/paypal-fee-calculator/ in “charge to receive” mode.",
+          "If you accept both rails at one list price, price for the more expensive rail you still allow—or publish rail-specific prices if your contracts and UX support that clarity. A single $100 list price nets ~$96.80 on Stripe vs ~$97.01 on PayPal G&S (or ~$96.02 on Checkout); the gap is your silent discount to PayPal users unless you adjust.",
         ],
         list: [
           "Set the net you need after fees.",
           "Identify every accepted payment rail and its schedule.",
           "Reverse-calculate per rail; pick publish price from the costliest allowed rail or separate SKUs.",
           "Round up for marketing cleanliness.",
-          "Document the as-of date (schedules here use 2026-10-15 sources).",
+          "Document the as-of date (schedules here use 2026-10-24 sources).",
         ],
       },
       {
         h2: "Worked example",
         paragraphs: [
-          "You need $250 net. Stripe: C = (250 + 0.30) ÷ 0.971 ≈ $257.78 → publish $259 or $265. PayPal G&S: C = (250 + 0.49) ÷ 0.9651 ≈ $259.55 → publish $265 if you want one price for both.",
+          "You need $250 net. Stripe: C = (250 + 0.30) ÷ 0.971 ≈ $257.78 → publish $259 or $265. PayPal G&S: C = 250 ÷ 0.9701 ≈ $257.71; Checkout: C = (250 + 0.49) ÷ 0.9651 ≈ $259.55 → publish $265 if you want one price covering Checkout.",
           "Surcharge-style illustration (only where allowed): list $250 + disclosed card fee. The fee line must match permitted calculation methods—some regimes cap surcharges or ban them on certain cards. Do not copy a percent from a blog; follow current network rules and processor docs.",
           "Creator platforms complicate pass-through: Gumroad customers already see a product price that must absorb ~12.9% + $0.80 blended if that is your rail. You cannot “surcharge Gumroad” separately in a way that surprises buyers—set the public price correctly up front.",
         ],
@@ -1129,12 +1176,17 @@ export const guides: Guide[] = [
   },
   {
     slug: "paypal-goods-services-vs-friends-family",
-    title: "PayPal G&S vs Friends & Family",
+    title: "PayPal Goods & Services Fee (2.99%) vs F&F",
     description: "PayPal Goods & Services (2.99% US) vs Friends & Family $0: protections, risks, and when each payment type is appropriate.",
     primaryKeyword: "paypal goods and services vs friends and family",
     published: "2026-10-23",
-    modified: "2026-10-23",
+    modified: "2026-10-24",
     answerFirst: "PayPal Goods & Services in the US commonly costs 2.99% (Send/Receive Money; Checkout is 3.49% + $0.49) and includes purchase protection features for eligible commercial payments. Friends & Family can be $0 when paid from PayPal balance or bank for eligible personal transfers, but it is the wrong tool for selling goods or services to customers. Price and protect commercial work on G&S.",
+    takeaways: [
+      "US Goods & Services Send/Receive Money: 2.99% with no fixed fee ($2.99 on $100).",
+      "PayPal Checkout is separate at 3.49% + $0.49 (~$3.98 on $100).",
+      "Friends & Family can be $0 from balance/bank — never use it for commercial sales.",
+    ],
     sections: [
       {
         h2: "Two products, two intents",
@@ -1243,12 +1295,17 @@ export const guides: Guide[] = [
   },
   {
     slug: "chargeback-fees-by-processor",
-    title: "Chargeback/dispute fees by processor",
+    title: "Chargeback Fees by Processor (2026 Guide)",
     description: "How chargebacks and disputes affect Stripe, PayPal, and Square sellers—why dollar fees vary, how to budget reserves, and where to verify official dispute costs.",
     primaryKeyword: "chargeback fees by processor",
     published: "2026-10-23",
-    modified: "2026-10-23",
-    answerFirst: "Chargeback and dispute fees vary by processor, country, and over time—so this guide does not invent a single dollar amount. Budget a risk reserve, check each provider’s official dispute docs for current fees, and compare that cost alongside Stripe’s 2.9% + $0.30, PayPal G&S 2.99%, and Square’s Free online (3.3% + $0.30), Plus/API online (2.9% + $0.30), or in-person (2.6% + $0.15) rates.",
+    modified: "2026-10-24",
+    answerFirst: "Chargeback fees often land near $15 on Stripe and about $15–$20 on PayPal (confirm live dispute docs — amounts change). One dispute can cost more than the processing fee on a small order. Budget a risk reserve alongside Stripe’s 2.9% + $0.30, PayPal G&S 2.99%, and Square Free online 3.3% + $0.30 (Plus/API 2.9% + $0.30; in-person 2.6% + $0.15).",
+    takeaways: [
+      "Stripe dispute fees are commonly cited around $15 (confirm on Stripe’s dispute docs).",
+      "PayPal chargeback/dispute fees often land near $20 / $15 depending on product and volume.",
+      "Budget a risk reserve — a single dispute can exceed the processing fee on a small order.",
+    ],
     sections: [
       {
         h2: "Disputes are a separate cost center",

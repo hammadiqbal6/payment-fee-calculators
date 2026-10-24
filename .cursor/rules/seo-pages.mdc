@@ -1,0 +1,39 @@
+---
+description: Per-page SEO/AEO checklist for new or reworked pages
+globs: src/pages/**/*.astro,src/data/guides.ts,src/data/toolContent.ts
+---
+# SEO / AEO page rules
+
+Research **before** writing any new tool, guide, hub, or example page. Follow `docs/SEO-GUARDRAILS.md` and the checklist below (from the site page-checklist).
+
+## Before you write
+- One primary query; name the intent (do / know / compare / navigate).
+- Check top 5 SERP formats and avoid cannibalizing an existing URL.
+- List 3–6 secondary questions → H2s and FAQ.
+
+## Structure
+- One H1 matching the query.
+- Answer first: 40–60 words with a number or verdict; on tools the calculator sits above the fold on mobile (≤450px to first input).
+- Guides: `answerFirst` + `takeaways` (3–5 bullets) before byline/body.
+- Hubs/home: lead + first tool card above the fold (no disclaimer/ad before the card grid).
+- Worked example with real numbers; at least one table you made.
+- Visible Published / Last updated matching schema and sitemap lastmod.
+
+## Metadata
+- Title 30–60 chars (final with brand ≤65), unique; primary query near the start.
+- Meta description 70–155 chars, unique, answer/benefit first.
+- Absolute https canonical via `BaseLayout` + `siteConfig.siteUrl` only.
+- Robots: index,follow for real pages; noindex for embeds.
+- OG/Twitter + 1200×630 PNG og:image; `lang` + viewport set.
+
+## Schema
+- Valid JSON-LD; BreadcrumbList except homepage.
+- Tools: WebApplication (offers price 0, OS Any); Guides: Article; FAQPage only when FAQ is visible.
+
+## Trust
+- Every rate/formula cites a primary source; reuse `src/data/fees.ts` — never invent rates.
+- Byline links to About; financial disclaimer on tools (not as an FAQ item).
+
+## Ship
+- Page in sitemap; `npm run build && npm test && npm run audit` (includes `audit:pages`).
+- Spot-check mobile 390×844: no overflow, tap targets ≥44px, cookie bar ≤56px.

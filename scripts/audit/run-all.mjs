@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 
 const steps = [
   ['SEO audit', 'scripts/audit/seo.mjs'],
+  ['Page SEO checklist', 'scripts/audit/page-checklist.mjs'],
   ['AdSense readiness', 'scripts/audit/adsense.mjs'],
   ['JS budget', 'scripts/audit/budget.mjs'],
   ['Internal links', 'scripts/audit/links.mjs'],
