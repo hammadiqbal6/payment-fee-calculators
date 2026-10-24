@@ -16,3 +16,4 @@ tmp/
 docs/rate-watcher/latest-report.*
 docs/rate-watcher/fees.proposed.ts
 docs/rate-watcher/report-*.md
+docs/rate-watcher/debug-*.txt
