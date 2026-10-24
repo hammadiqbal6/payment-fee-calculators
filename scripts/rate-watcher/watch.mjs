@@ -367,7 +367,7 @@ async function maybeOpenPr(report, patched) {
   const title = `chore: fee rate updates ${today}`;
 
   if (dryRun) {
-    console.log('[dry-run] Would open/update PR:', title);
+    log('[dry-run] Would open/update PR:', title);
     return;
   }
 
@@ -380,7 +380,7 @@ async function maybeOpenPr(report, patched) {
   const hasPlatformDrift = report.drifts.some((d) => d.skipFeesPatch);
   const hasErrors = report.errors.length > 0;
   if (!hasDrift && !hasPlatformDrift && !hasErrors) {
-    console.log('No drift and no errors — nothing to open');
+    log('No drift and no errors — nothing to open');
     return;
   }
 
@@ -424,7 +424,7 @@ async function maybeOpenPr(report, patched) {
 
   if (existing) {
     sh('gh', ['pr', 'edit', String(existing.number), '--title', title, '--body', report.md]);
-    console.log(`Updated PR #${existing.number}`);
+    log(`Updated PR #${existing.number}`);
   } else {
     const created = sh('gh', [
       'pr',
@@ -438,7 +438,7 @@ async function maybeOpenPr(report, patched) {
       '--body',
       report.md,
     ]);
-    console.log(created.stdout || created.stderr);
+    log(created.stdout || created.stderr);
   }
 
   if (hasErrors) {
@@ -464,9 +464,14 @@ async function maybeOpenPr(report, patched) {
   }
 }
 
+function log(...args) {
+  // Keep --json stdout machine-readable; progress/logs go to stderr.
+  console.error(...args);
+}
+
 async function main() {
-  console.log(`Fee rate watcher · ${today} · dryRun=${dryRun}`);
-  console.log(`Loaded ${rates.length} rates from fees.ts, ${rulesDoc.rules.length} rules`);
+  log(`Fee rate watcher · ${today} · dryRun=${dryRun}`);
+  log(`Loaded ${rates.length} rates from fees.ts, ${rulesDoc.rules.length} rules`);
 
   // Process dependencies first (stripe-us before stripe-us-intl)
   const ordered = [...rulesDoc.rules].sort((a, b) => {
@@ -477,7 +482,7 @@ async function main() {
 
   const results = [];
   for (const rule of ordered) {
-    process.stderr.write(`… ${rule.rateId}\n`);
+    log(`… ${rule.rateId}`);
     results.push(await checkRule(rule));
   }
 
@@ -491,7 +496,7 @@ async function main() {
     patched = patchFeesTs(report.patchableDrifts);
     if (dryRun) {
       writeFileSync(join(outDir, 'fees.proposed.ts'), patched);
-      console.log('Wrote docs/rate-watcher/fees.proposed.ts (dry-run)');
+      log('Wrote docs/rate-watcher/fees.proposed.ts (dry-run)');
     }
   }
 
