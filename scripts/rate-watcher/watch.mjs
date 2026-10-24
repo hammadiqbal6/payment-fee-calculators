@@ -21,6 +21,7 @@ const today = new Date().toISOString().slice(0, 10);
 const rulesDoc = JSON.parse(readFileSync(join(__dirname, 'extract-rules.json'), 'utf8'));
 const feesPath = join(root, 'src/data/fees.ts');
 const feesSource = readFileSync(feesPath, 'utf8');
+const outDir = join(root, 'docs/rate-watcher');
 
 function loadRatesFromFeesTs(src) {
   const better = [];
@@ -48,7 +49,13 @@ const htmlCache = new Map();
 /** @type {Record<string, { percent: number, fixed: number }>} */
 const extractedById = {};
 
-async function fetchText(url, strategy) {
+function patternList(ex) {
+  if (Array.isArray(ex.patterns) && ex.patterns.length) return ex.patterns;
+  if (typeof ex.pattern === 'string') return [ex.pattern];
+  return [];
+}
+
+async function fetchText(url, strategy, rule = {}) {
   const key = `${strategy}:${url}`;
   if (htmlCache.has(key)) return htmlCache.get(key);
 
@@ -56,12 +63,47 @@ async function fetchText(url, strategy) {
     const { chromium } = await import('playwright');
     const browser = await chromium.launch({ headless: true });
     try {
-      const page = await browser.newPage({ userAgent: rulesDoc.defaults.userAgent });
+      const page = await browser.newPage({
+        userAgent: rulesDoc.defaults.userAgent,
+        locale: 'en-US',
+        extraHTTPHeaders: {
+          'Accept-Language': rulesDoc.defaults.acceptLanguage || 'en-US,en;q=0.9',
+        },
+      });
+      await page.setViewportSize({ width: 1280, height: 900 });
       await page.goto(url, {
         waitUntil: 'domcontentloaded',
         timeout: rulesDoc.defaults.timeoutMs,
       });
-      await page.waitForTimeout(2500);
+
+      // Soft settle for SPA pricing tables; never fail the fetch solely on networkidle.
+      await Promise.race([
+        page.waitForLoadState('networkidle').catch(() => {}),
+        page.waitForTimeout(3000),
+      ]);
+
+      if (rule.waitForText) {
+        // Match against full innerText so multi-node copy still counts.
+        await page
+          .waitForFunction(
+            (reSource) => new RegExp(reSource, 'i').test(document.body?.innerText || ''),
+            rule.waitForText,
+            { timeout: rule.waitForTimeoutMs || 20000 },
+          )
+          .catch(() => {});
+      }
+
+      // Trigger lazy sections that only paint after scroll.
+      await page.evaluate(async () => {
+        const step = Math.max(300, Math.floor(window.innerHeight * 0.8));
+        for (let y = 0; y < document.body.scrollHeight; y += step) {
+          window.scrollTo(0, y);
+          await new Promise((r) => setTimeout(r, 150));
+        }
+        window.scrollTo(0, 0);
+      });
+      await page.waitForTimeout(800);
+
       const text = await page.evaluate(() => document.body?.innerText || '');
       const html = await page.content();
       const combined = `${text}\n${html}`;
@@ -73,7 +115,11 @@ async function fetchText(url, strategy) {
   }
 
   const res = await fetch(url, {
-    headers: { 'user-agent': rulesDoc.defaults.userAgent, accept: 'text/html' },
+    headers: {
+      'user-agent': rulesDoc.defaults.userAgent,
+      accept: 'text/html',
+      'accept-language': rulesDoc.defaults.acceptLanguage || 'en-US,en;q=0.9',
+    },
     redirect: 'follow',
     signal: AbortSignal.timeout(rulesDoc.defaults.timeoutMs),
   });
@@ -87,29 +133,60 @@ function nearlyEqual(a, b, eps = 0.00015) {
   return Math.abs(a - b) <= eps;
 }
 
+function firstRegexMatch(body, patterns, occurrence = 0) {
+  const tried = [];
+  for (const pattern of patterns) {
+    tried.push(pattern);
+    const matches = [...body.matchAll(new RegExp(pattern, 'gi'))];
+    if (!matches.length) continue;
+    const m = matches[occurrence] || matches[0];
+    if (m) return { match: m, pattern, tried };
+  }
+  return { match: null, pattern: null, tried };
+}
+
 function applyExtract(rule, body) {
   const ex = rule.extract;
   if (!ex) throw new Error('missing extract');
 
   if (typeof ex.percent === 'number') {
+    const patterns = patternList(ex);
+    if (patterns.length) {
+      const { match, tried } = firstRegexMatch(body, patterns);
+      if (!match) throw new Error(`pattern not found: ${tried.join(' | ')}`);
+    }
     return { percent: ex.percent, fixed: ex.fixed ?? 0, raw: 'literal' };
   }
 
-  if (ex.platformPercent != null && rule.compareMode === 'platformOnly') {
-    const re = new RegExp(ex.pattern, 'i');
-    if (!re.test(body)) throw new Error(`platform pattern not found: ${ex.pattern}`);
+  if (rule.compareMode === 'platformOnly' && (ex.platformPercent != null || ex.platformPercentGroup != null)) {
+    const patterns = patternList(ex);
+    if (!patterns.length) throw new Error('platformOnly rule missing pattern(s)');
+    const { match, tried } = firstRegexMatch(body, patterns);
+    if (!match) throw new Error(`platform pattern not found: ${tried.join(' | ')}`);
+
+    let percent = ex.platformPercent;
+    if (ex.platformPercentGroup != null) {
+      percent = Number(match[ex.platformPercentGroup]) / 100;
+      if (!Number.isFinite(percent)) throw new Error(`bad platform percent from ${rule.rateId}`);
+    }
+    if (percent == null || !Number.isFinite(percent)) {
+      throw new Error(`platformOnly rule ${rule.rateId} has no platform percent`);
+    }
+
     return {
-      percent: ex.platformPercent,
+      percent,
       fixed: 0,
-      raw: 'platformOnly',
+      raw: match[0],
       platformOnly: true,
+      expectedPlatformPercent: ex.platformPercent ?? percent,
     };
   }
 
-  const matches = [...body.matchAll(new RegExp(ex.pattern, 'gi'))];
-  if (!matches.length) throw new Error(`pattern not found: ${ex.pattern}`);
-  const idx = ex.occurrence ?? 0;
-  const m = matches[idx] || matches[0];
+  const patterns = patternList(ex);
+  if (!patterns.length) throw new Error('missing extract pattern(s)');
+  const { match: m, tried } = firstRegexMatch(body, patterns, ex.occurrence ?? 0);
+  if (!m) throw new Error(`pattern not found: ${tried.join(' | ')}`);
+
   let percent = ex.percentGroup != null ? Number(m[ex.percentGroup]) / 100 : Number(ex.percent);
   if (ex.combineWithRateId) {
     const base =
@@ -130,6 +207,19 @@ function applyExtract(rule, body) {
   return { percent, fixed, raw: m[0] };
 }
 
+function writeDebugSnippet(rateId, body, message) {
+  try {
+    mkdirSync(outDir, { recursive: true });
+    const snippet = (body || '').slice(0, 12000);
+    writeFileSync(
+      join(outDir, `debug-${rateId}.txt`),
+      `error: ${message}\nurl context saved ${today}\n\n--- body head ---\n${snippet}\n`,
+    );
+  } catch {
+    /* ignore debug IO errors */
+  }
+}
+
 async function checkRule(rule) {
   const stored = rateById[rule.rateId];
   if (!stored) {
@@ -145,12 +235,27 @@ async function checkRule(rule) {
     };
   }
 
+  let body = '';
   try {
-    const body = await fetchText(rule.sourceUrl, rule.strategy || 'fetch');
+    body = await fetchText(rule.sourceUrl, rule.strategy || 'fetch', rule);
     const extracted = applyExtract(rule, body);
     extractedById[rule.rateId] = extracted;
 
     if (extracted.platformOnly) {
+      const expected = extracted.expectedPlatformPercent;
+      if (expected != null && !nearlyEqual(extracted.percent, expected)) {
+        return {
+          rateId: rule.rateId,
+          status: 'drift',
+          message: `Platform fee changed (expected ${(expected * 100).toFixed(2)}%, found ${(extracted.percent * 100).toFixed(2)}%); blended schedule not auto-updated`,
+          sourceUrl: rule.sourceUrl,
+          stored,
+          extracted,
+          before: { percent: expected, fixed: 0 },
+          after: { percent: extracted.percent, fixed: 0 },
+          skipFeesPatch: true,
+        };
+      }
       return {
         rateId: rule.rateId,
         status: 'ok',
@@ -176,12 +281,14 @@ async function checkRule(rule) {
     }
     return { rateId: rule.rateId, status: 'ok', sourceUrl: rule.sourceUrl, stored, extracted };
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    writeDebugSnippet(rule.rateId, body, message);
     return {
       rateId: rule.rateId,
       status: 'fetch_error',
       sourceUrl: rule.sourceUrl,
       stored,
-      message: err instanceof Error ? err.message : String(err),
+      message,
     };
   }
 }
@@ -189,7 +296,7 @@ async function checkRule(rule) {
 function patchFeesTs(drifts) {
   let next = feesSource;
   for (const d of drifts) {
-    if (d.status !== 'drift') continue;
+    if (d.status !== 'drift' || d.skipFeesPatch) continue;
     const blockRe = new RegExp(
       `(id:\\s*'${d.rateId}'[\\s\\S]*?percent:\\s*)([0-9.]+)([\\s\\S]*?fixed:\\s*)([0-9.]+)([\\s\\S]*?lastVerified:\\s*')([^']+)(')`,
     );
@@ -213,6 +320,7 @@ function buildReport(results) {
   const errors = results.filter((r) => r.status === 'fetch_error' || r.status === 'error');
   const unverified = results.filter((r) => r.status === 'unverified');
   const ok = results.filter((r) => r.status === 'ok');
+  const patchableDrifts = drifts.filter((d) => !d.skipFeesPatch);
 
   let md = `## Fee rate watcher report (${today})\n\n`;
   md += `Checked ${results.length} rules · ${ok.length} match · ${drifts.length} drift · ${errors.length} errors · ${unverified.length} flagged unverified\n\n`;
@@ -220,7 +328,9 @@ function buildReport(results) {
   if (drifts.length) {
     md += `### Proposed rate changes\n\n| Rate | Before | After | Source |\n|---|---|---|---|\n`;
     for (const d of drifts) {
-      md += `| \`${d.rateId}\` | ${formatPct(d.before.percent)} + ${d.before.fixed} | ${formatPct(d.after.percent)} + ${d.after.fixed} | [link](${d.sourceUrl}) |\n`;
+      const note = d.skipFeesPatch ? ' (platform-only; fees.ts not auto-patched)' : '';
+      md += `| \`${d.rateId}\`${note} | ${formatPct(d.before.percent)} + ${d.before.fixed} | ${formatPct(d.after.percent)} + ${d.after.fixed} | [link](${d.sourceUrl}) |\n`;
+      if (d.message) md += `\n> ${d.message}\n`;
     }
     md += '\n';
   } else {
@@ -245,7 +355,7 @@ function buildReport(results) {
 
   md +=
     '_Opened by the scheduled rate-watcher Action. Never auto-merges. Fix layout changes in `scripts/rate-watcher/extract-rules.json`._\n';
-  return { md, drifts, errors, unverified, ok };
+  return { md, drifts, patchableDrifts, errors, unverified, ok };
 }
 
 function sh(cmd, args, opts = {}) {
@@ -257,7 +367,7 @@ async function maybeOpenPr(report, patched) {
   const title = `chore: fee rate updates ${today}`;
 
   if (dryRun) {
-    console.log('[dry-run] Would open/update PR:', title);
+    log('[dry-run] Would open/update PR:', title);
     return;
   }
 
@@ -266,10 +376,11 @@ async function maybeOpenPr(report, patched) {
     return;
   }
 
-  const hasDrift = report.drifts.length > 0;
+  const hasDrift = report.patchableDrifts.length > 0;
+  const hasPlatformDrift = report.drifts.some((d) => d.skipFeesPatch);
   const hasErrors = report.errors.length > 0;
-  if (!hasDrift && !hasErrors) {
-    console.log('No drift and no errors — nothing to open');
+  if (!hasDrift && !hasPlatformDrift && !hasErrors) {
+    log('No drift and no errors — nothing to open');
     return;
   }
 
@@ -279,7 +390,6 @@ async function maybeOpenPr(report, patched) {
 
   if (hasDrift && patched) writeFileSync(feesPath, patched);
 
-  const outDir = join(root, 'docs/rate-watcher');
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, `report-${today}.md`), report.md);
 
@@ -314,7 +424,7 @@ async function maybeOpenPr(report, patched) {
 
   if (existing) {
     sh('gh', ['pr', 'edit', String(existing.number), '--title', title, '--body', report.md]);
-    console.log(`Updated PR #${existing.number}`);
+    log(`Updated PR #${existing.number}`);
   } else {
     const created = sh('gh', [
       'pr',
@@ -328,7 +438,7 @@ async function maybeOpenPr(report, patched) {
       '--body',
       report.md,
     ]);
-    console.log(created.stdout || created.stderr);
+    log(created.stdout || created.stderr);
   }
 
   if (hasErrors) {
@@ -354,9 +464,14 @@ async function maybeOpenPr(report, patched) {
   }
 }
 
+function log(...args) {
+  // Keep --json stdout machine-readable; progress/logs go to stderr.
+  console.error(...args);
+}
+
 async function main() {
-  console.log(`Fee rate watcher · ${today} · dryRun=${dryRun}`);
-  console.log(`Loaded ${rates.length} rates from fees.ts, ${rulesDoc.rules.length} rules`);
+  log(`Fee rate watcher · ${today} · dryRun=${dryRun}`);
+  log(`Loaded ${rates.length} rates from fees.ts, ${rulesDoc.rules.length} rules`);
 
   // Process dependencies first (stripe-us before stripe-us-intl)
   const ordered = [...rulesDoc.rules].sort((a, b) => {
@@ -367,22 +482,21 @@ async function main() {
 
   const results = [];
   for (const rule of ordered) {
-    process.stderr.write(`… ${rule.rateId}\n`);
+    log(`… ${rule.rateId}`);
     results.push(await checkRule(rule));
   }
 
   const report = buildReport(results);
-  const outDir = join(root, 'docs/rate-watcher');
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, 'latest-report.md'), report.md);
   writeFileSync(join(outDir, 'latest-report.json'), JSON.stringify({ today, results }, null, 2));
 
   let patched = null;
-  if (report.drifts.length) {
-    patched = patchFeesTs(report.drifts);
+  if (report.patchableDrifts.length) {
+    patched = patchFeesTs(report.patchableDrifts);
     if (dryRun) {
       writeFileSync(join(outDir, 'fees.proposed.ts'), patched);
-      console.log('Wrote docs/rate-watcher/fees.proposed.ts (dry-run)');
+      log('Wrote docs/rate-watcher/fees.proposed.ts (dry-run)');
     }
   }
 
