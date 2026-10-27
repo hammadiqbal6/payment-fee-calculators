@@ -84,10 +84,15 @@ All owner placeholders live in **`src/config/site.ts`** (overridable via `PUBLIC
 
 See **`AGENTS.md`** and `.cursor/skills/add-new-tool/SKILL.md`.
 
+## UI / UX changes
+
+For anything that changes how the site looks or behaves, follow the **UI/UX Pro Max** section in **`AGENTS.md`** (skill at `.cursor/skills/ui-ux-pro-max/`).
+
 ## Testing & CI
 
 - Vitest: `src/lib/fees/calculate.test.ts` covers all schedules.
-- GitHub Actions: `.github/workflows/ci.yml` runs build, test, audit.
+- PR CI (`.github/workflows/ci.yml`): `npm ci`, `build`, `test` only — fast safety net.
+- Full suite: run locally before PRs; optional manual workflow `.github/workflows/full-checks.yml` (`audit`, `proof:verify`, Playwright, `lhci`).
 
 ## Performance budgets
 

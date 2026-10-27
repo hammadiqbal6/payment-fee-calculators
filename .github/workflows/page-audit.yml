@@ -1,13 +1,16 @@
 name: Page SEO checklist
 
 on:
-  pull_request:
-  push:
-    branches: [main, 'cursor/**']
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   page-audit:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     env:
       PUBLIC_SITE_URL: https://payment-fee-calculators.hammadiqbal117.workers.dev
       PUBLIC_SITE_URL_PAYMENT_FEES: https://payment-fee-calculators.hammadiqbal117.workers.dev
