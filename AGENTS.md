@@ -76,7 +76,7 @@ flowchart TB
 - Visible breadcrumbs + BreadcrumbList on hubs, guides, about, contact, methodology, privacy, terms
 - Worker `FILE_EXT` must allow `.webmanifest` (11+ char extensions)
 - Fee freshness: `docs/FEE-UPDATE.md` + content-refresh skill
-- Local gate: `npm run audit:pages` (also part of `npm run audit` and `.github/workflows/page-audit.yml`)
+- Local gate: `npm run audit:pages` (also part of `npm run audit`; manual workflow `.github/workflows/page-audit.yml`)
 
 ## Per-page checklist (required)
 
@@ -104,6 +104,35 @@ Before shipping a new or reworked page, confirm:
 | `performance-auditor` | Lighthouse / CWV |
 | `link-builder-researcher` | Outreach ideas |
 | `fee-fact-checker` | Verify rates against official URLs |
+
+## UI/UX Pro Max
+
+Use this skill for **any change to how the site looks or behaves** (layout, components, interaction, a11y, responsive, dark mode, motion).
+
+1. Read `.cursor/skills/ui-ux-pro-max/SKILL.md`.
+2. Search local design/UX data:
+
+```bash
+python3 .cursor/skills/ui-ux-pro-max/scripts/search.py "<query>" --domain <domain>
+# Optional (see SKILL.md): --design-system, --stack astro, -n <max>
+```
+
+Example (verified):
+
+```bash
+python3 .cursor/skills/ui-ux-pro-max/scripts/search.py "accessible form" --domain ux
+# → Form labels, ARIA labels, submit feedback (High)
+```
+
+**Priority checks before shipping UI:** contrast ≥ 4.5:1 · 44×44px touch targets · visible focus · labels + inline errors · dark mode · no horizontal scroll · `prefers-reduced-motion`.
+
+## CI notes
+
+- PR / `main` push: `.github/workflows/ci.yml` — `npm ci`, `build`, `test` only (fast safety net).
+- Manual: `.github/workflows/full-checks.yml` — audit, pages checklist, proof:verify, Playwright, lhci.
+- Manual: `.github/workflows/page-audit.yml` — `audit:pages` only.
+- Scheduled: `.github/workflows/rate-watcher.yml` unchanged.
+- Run the full suite locally before opening PRs (`npm run check`, `npm run lhci` as needed).
 
 ## Definition of done
 

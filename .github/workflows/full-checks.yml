@@ -1,0 +1,44 @@
+# Manual full suite: audits, proof, Lighthouse, Playwright.
+# Run locally before opening PRs; trigger here when you need CI evidence.
+name: Full checks
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  full-checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      PUBLIC_SITE_URL: https://payment-fee-calculators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_PAYMENT_FEES: https://payment-fee-calculators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_BUSINESS_DOCS: https://business-document-generators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_HOME_GARDEN: https://home-garden-calculators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_FIBER_ARTS: https://fiber-arts-calculators.hammadiqbal117.workers.dev
+      PUBLIC_SITE_URL_PET: https://pet-calculators.hammadiqbal117.workers.dev
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium
+      - run: npm run audit
+      - run: npm run audit:pages
+      - run: npm run proof:verify
+      - run: npm run lhci
+      - name: Upload proof artifact
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: docs-proof
+          path: docs/proof/
+          if-no-files-found: ignore

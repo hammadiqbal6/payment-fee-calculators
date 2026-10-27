@@ -3,11 +3,17 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main, 'cursor/**']
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
+  # Job name kept for any branch-protection required checks that still reference it.
   build-test-audit:
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     env:
       # Same PUBLIC_* pattern as Cloudflare Workers Builds (baked into static HTML).
       PUBLIC_SITE_URL: https://payment-fee-calculators.hammadiqbal117.workers.dev
@@ -25,9 +31,3 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
-      - run: npm run audit
-      - run: npm run proof:verify
-      - uses: actions/upload-artifact@v5
-        with:
-          name: docs-proof
-          path: docs/proof/
