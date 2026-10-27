@@ -269,9 +269,23 @@ const gaId = siteConfig.ga4MeasurementId;
     <script>
       const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
       const nav = document.querySelector<HTMLElement>('[data-nav]');
+
+      function setNavOpen(open: boolean) {
+        nav?.classList.toggle('is-open', open);
+        toggle?.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+
       toggle?.addEventListener('click', () => {
-        const open = nav?.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        const open = !(toggle.getAttribute('aria-expanded') === 'true');
+        setNavOpen(open);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        if (toggle?.getAttribute('aria-expanded') === 'true') {
+          setNavOpen(false);
+          toggle.focus();
+        }
       });
 
       const CONSENT_KEY = 'feecalc-consent-v2';
