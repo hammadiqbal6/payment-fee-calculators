@@ -56,12 +56,14 @@ const defaultRate = processor.defaultRateId;
         name="amount"
         data-amount
         inputmode="decimal"
-        min="0"
+        min="0.01"
         step="0.01"
         value="100"
         required
         autocomplete="off"
+        aria-describedby={`amount-error-${processor.id}`}
       />
+      <p class="field__error" id={`amount-error-${processor.id}`} data-amount-error hidden role="alert"></p>
     </label>
 
     <div class="fee-calc__actions">
@@ -104,17 +106,19 @@ const defaultRate = processor.defaultRateId;
     gap: 0.5rem;
   }
   .fee-calc__mode {
-    min-height: 48px;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
     border: 1px solid var(--color-border);
     border-radius: 8px;
     background: var(--color-bg);
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     color: var(--color-ink);
   }
   .fee-calc__mode.is-active {
-    background: var(--color-brand);
-    border-color: var(--color-brand);
+    background: var(--color-brand-solid, var(--color-brand));
+    border-color: var(--color-brand-solid, var(--color-brand));
     color: #fff;
   }
   .fee-calc__form {
@@ -135,12 +139,22 @@ const defaultRate = processor.defaultRateId;
     border-radius: 8px;
     padding: 0.65rem 0.75rem;
     font-size: max(1rem, 16px);
-    background: #fff;
+    background: var(--color-bg-elevated);
+    color: var(--color-ink);
     width: 100%;
   }
   .field__help {
     font-size: 0.85rem;
     color: var(--color-ink-muted);
+  }
+  .field__error {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-danger, #8b1e1e);
+    font-weight: 600;
+  }
+  .field__error[hidden] {
+    display: none;
   }
   .fee-calc__actions {
     display: flex;
@@ -210,6 +224,7 @@ const defaultRate = processor.defaultRateId;
     const rateSelect = root.querySelector<HTMLSelectElement>('[data-rate]')!;
     const amountInput = root.querySelector<HTMLInputElement>('[data-amount]')!;
     const amountLabel = root.querySelector<HTMLElement>('[data-amount-label]')!;
+    const amountError = root.querySelector<HTMLElement>('[data-amount-error]')!;
     const rateHelp = root.querySelector<HTMLElement>('[data-rate-help]')!;
     const form = root.querySelector<HTMLFormElement>('[data-form]')!;
     const modeButtons = root.querySelectorAll<HTMLButtonElement>('[data-mode]');
@@ -222,6 +237,26 @@ const defaultRate = processor.defaultRateId;
     function updateHelp() {
       const r = currentRate();
       rateHelp.textContent = r.notes || `${(r.percent * 100).toFixed(2)}% + ${r.fixed.toFixed(2)} ${r.currency}`;
+    }
+
+    function clearResults() {
+      root.querySelector<HTMLElement>('[data-out-fee]')!.textContent = '—';
+      root.querySelector<HTMLElement>('[data-out-net]')!.textContent = '—';
+      root.querySelector<HTMLElement>('[data-out-charge]')!.textContent = '—';
+      root.querySelector<HTMLElement>('[data-out-rate]')!.textContent = '—';
+      root.querySelector<HTMLElement>('[data-out-note]')!.textContent = '';
+    }
+
+    function setAmountError(message: string | null) {
+      if (message) {
+        amountInput.setAttribute('aria-invalid', 'true');
+        amountError.hidden = false;
+        amountError.textContent = message;
+      } else {
+        amountInput.removeAttribute('aria-invalid');
+        amountError.hidden = true;
+        amountError.textContent = '';
+      }
     }
 
     function setMode(next: 'forward' | 'reverse') {
@@ -238,8 +273,14 @@ const defaultRate = processor.defaultRateId;
     let lastTracked = '';
     function calculate(fromUser = false) {
       const r = currentRate();
-      const amount = Number(amountInput.value);
-      if (!Number.isFinite(amount) || amount < 0) return;
+      const raw = amountInput.value.trim();
+      const amount = Number(raw);
+      if (raw === '' || !Number.isFinite(amount) || amount <= 0) {
+        setAmountError('Enter an amount greater than zero.');
+        clearResults();
+        return;
+      }
+      setAmountError(null);
       const result = mode === 'forward' ? forward(amount, r.percent, r.fixed) : reverse(amount, r.percent, r.fixed);
       root.querySelector<HTMLElement>('[data-out-fee]')!.textContent = money(result.fee, r.currency);
       root.querySelector<HTMLElement>('[data-out-net]')!.textContent = money(result.net, r.currency);
@@ -271,6 +312,7 @@ const defaultRate = processor.defaultRateId;
       updateHelp();
       calculate(true);
     });
+    amountInput.addEventListener('input', () => calculate(false));
     amountInput.addEventListener('change', () => calculate(true));
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -301,7 +343,7 @@ const defaultRate = processor.defaultRateId;
     const qRate = params.get('rate');
     const qAmount = params.get('amount');
     if (qRate && rates.some((r) => r.id === qRate)) rateSelect.value = qRate;
-    if (qAmount && Number(qAmount) >= 0) amountInput.value = qAmount;
+    if (qAmount && Number(qAmount) > 0) amountInput.value = qAmount;
     updateHelp();
     if (qMode === 'reverse' || qMode === 'forward') setMode(qMode);
     else calculate();
