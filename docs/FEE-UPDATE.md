@@ -61,7 +61,7 @@ Freshness: verified/estimated rates must have `lastVerified` within ~60 days (`F
 - Compares using `scripts/rate-watcher/extract-rules.json`
 - Opens/updates a **single PR** with before/after + source links
 - Flags fetch/parse failures in the PR or an issue — **never guesses**
-- **Never** auto-merges or commits to `main`
+- **Safe auto-merge** only when every proposed change verifies (clean parse, consistent extraction, within bounds), the diff is limited to `fees.ts` + rate-watcher reports, and `npm ci` / `test` / `build` / `audit` pass in the same workflow — see `docs/rate-watcher/README.md`. Otherwise the PR stays open with `needs human review`.
 
 Local dry run: `npm run rate-watch:dry`
 

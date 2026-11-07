@@ -3,7 +3,12 @@
   "defaults": {
     "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 FeeCalcRateWatcher/1.0 (+https://github.com/hammadiqbal6/payment-fee-calculators; fee freshness check)",
     "timeoutMs": 45000,
-    "acceptLanguage": "en-US,en;q=0.9"
+    "acceptLanguage": "en-US,en;q=0.9",
+    "autoMerge": {
+      "maxPercentChangePoints": 1.5,
+      "maxFixedMultiplier": 2,
+      "maxFixedAbsoluteDelta": 1
+    }
   },
   "rules": [
     {

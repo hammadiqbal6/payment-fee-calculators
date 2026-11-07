@@ -2,26 +2,44 @@
 /**
  * Weekly fee rate watcher (GitHub Actions).
  * Fetches official pricing pages, compares to src/data/fees.ts, and opens/updates
- * a single PR with proposed changes. Never commits to the default branch or auto-merges.
+ * a single PR with proposed changes. Auto-merges only when every proposed change
+ * is verified (clean parse, consistent extraction, within bounds) and local gates pass.
  *
  * Usage:
- *   node scripts/rate-watcher/watch.mjs [--dry-run] [--json]
+ *   node scripts/rate-watcher/watch.mjs [--dry-run] [--json] [--no-auto-merge]
+ *
+ * Env:
+ *   AUTO_MERGE=true|false  (default true; workflow_dispatch can override)
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import {
+  assertAutoMergeDiffAllowed,
+  buildAutoVerifiedChangelogEntry,
+  evaluateAutoMergeEligibility,
+  formatChangelogEntryTs,
+  nearlyEqual,
+  parseAutoMergeFlag,
+  resolveAutoMergeBounds,
+} from './verify.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '../..');
 const dryRun = process.argv.includes('--dry-run');
 const asJson = process.argv.includes('--json');
+const autoMergeCliOff = process.argv.includes('--no-auto-merge');
+const autoMergeEnabled =
+  !autoMergeCliOff && parseAutoMergeFlag(process.env.AUTO_MERGE, true);
 const today = new Date().toISOString().slice(0, 10);
 
 const rulesDoc = JSON.parse(readFileSync(join(__dirname, 'extract-rules.json'), 'utf8'));
+const autoMergeBounds = resolveAutoMergeBounds(rulesDoc.defaults?.autoMerge);
 const feesPath = join(root, 'src/data/fees.ts');
 const feesSource = readFileSync(feesPath, 'utf8');
 const outDir = join(root, 'docs/rate-watcher');
+const NEEDS_REVIEW_LABEL = 'needs human review';
 
 function loadRatesFromFeesTs(src) {
   const better = [];
@@ -55,8 +73,16 @@ function patternList(ex) {
   return [];
 }
 
+function cacheKey(url, strategy) {
+  return `${strategy}:${url}`;
+}
+
+function bustFetchCache(url, strategy) {
+  htmlCache.delete(cacheKey(url, strategy || 'fetch'));
+}
+
 async function fetchText(url, strategy, rule = {}) {
-  const key = `${strategy}:${url}`;
+  const key = cacheKey(url, strategy);
   if (htmlCache.has(key)) return htmlCache.get(key);
 
   if (strategy === 'playwright') {
@@ -129,10 +155,6 @@ async function fetchText(url, strategy, rule = {}) {
   return text;
 }
 
-function nearlyEqual(a, b, eps = 0.00015) {
-  return Math.abs(a - b) <= eps;
-}
-
 function firstRegexMatch(body, patterns, occurrence = 0) {
   const tried = [];
   for (const pattern of patterns) {
@@ -145,6 +167,48 @@ function firstRegexMatch(body, patterns, occurrence = 0) {
   return { match: null, pattern: null, tried };
 }
 
+/**
+ * Extract percent/fixed for one pattern string (or literal / platform modes handled in applyExtract).
+ */
+function extractFromMatch(rule, body, match) {
+  const ex = rule.extract;
+  let percent = ex.percentGroup != null ? Number(match[ex.percentGroup]) / 100 : Number(ex.percent);
+  if (ex.combineWithRateId) {
+    const base =
+      extractedById[ex.combineWithRateId]?.percent ?? rateById[ex.combineWithRateId]?.percent;
+    if (base == null) throw new Error(`missing base rate ${ex.combineWithRateId}`);
+    percent = base + percent;
+  }
+  let fixed = ex.fixed ?? rule.fixedFallback ?? 0;
+  if (ex.fixedFromCurrencyTable) {
+    const cur = ex.fixedFromCurrencyTable.currency;
+    const label = ex.fixedFromCurrencyTable.label;
+    const fixedRe = new RegExp(`${label}[^0-9]*([0-9]+\\.[0-9]+)\\s*${cur}`, 'i');
+    const fm = body.match(fixedRe);
+    if (fm) fixed = Number(fm[1]);
+    else if (rule.fixedFallback != null) fixed = rule.fixedFallback;
+  }
+  if (!Number.isFinite(percent)) throw new Error(`bad percent from ${rule.rateId}`);
+  return { percent, fixed, raw: match[0] };
+}
+
+/**
+ * Collect values from every pattern that matches (for consistency checks).
+ */
+function extractAllPatternSamples(rule, body) {
+  const ex = rule.extract;
+  const patterns = patternList(ex);
+  const samples = [];
+  for (const pattern of patterns) {
+    const matches = [...body.matchAll(new RegExp(pattern, 'gi'))];
+    if (!matches.length) continue;
+    const m = matches[ex.occurrence ?? 0] || matches[0];
+    if (!m) continue;
+    samples.push(extractFromMatch(rule, body, m));
+  }
+  return samples;
+}
+
 function applyExtract(rule, body) {
   const ex = rule.extract;
   if (!ex) throw new Error('missing extract');
@@ -155,7 +219,12 @@ function applyExtract(rule, body) {
       const { match, tried } = firstRegexMatch(body, patterns);
       if (!match) throw new Error(`pattern not found: ${tried.join(' | ')}`);
     }
-    return { percent: ex.percent, fixed: ex.fixed ?? 0, raw: 'literal' };
+    return {
+      percent: ex.percent,
+      fixed: ex.fixed ?? 0,
+      raw: 'literal',
+      patternSamples: [{ percent: ex.percent, fixed: ex.fixed ?? 0 }],
+    };
   }
 
   if (rule.compareMode === 'platformOnly' && (ex.platformPercent != null || ex.platformPercentGroup != null)) {
@@ -179,32 +248,20 @@ function applyExtract(rule, body) {
       raw: match[0],
       platformOnly: true,
       expectedPlatformPercent: ex.platformPercent ?? percent,
+      patternSamples: [{ percent, fixed: 0 }],
     };
   }
 
   const patterns = patternList(ex);
   if (!patterns.length) throw new Error('missing extract pattern(s)');
-  const { match: m, tried } = firstRegexMatch(body, patterns, ex.occurrence ?? 0);
-  if (!m) throw new Error(`pattern not found: ${tried.join(' | ')}`);
+  const patternSamples = extractAllPatternSamples(rule, body);
+  if (!patternSamples.length) {
+    throw new Error(`pattern not found: ${patterns.join(' | ')}`);
+  }
 
-  let percent = ex.percentGroup != null ? Number(m[ex.percentGroup]) / 100 : Number(ex.percent);
-  if (ex.combineWithRateId) {
-    const base =
-      extractedById[ex.combineWithRateId]?.percent ?? rateById[ex.combineWithRateId]?.percent;
-    if (base == null) throw new Error(`missing base rate ${ex.combineWithRateId}`);
-    percent = base + percent;
-  }
-  let fixed = ex.fixed ?? rule.fixedFallback ?? 0;
-  if (ex.fixedFromCurrencyTable) {
-    const cur = ex.fixedFromCurrencyTable.currency;
-    const label = ex.fixedFromCurrencyTable.label;
-    const fixedRe = new RegExp(`${label}[^0-9]*([0-9]+\\.[0-9]+)\\s*${cur}`, 'i');
-    const fm = body.match(fixedRe);
-    if (fm) fixed = Number(fm[1]);
-    else if (rule.fixedFallback != null) fixed = rule.fixedFallback;
-  }
-  if (!Number.isFinite(percent)) throw new Error(`bad percent from ${rule.rateId}`);
-  return { percent, fixed, raw: m[0] };
+  // Primary value: first matching pattern (stable with historical behavior).
+  const primary = patternSamples[0];
+  return { ...primary, patternSamples };
 }
 
 function writeDebugSnippet(rateId, body, message) {
@@ -237,7 +294,8 @@ async function checkRule(rule) {
 
   let body = '';
   try {
-    body = await fetchText(rule.sourceUrl, rule.strategy || 'fetch', rule);
+    const strategy = rule.strategy || 'fetch';
+    body = await fetchText(rule.sourceUrl, strategy, rule);
     const extracted = applyExtract(rule, body);
     extractedById[rule.rateId] = extracted;
 
@@ -254,6 +312,7 @@ async function checkRule(rule) {
           before: { percent: expected, fixed: 0 },
           after: { percent: extracted.percent, fixed: 0 },
           skipFeesPatch: true,
+          platformOnly: true,
         };
       }
       return {
@@ -269,6 +328,19 @@ async function checkRule(rule) {
     const percentDiff = !nearlyEqual(extracted.percent, stored.percent);
     const fixedDiff = !nearlyEqual(extracted.fixed, stored.fixed);
     if (percentDiff || fixedDiff) {
+      // Consistency: all matching patterns must agree; re-fetch and compare.
+      const patternSamples = (extracted.patternSamples || []).map((s) => ({
+        percent: s.percent,
+        fixed: s.fixed,
+      }));
+      bustFetchCache(rule.sourceUrl, strategy);
+      const body2 = await fetchText(rule.sourceUrl, strategy, rule);
+      const extracted2 = applyExtract(rule, body2);
+      const consistencySamples = [
+        ...patternSamples.slice(1),
+        { percent: extracted2.percent, fixed: extracted2.fixed },
+      ];
+
       return {
         rateId: rule.rateId,
         status: 'drift',
@@ -277,6 +349,7 @@ async function checkRule(rule) {
         extracted,
         before: { percent: stored.percent, fixed: stored.fixed },
         after: { percent: extracted.percent, fixed: extracted.fixed },
+        consistencySamples,
       };
     }
     return { rateId: rule.rateId, status: 'ok', sourceUrl: rule.sourceUrl, stored, extracted };
@@ -293,7 +366,7 @@ async function checkRule(rule) {
   }
 }
 
-function patchFeesTs(drifts) {
+function patchFeesTs(drifts, { includeChangelog = false } = {}) {
   let next = feesSource;
   for (const d of drifts) {
     if (d.status !== 'drift' || d.skipFeesPatch) continue;
@@ -308,6 +381,20 @@ function patchFeesTs(drifts) {
     `export const FEE_DATA_VERSION = '${today.replace(/-/g, '.')}'`,
   );
   next = next.replace(/export const FEE_DATA_UPDATED = '[^']+'/, `export const FEE_DATA_UPDATED = '${today}'`);
+
+  if (includeChangelog) {
+    const entry = buildAutoVerifiedChangelogEntry(
+      today,
+      drifts.filter((d) => d.status === 'drift' && !d.skipFeesPatch),
+    );
+    const entryTs = formatChangelogEntryTs(entry);
+    const marker = 'export const feeChangelog: FeeChangelogEntry[] = [';
+    if (!next.includes(marker)) {
+      throw new Error('Could not locate feeChangelog array to insert auto-verified entry');
+    }
+    next = next.replace(marker, `${marker}\n${entryTs},`);
+  }
+
   return next;
 }
 
@@ -315,7 +402,7 @@ function formatPct(p) {
   return `${parseFloat((p * 100).toFixed(4))}%`;
 }
 
-function buildReport(results) {
+function buildReport(results, eligibility) {
   const drifts = results.filter((r) => r.status === 'drift');
   const errors = results.filter((r) => r.status === 'fetch_error' || r.status === 'error');
   const unverified = results.filter((r) => r.status === 'unverified');
@@ -324,6 +411,18 @@ function buildReport(results) {
 
   let md = `## Fee rate watcher report (${today})\n\n`;
   md += `Checked ${results.length} rules · ${ok.length} match · ${drifts.length} drift · ${errors.length} errors · ${unverified.length} flagged unverified\n\n`;
+
+  if (eligibility) {
+    if (eligibility.eligible) {
+      md += `### Auto-merge\n\nEligible — all proposed changes verified (clean parse, consistent extraction, within bounds).\n\n`;
+    } else {
+      md += `### Needs human review\n\nAuto-merge blocked:\n\n`;
+      for (const reason of eligibility.reasons) {
+        md += `- ${reason}\n`;
+      }
+      md += '\n';
+    }
+  }
 
   if (drifts.length) {
     md += `### Proposed rate changes\n\n| Rate | Before | After | Source |\n|---|---|---|---|\n`;
@@ -354,26 +453,84 @@ function buildReport(results) {
   }
 
   md +=
-    '_Opened by the scheduled rate-watcher Action. Never auto-merges. Fix layout changes in `scripts/rate-watcher/extract-rules.json`._\n';
-  return { md, drifts, patchableDrifts, errors, unverified, ok };
+    '_Opened by the scheduled rate-watcher Action. Auto-merges only when every proposed change verifies and `npm ci` / `test` / `build` / `audit` pass on the patched tree. Fix layout changes in `scripts/rate-watcher/extract-rules.json`._\n';
+  return { md, drifts, patchableDrifts, errors, unverified, ok, eligibility };
 }
 
 function sh(cmd, args, opts = {}) {
   return spawnSync(cmd, args, { encoding: 'utf8', cwd: root, ...opts });
 }
 
-async function maybeOpenPr(report, patched) {
+function shOk(cmd, args, opts = {}) {
+  const r = sh(cmd, args, opts);
+  if (r.status !== 0) {
+    const detail = (r.stderr || r.stdout || '').trim();
+    throw new Error(`${cmd} ${args.join(' ')} failed (${r.status}): ${detail.slice(0, 2000)}`);
+  }
+  return r;
+}
+
+function ensureNeedsReviewLabel() {
+  const listed = sh('gh', ['label', 'list', '--json', 'name']);
+  let names = [];
+  try {
+    names = (JSON.parse(listed.stdout || '[]') || []).map((l) => l.name);
+  } catch {
+    names = [];
+  }
+  if (!names.includes(NEEDS_REVIEW_LABEL)) {
+    sh('gh', [
+      'label',
+      'create',
+      NEEDS_REVIEW_LABEL,
+      '--color',
+      'D93F0B',
+      '--description',
+      'Rate watcher could not auto-verify; human review required',
+    ]);
+  }
+}
+
+function runMergeGates() {
+  log('Running pre-merge gates: npm ci, test, build, audit');
+  shOk('npm', ['ci'], { stdio: 'inherit' });
+  shOk('npm', ['test'], { stdio: 'inherit' });
+  shOk('npm', ['run', 'build'], { stdio: 'inherit' });
+  shOk('npm', ['run', 'audit'], { stdio: 'inherit' });
+}
+
+function changedFilesVsMain() {
+  const r = sh('git', ['diff', '--name-only', 'origin/main...HEAD']);
+  if (r.status !== 0) throw new Error(r.stderr || 'git diff failed');
+  return (r.stdout || '')
+    .split('\n')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+async function maybeOpenPr(report, patched, { willAutoMerge }) {
   const branch = `chore/fee-rate-watcher-${today}`;
   const title = `chore: fee rate updates ${today}`;
 
   if (dryRun) {
-    log('[dry-run] Would open/update PR:', title);
-    return;
+    if (willAutoMerge) {
+      log('[dry-run] Would auto-merge after gates:', title);
+      log('[dry-run] Patchable rates:', report.patchableDrifts.map((d) => d.rateId).join(', '));
+    } else if (report.patchableDrifts.length || report.errors.length || report.drifts.length) {
+      log('[dry-run] Would open/update PR (no auto-merge):', title);
+      if (report.eligibility?.reasons?.length) {
+        log('[dry-run] Needs human review because:');
+        for (const reason of report.eligibility.reasons) log(`  - ${reason}`);
+      }
+    } else {
+      log('[dry-run] No PR needed');
+    }
+    return { merged: false, dryRun: true };
   }
 
   if (!process.env.GITHUB_TOKEN && !process.env.GH_TOKEN) {
     console.warn('No GITHUB_TOKEN — writing local artifacts only');
-    return;
+    return { merged: false };
   }
 
   const hasDrift = report.patchableDrifts.length > 0;
@@ -381,7 +538,7 @@ async function maybeOpenPr(report, patched) {
   const hasErrors = report.errors.length > 0;
   if (!hasDrift && !hasPlatformDrift && !hasErrors) {
     log('No drift and no errors — nothing to open');
-    return;
+    return { merged: false };
   }
 
   sh('git', ['fetch', 'origin', 'main']);
@@ -392,14 +549,23 @@ async function maybeOpenPr(report, patched) {
 
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, `report-${today}.md`), report.md);
+  writeFileSync(join(outDir, 'latest-report.md'), report.md);
 
   sh('git', ['config', 'user.name', 'fee-rate-watcher[bot]']);
   sh('git', ['config', 'user.email', 'fee-rate-watcher[bot]@users.noreply.github.com']);
   sh('git', ['add', 'src/data/fees.ts', 'docs/rate-watcher']);
-  const commitMsg = hasDrift
-    ? `chore: propose fee rate updates from watcher (${today})`
-    : `chore: fee watcher fetch/parse failures (${today})`;
-  sh('git', ['commit', '-m', commitMsg]);
+  const commitMsg = willAutoMerge
+    ? `chore: auto-verified fee rate updates (${today})`
+    : hasDrift
+      ? `chore: propose fee rate updates from watcher (${today})`
+      : `chore: fee watcher fetch/parse failures (${today})`;
+  const commit = sh('git', ['commit', '-m', commitMsg]);
+  if (commit.status !== 0) {
+    const out = `${commit.stdout || ''}\n${commit.stderr || ''}`;
+    if (!/nothing to commit/i.test(out)) {
+      throw new Error(commit.stderr || 'commit failed');
+    }
+  }
 
   const push = sh('git', ['push', '-u', 'origin', branch, '--force']);
   if (push.status !== 0) throw new Error(push.stderr || 'push failed');
@@ -412,7 +578,7 @@ async function maybeOpenPr(report, patched) {
     '--state',
     'open',
     '--json',
-    'number,title,headRefName',
+    'number,title,headRefName,url',
   ]);
   let existing = null;
   try {
@@ -422,9 +588,12 @@ async function maybeOpenPr(report, patched) {
     /* ignore */
   }
 
+  let prNumber = existing ? String(existing.number) : null;
+  let prUrl = existing?.url || null;
+
   if (existing) {
-    sh('gh', ['pr', 'edit', String(existing.number), '--title', title, '--body', report.md]);
-    log(`Updated PR #${existing.number}`);
+    sh('gh', ['pr', 'edit', prNumber, '--title', title, '--body', report.md]);
+    log(`Updated PR #${prNumber}`);
   } else {
     const created = sh('gh', [
       'pr',
@@ -439,6 +608,22 @@ async function maybeOpenPr(report, patched) {
       report.md,
     ]);
     log(created.stdout || created.stderr);
+    prUrl = (created.stdout || '').trim();
+    const view = sh('gh', ['pr', 'view', branch, '--json', 'number,url']);
+    try {
+      const meta = JSON.parse(view.stdout || '{}');
+      prNumber = String(meta.number);
+      prUrl = meta.url || prUrl;
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (!willAutoMerge) {
+    ensureNeedsReviewLabel();
+    if (prNumber) {
+      sh('gh', ['pr', 'edit', prNumber, '--add-label', NEEDS_REVIEW_LABEL]);
+    }
   }
 
   if (hasErrors) {
@@ -462,6 +647,56 @@ async function maybeOpenPr(report, patched) {
     if (issue) sh('gh', ['issue', 'comment', String(issue.number), '--body', report.md]);
     else sh('gh', ['issue', 'create', '--title', issueTitle, '--body', report.md]);
   }
+
+  if (!willAutoMerge || !prNumber) {
+    return { merged: false, prNumber, prUrl };
+  }
+
+  // Restrict diff before spending CI minutes.
+  const files = changedFilesVsMain();
+  const diffCheck = assertAutoMergeDiffAllowed(files);
+  if (!diffCheck.ok) {
+    log('Refusing auto-merge — unexpected paths in diff:', diffCheck.blocked.join(', '));
+    ensureNeedsReviewLabel();
+    sh('gh', ['pr', 'edit', prNumber, '--add-label', NEEDS_REVIEW_LABEL]);
+    const blockBody =
+      report.md +
+      `\n\n### Auto-merge refused\n\nDiff included non-allowlisted paths: ${diffCheck.blocked.join(', ')}\n`;
+    sh('gh', ['pr', 'edit', prNumber, '--body', blockBody]);
+    return { merged: false, prNumber, prUrl, refused: 'diff' };
+  }
+
+  try {
+    runMergeGates();
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    log('Pre-merge gates failed — leaving PR open:', message);
+    ensureNeedsReviewLabel();
+    sh('gh', ['pr', 'edit', prNumber, '--add-label', NEEDS_REVIEW_LABEL]);
+    const failBody =
+      report.md + `\n\n### Auto-merge refused\n\nPre-merge gates failed:\n\n\`\`\`\n${message.slice(0, 3000)}\n\`\`\`\n`;
+    sh('gh', ['pr', 'edit', prNumber, '--body', failBody]);
+    return { merged: false, prNumber, prUrl, refused: 'gates' };
+  }
+
+  const merge = sh('gh', [
+    'pr',
+    'merge',
+    prNumber,
+    '--squash',
+    '--delete-branch',
+    '--subject',
+    `chore: auto-verified fee rate updates (${today})`,
+  ]);
+  if (merge.status !== 0) {
+    log('gh pr merge failed:', merge.stderr || merge.stdout);
+    ensureNeedsReviewLabel();
+    sh('gh', ['pr', 'edit', prNumber, '--add-label', NEEDS_REVIEW_LABEL]);
+    return { merged: false, prNumber, prUrl, refused: 'merge' };
+  }
+
+  log(`Auto-merged PR #${prNumber}`);
+  return { merged: true, prNumber, prUrl };
 }
 
 function log(...args) {
@@ -470,8 +705,11 @@ function log(...args) {
 }
 
 async function main() {
-  log(`Fee rate watcher · ${today} · dryRun=${dryRun}`);
+  log(`Fee rate watcher · ${today} · dryRun=${dryRun} · autoMerge=${autoMergeEnabled}`);
   log(`Loaded ${rates.length} rates from fees.ts, ${rulesDoc.rules.length} rules`);
+  log(
+    `Auto-merge bounds: ${autoMergeBounds.maxPercentChangePoints} pp / ${autoMergeBounds.maxFixedMultiplier}× fixed / ±${autoMergeBounds.maxFixedAbsoluteDelta}`,
+  );
 
   // Process dependencies first (stripe-us before stripe-us-intl)
   const ordered = [...rulesDoc.rules].sort((a, b) => {
@@ -486,18 +724,30 @@ async function main() {
     results.push(await checkRule(rule));
   }
 
-  const report = buildReport(results);
+  const eligibility = evaluateAutoMergeEligibility(results, autoMergeBounds);
+  const report = buildReport(results, eligibility);
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, 'latest-report.md'), report.md);
-  writeFileSync(join(outDir, 'latest-report.json'), JSON.stringify({ today, results }, null, 2));
+  writeFileSync(
+    join(outDir, 'latest-report.json'),
+    JSON.stringify({ today, autoMergeEnabled, eligibility, results }, null, 2),
+  );
 
+  const willAutoMerge = autoMergeEnabled && eligibility.eligible;
   let patched = null;
   if (report.patchableDrifts.length) {
-    patched = patchFeesTs(report.patchableDrifts);
+    patched = patchFeesTs(report.patchableDrifts, { includeChangelog: willAutoMerge });
     if (dryRun) {
       writeFileSync(join(outDir, 'fees.proposed.ts'), patched);
       log('Wrote docs/rate-watcher/fees.proposed.ts (dry-run)');
+      if (willAutoMerge) {
+        log('[dry-run] Proposed tree would be auto-merged after npm ci/test/build/audit');
+      } else {
+        log('[dry-run] Would leave PR open with label:', NEEDS_REVIEW_LABEL);
+      }
     }
+  } else if (dryRun && !eligibility.eligible && (report.errors.length || report.drifts.length)) {
+    log('[dry-run] Would leave PR open with label:', NEEDS_REVIEW_LABEL);
   }
 
   if (asJson) {
@@ -505,6 +755,9 @@ async function main() {
       JSON.stringify(
         {
           today,
+          autoMergeEnabled,
+          willAutoMerge,
+          eligibility,
           summary: {
             ok: report.ok.length,
             drift: report.drifts.length,
@@ -521,7 +774,7 @@ async function main() {
     console.log(report.md);
   }
 
-  await maybeOpenPr(report, patched);
+  await maybeOpenPr(report, patched, { willAutoMerge });
   process.exit(0);
 }
 

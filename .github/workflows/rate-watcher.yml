@@ -5,6 +5,11 @@ on:
     # Mondays 14:00 UTC
     - cron: '0 14 * * 1'
   workflow_dispatch:
+    inputs:
+      auto_merge:
+        description: 'Auto-merge when every proposed change verifies and gates pass'
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -41,6 +46,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Schedule always allows auto-merge; workflow_dispatch respects the input.
+          AUTO_MERGE: ${{ github.event_name == 'schedule' && 'true' || inputs.auto_merge }}
         run: node scripts/rate-watcher/watch.mjs
 
       - name: Upload report artifact
