@@ -1,8 +1,8 @@
 ---
 /**
- * Long-tail “fee on $X” example pages — unique worked tables, not thin clones of tool pages.
- * Primary keywords target “stripe fee on 100”, “paypal fee on 500”, etc. without competing
- * with the interactive calculators (which own “stripe fee calculator”).
+ * Long-tail “fee on $X” example pages — each amount owns a distinct intent cluster
+ * (tips/micropayments, freelance invoices, deposits, retainers) with unique prose,
+ * FAQ, and worked breakdowns so they are not near-duplicate clones.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { processors, comparisonOrder, FEE_DATA_UPDATED } from '@/data/fees';
@@ -17,8 +17,23 @@ export function getStaticPaths() {
   }));
 }
 
+type Amount = 50 | 100 | 500 | 1000;
+
+type AmountProfile = {
+  title: string;
+  description: string;
+  h1: string;
+  intentLabel: string;
+  answerFirstLead: string;
+  focusHeading: string;
+  focusBody: string[];
+  deepDiveHeading: string;
+  deepDiveIds: string[];
+  faq: { q: string; a: string }[];
+};
+
 const amounts = [50, 100, 500, 1000] as const;
-const { amount } = Astro.props;
+const { amount } = Astro.props as { amount: Amount };
 const path = `/examples/fee-on-${amount}/`;
 const pageUrl = new URL(path, siteConfig.siteUrl).toString();
 
@@ -33,20 +48,168 @@ const rows = comparisonOrder
   })
   .sort((a, b) => a.forward.fee - b.forward.fee);
 
+const byId = Object.fromEntries(rows.map((r) => [r.processor.id, r]));
 const cheapest = rows[0];
 const priciest = rows[rows.length - 1];
-const stripeRow = rows.find((r) => r.processor.id === 'stripe');
-const paypalRow = rows.find((r) => r.processor.id === 'paypal');
+const stripeRow = byId.stripe;
+const paypalRow = byId.paypal;
+const squareRow = byId.square;
+const venmoRow = byId.venmo;
+const gumroadRow = byId.gumroad;
+const shopifyRow = byId.shopify;
+const wiseRow = byId.wise;
 
-const amountBlurb: Record<number, string> = {
-  50: 'Typical tip, micro-invoice, or small digital download.',
-  100: 'Common freelance invoice round number and SERP demo size.',
-  500: 'Mid-size project deposit or product bundle.',
-  1000: 'Larger retainers and storefront orders where fixed fees matter less.',
+function feeLine(id: string): string {
+  const row = byId[id];
+  if (!row) return '';
+  return `${row.processor.name} default (${row.rate.label}): fee ${formatMoney(row.forward.fee, row.rate.currency)}, net ${formatMoney(row.forward.net, row.rate.currency)}; charge ${formatMoney(row.reverse.charge, row.rate.currency)} to receive $${amount}.`;
+}
+
+const profiles: Record<Amount, AmountProfile> = {
+  50: {
+    title: 'Payment Fees on $50 Tips & Small Sales',
+    description:
+      'What processors take on a $50 tip, micro-invoice, or download. Fixed fees dominate at this size — compare Stripe, PayPal G&S, micropayments, and Venmo.',
+    h1: 'Payment fees on a $50 tip or micro-sale',
+    intentLabel: 'tips, micropayments, and small digital sales',
+    answerFirstLead:
+      'At $50, fixed per-transaction fees are a large share of cost. Stripe US takes $1.75 (net $48.25); PayPal US G&S takes $1.50 (net $48.50). Micropayments and tip platforms can change the ranking.',
+    focusHeading: 'Why $50 is a fixed-fee stress test',
+    focusBody: [
+      'A 30¢ or 49¢ fixed fee is only 0.03% of a $1,000 charge but 0.6–1% of a $50 charge. That is why PayPal Checkout (3.49% + $0.49) looks expensive next to Send/Receive Money G&S (2.99% with $0 fixed) at this size, and why PayPal micropayments (4.99% + $0.09) can win on very small tickets when enabled.',
+      'Creator tip pages amplify the effect: blended Patreon/Gumroad defaults include platform commission plus processing, so a $50 tip can lose more than $6 before you see a payout. Ko-fi Free tips list 0% platform fee (processing still applies when supporters pay by card).',
+      'Use this page when you price tips, stickers, short commissions, or micro-invoices. Switch amounts with the links below if your typical ticket is larger.',
+    ],
+    deepDiveHeading: 'Worked $50 breakdowns that matter at tip size',
+    deepDiveIds: ['paypal', 'stripe', 'venmo', 'gumroad'],
+    faq: [
+      {
+        q: 'Is PayPal cheaper than Stripe on a $50 payment?',
+        a: 'On default US schedules in our dataset, PayPal Send/Receive Money G&S ($1.50) undercuts Stripe US ($1.75) because G&S has no fixed fee. PayPal Checkout with the $0.49 fixed fee is usually more expensive than Stripe at $50.',
+      },
+      {
+        q: 'When do PayPal micropayments beat standard G&S?',
+        a: 'Micropayments (4.99% + $0.09 when enabled) cut the fixed fee. On very small tickets the higher percent can still win versus a $0.49 Checkout fixed fee; compare both schedules in the PayPal calculator before you enable micropayments account-wide.',
+      },
+      {
+        q: 'Should creators avoid Patreon for $50 one-off tips?',
+        a: 'Patreon is built for memberships. Its blended default (platform + processing estimate) is much higher than a plain card processor on the same $50. For one-off tips, compare Ko-fi Free tips and Buy Me a Coffee against Stripe or PayPal G&S.',
+      },
+    ],
+  },
+  100: {
+    title: 'Payment Fees on $100 Invoices Compared',
+    description:
+      'Side-by-side fees and net on a $100 freelance invoice across Stripe, PayPal, Square, Venmo, Cash App, and Shopify — plus reverse pricing to net $100.',
+    h1: 'Payment fees on a $100 freelance invoice',
+    intentLabel: 'standard freelance invoices and SERP demo amounts',
+    answerFirstLead:
+      'On a $100 charge, Stripe US fees are $3.20 (net $96.80); PayPal US G&S is $2.99 (net $97.01); Square Free online is $3.60 (net $96.40). Most “fee calculator” demos use $100 because the arithmetic is easy to check by hand.',
+    focusHeading: 'Why $100 is the default comparison amount',
+    focusBody: [
+      'Freelancers often quote round $100 milestones. At this size, percent fees dominate but fixed fees still move rankings by tens of cents — enough to matter when you send dozens of invoices a month.',
+      'This page is the “same $100, every default schedule” checklist. Open a processor calculator to change country, channel (in-person vs online), or reverse-price a different net. For narrative Stripe vs PayPal context, see the comparison guide.',
+      'If you need to receive exactly $100 after fees, use the reverse column: Stripe US needs about $103.30 charged; PayPal G&S needs about $103.08.',
+    ],
+    deepDiveHeading: 'Worked $100 invoice breakdowns',
+    deepDiveIds: ['stripe', 'paypal', 'square', 'shopify'],
+    faq: [
+      {
+        q: 'How much is Stripe’s fee on $100?',
+        a: 'Stripe’s common US online card rate is 2.9% + $0.30, so the fee is $3.20 and you keep $96.80. Charge about $103.30 if you need $100 net.',
+      },
+      {
+        q: 'How much does PayPal take on a $100 Goods & Services payment?',
+        a: 'US Send/Receive Money for Goods & Services is 2.99% with no fixed fee → $2.99 fee, $97.01 net. Do not confuse that with PayPal Checkout at 3.49% + $0.49 (~$3.98 on $100).',
+      },
+      {
+        q: 'Is Square more expensive than Stripe on $100 online?',
+        a: 'Square Free-plan online/invoice pricing at 3.3% + $0.30 is $3.60 on $100. Square Plus/API online at 2.9% + $0.30 matches Stripe’s common US card rate dollar-for-dollar on this amount.',
+      },
+    ],
+  },
+  500: {
+    title: 'Payment Fees on $500 Deposits & Bundles',
+    description:
+      'Estimated fees on a $500 project deposit or product bundle across Stripe, PayPal, Square, Shopify, and creator platforms — with reverse pricing to receive $500.',
+    h1: 'Payment fees on a $500 deposit or bundle',
+    intentLabel: 'project deposits, retainers-lite, and mid-ticket bundles',
+    answerFirstLead:
+      'On $500, Stripe US takes $14.80 (net $485.20); PayPal US G&S takes $14.95 (net $485.05). Fixed fees shrink as a share of total, so percent differences and plan tiers (Shopify Basic vs Advanced, Square Free vs Plus) matter more than pennies of fixed cost.',
+    focusHeading: 'What changes at the $500 ticket size',
+    focusBody: [
+      'Agencies and makers often collect 30–50% deposits near $500. At this size, a 0.2 percentage-point plan difference (for example Shopify Grow 2.7% vs Basic 2.9%) is about $1 per charge — meaningful across a month of checkouts.',
+      'Instant-access rails become a second cut: Venmo Instant Transfer (~1.75%) or Cash App Instant Deposit (estimated mid-range) applied after the business receive fee can add another ~$8–$9 if you cash out the full $500 quickly. Model both layers before you promise same-day cash.',
+      'International card add-ons also scale: Stripe US + international (4.4% + $0.30) is about $22.30 on $500 versus $14.80 domestic — budget FX/international when clients pay with foreign cards.',
+    ],
+    deepDiveHeading: 'Worked $500 deposit breakdowns',
+    deepDiveIds: ['stripe', 'paypal', 'shopify', 'venmo'],
+    faq: [
+      {
+        q: 'How much should I invoice to receive $500 after Stripe fees?',
+        a: 'Using Stripe US 2.9% + $0.30: charge = (500 + 0.30) ÷ (1 − 0.029) ≈ $515.24. Confirm in the Stripe calculator if your account uses a different country or Connect fee.',
+      },
+      {
+        q: 'Do Shopify plan rates matter on a $500 order?',
+        a: 'Yes. Online standard card rates fall as you move Basic → Grow → Advanced → Plus. On $500 the gap between Basic (2.9% + $0.30) and Advanced (2.5% + $0.30) is about $2 before you count subscription cost.',
+      },
+      {
+        q: 'Should I pass fees through on deposits?',
+        a: 'Some contracts list a card-processing surcharge; others bake fees into the quote. Either way, reverse-price so the net deposit still covers your kickoff costs. See the passing-fees guide for policy notes — not legal advice.',
+      },
+    ],
+  },
+  1000: {
+    title: 'Payment Fees on $1,000 Retainers & Orders',
+    description:
+      'Fees on a $1,000 retainer or order across Stripe, PayPal, Square, Shopify, and Wise — percent fees dominate; reverse-price to keep a full $1,000 net.',
+    h1: 'Payment fees on a $1,000 retainer or order',
+    intentLabel: 'monthly retainers, large invoices, and storefront orders',
+    answerFirstLead:
+      'On $1,000, Stripe US fees are $29.30 (net $970.70); PayPal US G&S is $29.90 (net $970.10). Fixed fees are almost noise; corridor FX (Wise) and platform commissions (Gumroad/Patreon blends) can dwarf card processing.',
+    focusHeading: 'Percent fees and FX dominate at $1,000',
+    focusBody: [
+      'At four figures, optimizing plan tier and avoiding unnecessary cross-border markups usually beats worrying about a 30¢ fixed fee. Shopify Plus vs Basic is a $6.50 gap on a $1,000 online card charge in our default schedules — still small next to a bad FX conversion.',
+      'Wise corridor estimates (unverified until you generate a live quote) often land near $4–$6 of fee on a $1,000 USD→GBP style send in our planning rows — far below PayPal cross-border commercial rates when FX and receiving fees stack. Always confirm the live Wise quote before you promise a converted total.',
+      'Creator marketplace cuts remain the outlier: Gumroad Discover at 30% would take $300 of a $1,000 sale found through Discover, versus the direct 10% + $0.50 platform fee (plus processing on the blended schedule). Direct links matter at this ticket size.',
+    ],
+    deepDiveHeading: 'Worked $1,000 retainer / order breakdowns',
+    deepDiveIds: ['stripe', 'paypal', 'wise', 'gumroad'],
+    faq: [
+      {
+        q: 'How much does Stripe take on a $1,000 payment?',
+        a: 'At 2.9% + $0.30 US domestic cards: $29.30 fee, $970.70 net. To receive $1,000 net, charge about $1,030.18.',
+      },
+      {
+        q: 'Is Wise cheaper than PayPal for a $1,000 international transfer?',
+        a: 'Often yes on fee transparency, but Wise prices by corridor and amount and is quoted live. Our calculator rows are planning estimates only — generate a Wise quote and compare against PayPal’s commercial + FX schedule for the same currencies.',
+      },
+      {
+        q: 'Does the fixed fee still matter at $1,000?',
+        a: 'Barely for ranking card processors against each other. It still matters when you compare a percent-only schedule (PayPal G&S 2.99%) to percent-plus-fixed (Stripe 2.9% + $0.30): on $1,000, G&S stays slightly ahead on fee dollars in our defaults.',
+      },
+    ],
+  },
 };
 
-const title = `Payment Fees on $${amount}: Stripe, PayPal, Square & More`;
-const description = `Estimated fees and net on a $${amount} charge across Stripe, PayPal, Square, Venmo, Cash App and more. Dated default schedules plus reverse pricing to receive $${amount}.`;
+const profile = profiles[amount];
+
+// Sanity: answer-first numbers for $50/$100 match live math for Stripe/PayPal defaults
+const stripeFee = stripeRow ? formatMoney(stripeRow.forward.fee, stripeRow.rate.currency) : '';
+const paypalFee = paypalRow ? formatMoney(paypalRow.forward.fee, paypalRow.rate.currency) : '';
+
+const title = profile.title;
+const description = profile.description;
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: profile.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
 
 const jsonLd = [
   {
@@ -68,6 +231,7 @@ const jsonLd = [
       { '@type': 'ListItem', position: 2, name: `Fees on $${amount}`, item: pageUrl },
     ],
   },
+  faqJsonLd,
 ];
 ---
 
@@ -75,12 +239,13 @@ const jsonLd = [
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href="/">Home</a> <span>/</span> <span>Examples</span> <span>/</span> <span>${amount}</span>
   </nav>
-  <h1>Payment fees on ${amount}</h1>
+  <h1>{profile.h1}</h1>
   <p class="answer-first">
-    On a ${amount} charge, default-schedule fees range from about{' '}
+    {profile.answerFirstLead}{' '}
+    Default-schedule fees on ${amount} range from about{' '}
     {formatMoney(cheapest.forward.fee, cheapest.rate.currency)} ({cheapest.processor.name}) to{' '}
-    {formatMoney(priciest.forward.fee, priciest.rate.currency)} ({priciest.processor.name}).{' '}
-    {amountBlurb[amount]} To <em>receive</em> ${amount} after fees, charge the reverse amount in the table.
+    {formatMoney(priciest.forward.fee, priciest.rate.currency)} ({priciest.processor.name}). Intent focus:{' '}
+    {profile.intentLabel}.
   </p>
 
   <div class="takeaways">
@@ -94,7 +259,7 @@ const jsonLd = [
       {
         stripeRow && (
           <li>
-            Stripe US default fee on ${amount}: {formatMoney(stripeRow.forward.fee, stripeRow.rate.currency)}; charge{' '}
+            Stripe US default fee on ${amount}: {stripeFee}; charge{' '}
             {formatMoney(stripeRow.reverse.charge, stripeRow.rate.currency)} to net ${amount}.
           </li>
         )
@@ -102,11 +267,14 @@ const jsonLd = [
       {
         paypalRow && (
           <li>
-            PayPal default fee on ${amount}: {formatMoney(paypalRow.forward.fee, paypalRow.rate.currency)}; charge{' '}
+            PayPal default fee on ${amount}: {paypalFee}; charge{' '}
             {formatMoney(paypalRow.reverse.charge, paypalRow.rate.currency)} to net ${amount}.
           </li>
         )
       }
+      <li>
+        This URL targets {profile.intentLabel} — other amounts below cover different pricing decisions.
+      </li>
     </ul>
   </div>
 
@@ -115,10 +283,13 @@ const jsonLd = [
     · Last reviewed <time datetime={FEE_DATA_UPDATED}>{FEE_DATA_UPDATED}</time>
   </p>
   <p class="lead">
-    Worked estimates using each product’s default schedule in our dated dataset. Open a calculator to change country,
-    channel, or reverse-price a different net. See also{' '}
+    Worked estimates using each product’s default schedule in our dated dataset (last verified{' '}
+    {FEE_DATA_UPDATED}). Open a calculator to change country, channel, or reverse-price a different net. See also{' '}
     <a href="/guides/how-to-price-after-fees/">how to price after fees</a>.
   </p>
+
+  <h2>{profile.focusHeading}</h2>
+  {profile.focusBody.map((para) => <p>{para}</p>)}
 
   <h2>Fee and net on ${amount} charged</h2>
   <div class="table-wrap">
@@ -156,6 +327,45 @@ const jsonLd = [
     </table>
   </div>
 
+  <h2>{profile.deepDiveHeading}</h2>
+  <ul>
+    {
+      profile.deepDiveIds.map((id) => {
+        const line = feeLine(id);
+        return line ? <li>{line}</li> : null;
+      })
+    }
+  </ul>
+  {
+    amount === 50 && paypalRow && (
+      <p>
+        Extra $50 check: PayPal micropayments (when enabled) uses a higher percent and lower fixed fee — open the{' '}
+        <a href="/tools/paypal-fee-calculator/?amount=50">PayPal calculator</a> and select the micropayments schedule to
+        compare against G&S on the same tip.
+      </p>
+    )
+  }
+  {
+    amount === 500 && squareRow && shopifyRow && (
+      <p>
+        Extra $500 check: Square Free online fee is{' '}
+        {formatMoney(squareRow.forward.fee, squareRow.rate.currency)}; Shopify Basic default is{' '}
+        {formatMoney(shopifyRow.forward.fee, shopifyRow.rate.currency)}. Plan upgrades change the Shopify line without
+        changing Square Free until you move to Plus/API online rates.
+      </p>
+    )
+  }
+  {
+    amount === 1000 && wiseRow && gumroadRow && (
+      <p>
+        Extra $1,000 check: Wise estimate fee is{' '}
+        {formatMoney(wiseRow.forward.fee, wiseRow.rate.currency)} on the default corridor row (confirm live).
+        Gumroad direct blended default fee is {formatMoney(gumroadRow.forward.fee, gumroadRow.rate.currency)} — platform
+        commission, not card processing alone.
+      </p>
+    )
+  }
+
   <h2>How it’s calculated</h2>
   <p>
     Forward: <code>fee = {amount} × percent + fixed</code>, <code>net = {amount} − fee</code>. Reverse to receive $
@@ -163,10 +373,30 @@ const jsonLd = [
     platform commissions in the blended default — they are not comparable 1:1 with raw card processors.
   </p>
 
+  <h2>FAQ</h2>
+  <div class="faq">
+    {
+      profile.faq.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
+
   <h2>Other common amounts</h2>
+  <p>
+    Each amount page keeps its own canonical URL and intent. Prefer the amount closest to your real ticket size rather
+    than treating these as interchangeable copies.
+  </p>
   <div class="compare-with">
     {amounts.filter((a) => a !== amount).map((a) => <a href={`/examples/fee-on-${a}/`}>Fees on ${a}</a>)}
     <a href="/tools/compare-payment-fees/">Interactive comparison</a>
     <a href="/guides/how-to-price-after-fees/">Reverse pricing guide</a>
+    {amount === 100 && <a href="/guides/stripe-vs-paypal-fees/">Stripe vs PayPal fees</a>}
+    {amount === 50 && <a href="/guides/paypal-goods-services-vs-friends-family/">PayPal G&S vs Friends & Family</a>}
+    {amount === 500 && <a href="/guides/passing-fees-to-customers/">Passing fees to customers</a>}
+    {amount === 1000 && <a href="/guides/wise-vs-paypal-international/">Wise vs PayPal international</a>}
   </div>
 </BaseLayout>

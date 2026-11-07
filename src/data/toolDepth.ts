@@ -35,7 +35,7 @@ export const toolDepth: Record<string, { sections: { h2: string; body: string }[
       {
         h2: 'Regional PayPal accounts',
         body:
-          'UK, Australia, and India publish different commercial rate cards. A US freelancer invoicing a UK client may still be on US rates depending on account setup — but your buyer’s experience and FX can differ. Select the regional schedule closest to your merchant account country, then verify on PayPal’s business fees page.',
+          'UK and Australia publish domestic commercial rate cards; PayPal India lists international receiving only (no domestic). A US freelancer invoicing a UK client may still be on US rates depending on account setup — but your buyer’s experience and FX can differ. Select the regional schedule closest to your merchant account country, then verify on PayPal’s business fees page.',
       },
     ],
   },

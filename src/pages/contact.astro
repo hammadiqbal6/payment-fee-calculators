@@ -45,16 +45,42 @@ const mailtoHref = `mailto:${siteConfig.contactEmail}`;
   <h1>Contact</h1>
   <p class="answer-first">
     Reach us at <a href={mailtoHref}>{siteConfig.contactEmail}</a>. For fee corrections, include the processor, country,
-    screenshot or URL, and the date you observed the rate.
+    screenshot or URL, and the date you observed the rate. Typical replies cover schedule mismatches, broken calculator
+    links, privacy questions, and partnership notes — not personalized financial advice.
   </p>
+
   <h2>What to include</h2>
   <ul>
-    <li>Tool page URL</li>
-    <li>Expected vs displayed fee</li>
-    <li>Link to the official pricing page</li>
+    <li>Tool page URL (for example <code>/tools/stripe-fee-calculator/</code>)</li>
+    <li>Expected vs displayed fee, with the amount and schedule you selected</li>
+    <li>Link to the official pricing page you checked, plus the date you checked it</li>
+    <li>Browser and device if the bug is UI-related (optional)</li>
   </ul>
-  <p>We do not provide personalized financial, tax, or legal advice.</p>
 
+  <h2>Fee corrections</h2>
+  <p>
+    Published list rates change. If you spot a mismatch against an official Stripe, PayPal, Square, Venmo, Cash App,
+    Patreon, Ko-fi, Gumroad, Shopify, Zelle, or Wise page, email the details above. Corrections that we verify are
+    written into <code>fees.ts</code>, stamped with a new last-verified date, and listed on{' '}
+    <a href="/fee-changelog/">Fee changelog</a>. We do not invent rates from blogs or screenshots alone — the official
+    URL is required.
+  </p>
+
+  <h2>What we do not offer</h2>
+  <p>
+    We do not provide personalized financial, tax, accounting, or legal advice. We cannot negotiate processor rates for
+    you, open merchant accounts, or resolve chargebacks with a brand. For those, contact the processor or a licensed
+    professional. Calculator outputs are educational estimates from dated public schedules.
+  </p>
+
+  <h2>Privacy and ads</h2>
+  <p>
+    Privacy questions (cookies, analytics consent, AdSense disclosures) go to the same inbox. See{' '}
+    <a href="/privacy/">Privacy</a> for how calculator inputs stay in your browser and how consent works. Site policies
+    live on <a href="/terms/">Terms</a>.
+  </p>
+
+  <h2>Send a message</h2>
   {
     emailjsReady ? (
       <form

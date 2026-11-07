@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Payment Fees on $100: Stripe, PayPal, Square & More",
-    "description": "Estimated fees and net on a $100 charge across Stripe, PayPal, Square, Venmo, Cash App and more. Dated default schedules plus reverse pricing to receive $100.",
+    "headline": "Payment Fees on $100 Invoices Compared",
+    "description": "Side-by-side fees and net on a $100 freelance invoice across Stripe, PayPal, Square, Venmo, Cash App, and Shopify — plus reverse pricing to net $100.",
     "datePublished": "2026-10-20T00:00:00+05:00",
-    "dateModified": "2026-10-24T00:00:00+05:00",
+    "dateModified": "2026-11-07T00:00:00+05:00",
     "author": [
       {
         "@type": "Person",
@@ -35,6 +35,36 @@
         "position": 2,
         "name": "Fees on $100",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/examples/fee-on-100/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much is Stripe’s fee on $100?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Stripe’s common US online card rate is 2.9% + $0.30, so the fee is $3.20 and you keep $96.80. Charge about $103.30 if you need $100 net."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does PayPal take on a $100 Goods & Services payment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "US Send/Receive Money for Goods & Services is 2.99% with no fixed fee → $2.99 fee, $97.01 net. Do not confuse that with PayPal Checkout at 3.49% + $0.49 (~$3.98 on $100)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Square more expensive than Stripe on $100 online?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Square Free-plan online/invoice pricing at 3.3% + $0.30 is $3.60 on $100. Square Plus/API online at 2.9% + $0.30 matches Stripe’s common US card rate dollar-for-dollar on this amount."
+        }
       }
     ]
   }

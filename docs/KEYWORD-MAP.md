@@ -21,10 +21,10 @@ One primary keyword + secondary cluster per URL. Do not create duplicate-intent 
 | `/tools/shopify-payments-fee-calculator/` | shopify payments fee calculator | shopify payments rates by plan third party gateway fee |
 | `/tools/wise-transfer-fee-calculator/` | wise transfer fee calculator | wise fees usd gbp eur estimate |
 | `/tools/compare-payment-fees/` | payment processor fee comparison | compare stripe paypal square fees (narrative stripe vs paypal → guide) |
-| `/examples/fee-on-50/` | payment fees on 50 | stripe fee on 50 paypal fee on $50 |
-| `/examples/fee-on-100/` | payment fees on 100 | stripe fee on 100 paypal fee on $100 |
-| `/examples/fee-on-500/` | payment fees on 500 | stripe fee on 500 |
-| `/examples/fee-on-1000/` | payment fees on 1000 | stripe fee on 1000 |
+| `/examples/fee-on-50/` | payment fees on $50 tip | stripe fee on 50; paypal micropayments vs g&s on $50 |
+| `/examples/fee-on-100/` | payment fees on $100 invoice | stripe fee on 100; paypal fee on $100 freelance |
+| `/examples/fee-on-500/` | payment fees on $500 deposit | stripe fee on 500; shopify vs square on $500 |
+| `/examples/fee-on-1000/` | payment fees on $1000 retainer | stripe fee on 1000; wise vs paypal on $1000 |
 | `/guides/how-to-price-after-fees/` | how to price after payment fees | reverse fee calculator; how much to charge to receive 100 after fees |
 | `/guides/stripe-vs-paypal-fees/` | stripe vs paypal fees | which is cheaper stripe or paypal |
 | `/guides/patreon-vs-kofi-vs-bmac/` | patreon vs ko-fi fees | buy me a coffee vs patreon fees |

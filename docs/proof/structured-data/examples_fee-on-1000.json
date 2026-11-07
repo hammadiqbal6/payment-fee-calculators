@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Payment Fees on $1000: Stripe, PayPal, Square & More",
-    "description": "Estimated fees and net on a $1000 charge across Stripe, PayPal, Square, Venmo, Cash App and more. Dated default schedules plus reverse pricing to receive $1000.",
+    "headline": "Payment Fees on $1,000 Retainers & Orders",
+    "description": "Fees on a $1,000 retainer or order across Stripe, PayPal, Square, Shopify, and Wise — percent fees dominate; reverse-price to keep a full $1,000 net.",
     "datePublished": "2026-10-20T00:00:00+05:00",
-    "dateModified": "2026-10-24T00:00:00+05:00",
+    "dateModified": "2026-11-07T00:00:00+05:00",
     "author": [
       {
         "@type": "Person",
@@ -35,6 +35,36 @@
         "position": 2,
         "name": "Fees on $1000",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/examples/fee-on-1000/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does Stripe take on a $1,000 payment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "At 2.9% + $0.30 US domestic cards: $29.30 fee, $970.70 net. To receive $1,000 net, charge about $1,030.18."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Wise cheaper than PayPal for a $1,000 international transfer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Often yes on fee transparency, but Wise prices by corridor and amount and is quoted live. Our calculator rows are planning estimates only — generate a Wise quote and compare against PayPal’s commercial + FX schedule for the same currencies."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the fixed fee still matter at $1,000?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Barely for ranking card processors against each other. It still matters when you compare a percent-only schedule (PayPal G&S 2.99%) to percent-plus-fixed (Stripe 2.9% + $0.30): on $1,000, G&S stays slightly ahead on fee dollars in our defaults."
+        }
       }
     ]
   }
