@@ -5,7 +5,7 @@
     "name": "Payment fee changelog",
     "url": "https://payment-fee-calculators.hammadiqbal117.workers.dev/fee-changelog/",
     "description": "Versioned changelog of payment processor and creator fee schedule updates used by FeeCalc Tools calculators.",
-    "dateModified": "2026-10-24T00:00:00+05:00"
+    "dateModified": "2026-11-07T00:00:00+05:00"
   },
   {
     "@context": "https://schema.org",

@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Payment Fees on $50: Stripe, PayPal, Square & More",
-    "description": "Estimated fees and net on a $50 charge across Stripe, PayPal, Square, Venmo, Cash App and more. Dated default schedules plus reverse pricing to receive $50.",
+    "headline": "Payment Fees on $50 Tips & Small Sales",
+    "description": "What processors take on a $50 tip, micro-invoice, or download. Fixed fees dominate at this size — compare Stripe, PayPal G&S, micropayments, and Venmo.",
     "datePublished": "2026-10-20T00:00:00+05:00",
-    "dateModified": "2026-10-24T00:00:00+05:00",
+    "dateModified": "2026-11-07T00:00:00+05:00",
     "author": [
       {
         "@type": "Person",
@@ -35,6 +35,36 @@
         "position": 2,
         "name": "Fees on $50",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/examples/fee-on-50/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is PayPal cheaper than Stripe on a $50 payment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "On default US schedules in our dataset, PayPal Send/Receive Money G&S ($1.50) undercuts Stripe US ($1.75) because G&S has no fixed fee. PayPal Checkout with the $0.49 fixed fee is usually more expensive than Stripe at $50."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When do PayPal micropayments beat standard G&S?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Micropayments (4.99% + $0.09 when enabled) cut the fixed fee. On very small tickets the higher percent can still win versus a $0.49 Checkout fixed fee; compare both schedules in the PayPal calculator before you enable micropayments account-wide."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should creators avoid Patreon for $50 one-off tips?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Patreon is built for memberships. Its blended default (platform + processing estimate) is much higher than a plain card processor on the same $50. For one-off tips, compare Ko-fi Free tips and Buy Me a Coffee against Stripe or PayPal G&S."
+        }
       }
     ]
   }

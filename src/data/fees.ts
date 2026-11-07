@@ -44,13 +44,48 @@ export type FeeChangelogEntry = {
   }[];
 };
 
-export const FEE_DATA_VERSION = '2026.10.24';
-export const FEE_DATA_UPDATED = '2026-10-24';
+export const FEE_DATA_VERSION = '2026.11.07';
+export const FEE_DATA_UPDATED = '2026-11-07';
 
 /** Max age (days) before freshness tests fail for verified rates. */
 export const FEE_MAX_AGE_DAYS = 60;
 
 export const feeChangelog: FeeChangelogEntry[] = [
+  {
+    date: '2026-11-07',
+    summary:
+      'Re-verified published list rates against official pricing pages. Replaced incorrect PayPal India “domestic approximate” (2.3%, unverified) with official India international receiving rate (4.40% + ₹3.00). Fixed Stripe EU source URL (en-eu 404 → en-de) and Zelle FAQ URL. Refreshed lastVerified stamps. Wise corridors remain unverified (JS-rendered quotes).',
+    changes: [
+      {
+        rateId: 'paypal-in',
+        field: 'percent',
+        before: '2.30% + ₹0 (unverified India domestic approximate)',
+        after: '4.40% + ₹3.00 (India international receiving — domestic not offered)',
+        sourceUrl: 'https://www.paypal.com/in/business/paypal-business-fees',
+      },
+      {
+        rateId: 'paypal-in',
+        field: 'renamed',
+        before: 'India domestic (approximate)',
+        after: 'India international receiving',
+        sourceUrl: 'https://www.paypal.com/in/business/paypal-business-fees',
+      },
+      {
+        rateId: 'stripe-eu',
+        field: 'notes',
+        before: 'source https://stripe.com/en-eu/pricing (404)',
+        after: 'source https://stripe.com/en-de/pricing (1.5% + €0.25 standard EEA)',
+        sourceUrl: 'https://stripe.com/en-de/pricing',
+      },
+      {
+        rateId: 'zelle-standard',
+        field: 'notes',
+        before: 'zellepay.com FAQ URL intermittently failing',
+        after: 'source https://www.zelle.com/faq/are-there-any-fees-send-money-using-zelle',
+        sourceUrl: 'https://www.zelle.com/faq/are-there-any-fees-send-money-using-zelle',
+      },
+    ],
+  },
   {
     date: '2026-10-24',
     summary:
@@ -197,7 +232,7 @@ export const processors: ProcessorSchedule[] = [
         fixed: 0.3,
         currency: 'USD',
         sourceUrl: 'https://stripe.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -208,7 +243,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'GBP',
         notes: 'Standard UK online card rate; premium UK cards are higher (often ~2.8%).',
         sourceUrl: 'https://stripe.com/gb/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -219,7 +254,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'CAD',
         notes: 'International cards typically add ~0.8% in Canada.',
         sourceUrl: 'https://stripe.com/en-ca/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -230,7 +265,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'AUD',
         notes: 'Domestic cards 1.65% + A$0.30.',
         sourceUrl: 'https://stripe.com/au/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -241,7 +276,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'AUD',
         notes: 'International cards 3.5% + A$0.30.',
         sourceUrl: 'https://stripe.com/au/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -250,8 +285,9 @@ export const processors: ProcessorSchedule[] = [
         percent: 0.015,
         fixed: 0.25,
         currency: 'EUR',
-        sourceUrl: 'https://stripe.com/en-eu/pricing',
-        lastVerified: '2026-10-24',
+        notes: 'Standard EEA cards 1.5% + €0.25 (premium EEA often 2.8% + €0.25).',
+        sourceUrl: 'https://stripe.com/en-de/pricing',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -262,7 +298,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: '2.9% + $0.30 plus 1.5% international card fee = 4.4% + $0.30.',
         sourceUrl: 'https://stripe.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -273,7 +309,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: '2.9% + $0.30 plus 1% currency conversion (domestic card settling in another currency).',
         sourceUrl: 'https://stripe.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -284,7 +320,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: '2.9% + 1.5% intl + 1% FX = 5.4% + $0.30.',
         sourceUrl: 'https://stripe.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -295,7 +331,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: '2.9% + $0.30 plus 0.5% manually entered card surcharge.',
         sourceUrl: 'https://stripe.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -306,7 +342,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Base card fee only; platform application fees are separate.',
         sourceUrl: 'https://stripe.com/connect/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -317,7 +353,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Card payments on invoices use standard card pricing; Invoicing product fees may apply separately.',
         sourceUrl: 'https://stripe.com/invoicing/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
     ],
@@ -339,7 +375,7 @@ export const processors: ProcessorSchedule[] = [
         notes:
           'Personal/commercial Send & Receive Money for Goods and Services: 2.99% with no fixed fee. Not the same as PayPal Checkout.',
         sourceUrl: 'https://www.paypal.com/us/business/paypal-business-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -350,7 +386,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'PayPal Checkout / Guest Checkout / Pay with Venmo commercial rate (3.49% + $0.49).',
         sourceUrl: 'https://www.paypal.com/us/business/paypal-business-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -361,7 +397,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Standard card processing on PayPal: 2.99% + $0.49.',
         sourceUrl: 'https://www.paypal.com/us/business/paypal-business-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -372,7 +408,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Typically free when sending from PayPal balance or linked bank. Card-funded F&F can incur fees.',
         sourceUrl: 'https://www.paypal.com/us/webapps/mpp/paypal-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -383,7 +419,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Checkout 3.49% + 1.50% cross-border = 4.99% + $0.49.',
         sourceUrl: 'https://www.paypal.com/us/business/paypal-business-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -394,7 +430,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'GBP',
         notes: 'All Other Commercial Transactions: 2.9% + £0.30. International adds +1.29% EEA / +1.99% other.',
         sourceUrl: 'https://www.paypal.com/uk/business/paypal-business-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -405,19 +441,20 @@ export const processors: ProcessorSchedule[] = [
         currency: 'AUD',
         notes: 'Commercial Transactions: 2.90% + A$0.30.',
         sourceUrl: 'https://www.paypal.com/au/business/paypal-business-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
         id: 'paypal-in',
-        label: 'India domestic (approximate)',
-        percent: 0.023,
-        fixed: 0,
+        label: 'India international receiving',
+        percent: 0.044,
+        fixed: 3,
         currency: 'INR',
-        notes: 'India fee structure varies by product; not fully verified — confirm on PayPal India fee page.',
-        sourceUrl: 'https://www.paypal.com/in/webapps/mpp/merchant-fees',
-        lastVerified: '2026-10-24',
-        verificationStatus: 'unverified',
+        notes:
+          'PayPal India supports international payments only (no domestic). Receiving from outside India: 4.40% + fixed fee by currency (₹3.00 when receiving INR). Source last updated 28 Mar 2024 on PayPal IN fees page; re-checked 2026-11-07.',
+        sourceUrl: 'https://www.paypal.com/in/business/paypal-business-fees',
+        lastVerified: '2026-11-07',
+        verificationStatus: 'verified',
       },
       {
         id: 'paypal-micro',
@@ -427,7 +464,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Micropayments pricing (when enabled) for low-value transactions.',
         sourceUrl: 'https://www.paypal.com/us/business/paypal-business-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
     ],
@@ -448,7 +485,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Free plan online checkout / invoices. Plus/Premium online and Online API are often 2.9% + 30¢.',
         sourceUrl: 'https://squareup.com/us/en/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -459,7 +496,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Plus plan online and Online API rate. International cards add 1.5%.',
         sourceUrl: 'https://squareup.com/us/en/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -470,7 +507,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Free plan in-person. Premium plans may list 2.5% or 2.4% + 15¢.',
         sourceUrl: 'https://squareup.com/us/en/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -480,7 +517,7 @@ export const processors: ProcessorSchedule[] = [
         fixed: 0.15,
         currency: 'USD',
         sourceUrl: 'https://squareup.com/us/en/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -491,7 +528,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'GBP',
         notes: 'UK-issued cards online: 1.4% + 25p. Non-UK cards online: 2.5% + 25p.',
         sourceUrl: 'https://squareup.com/gb/en/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -501,7 +538,7 @@ export const processors: ProcessorSchedule[] = [
         fixed: 0.25,
         currency: 'GBP',
         sourceUrl: 'https://squareup.com/gb/en/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -512,7 +549,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'AUD',
         notes: '2.2% with no fixed fee. In-person (newer sellers) typically 1.6%.',
         sourceUrl: 'https://squareup.com/au/en/payments/our-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
     ],
@@ -533,7 +570,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Tap to Pay is 2.29% + $0.09.',
         sourceUrl: 'https://venmo.com/resources/our-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -544,7 +581,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Seller fee when a payment is identified as goods and services: 2.99%, no fixed fee.',
         sourceUrl: 'https://venmo.com/resources/our-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -555,7 +592,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: '1.75% of amount transferred; minimum $0.25, maximum $25. Separate from payment processing.',
         sourceUrl: 'https://venmo.com/resources/our-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
     ],
@@ -576,7 +613,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: '2.6% + $0.15 per business payment. Tap to Pay is 3%.',
         sourceUrl: 'https://cash.app/help/us/en-us/6521-cash-app-business-fees',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -588,7 +625,7 @@ export const processors: ProcessorSchedule[] = [
         notes:
           'Official range 0.5%–2.5% (min $0.25–$1, max $75). Mid 1.5% used for planning; exact fee shown before confirm.',
         sourceUrl: 'https://cash.app/us/en/legal/tos',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
     ],
@@ -611,8 +648,8 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes:
           'No Zelle network fee for most consumer bank transfers (Zelle states 99.4%+ of enrolled accounts charge no fee). Your bank may set send limits.',
-        sourceUrl: 'https://www.zellepay.com/faq/will-i-get-charged-fee-send-receive-money-zelle',
-        lastVerified: '2026-10-24',
+        sourceUrl: 'https://www.zelle.com/faq/are-there-any-fees-send-money-using-zelle',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
     ],
@@ -634,7 +671,7 @@ export const processors: ProcessorSchedule[] = [
         notes:
           'Creators publishing after Aug 4, 2025: 10% platform + typical US processing ~2.9% + $0.30 ≈ 12.9% + $0.30 blended.',
         sourceUrl: 'https://www.patreon.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
       {
@@ -645,7 +682,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Legacy 5% platform + ~2.9% + $0.30 processing. Only for continuously published pre-Aug 2025 pages.',
         sourceUrl: 'https://support.patreon.com/hc/en-us/articles/11111747095181-Creator-fees-overview',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
       {
@@ -656,7 +693,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Legacy 8% platform + processing estimate. Unavailable to new creators after Aug 4, 2025.',
         sourceUrl: 'https://support.patreon.com/hc/en-us/articles/11111747095181-Creator-fees-overview',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
       {
@@ -667,7 +704,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Legacy 11% platform (Pro + Merch) + processing estimate.',
         sourceUrl: 'https://support.patreon.com/hc/en-us/articles/11111747095181-Creator-fees-overview',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
     ],
@@ -689,7 +726,7 @@ export const processors: ProcessorSchedule[] = [
         notes:
           'Ko-fi takes 0% on one-time tips on the Free plan. PayPal/Stripe processing still applies separately (~2.9% + $0.30).',
         sourceUrl: 'https://ko-fi.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -700,7 +737,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: '0% Ko-fi + typical Stripe processing when fans pay by card.',
         sourceUrl: 'https://ko-fi.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
       {
@@ -711,7 +748,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Default for many new creators: 5% on all payment types + ~2.9% + $0.30 processing.',
         sourceUrl: 'https://help.ko-fi.com/hc/en-us/articles/360002506494-Does-Ko-fi-take-a-fee',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
       {
@@ -722,7 +759,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Gold can remove Ko-fi service fee on tips; card processing still applies.',
         sourceUrl: 'https://ko-fi.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
       {
@@ -733,7 +770,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: '5% Ko-fi service fee + approximate processing on shop, memberships, and commissions.',
         sourceUrl: 'https://ko-fi.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
     ],
@@ -756,7 +793,7 @@ export const processors: ProcessorSchedule[] = [
           '5% platform + Stripe ~2.9% + $0.30 + 0.5% payout ≈ 8.4% + $0.30. Intl +1%, subscriptions +0.5% may apply.',
         sourceUrl:
           'https://help.buymeacoffee.com/en/articles/8105744-how-to-calculate-charges-on-your-payment',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
       {
@@ -768,7 +805,7 @@ export const processors: ProcessorSchedule[] = [
         notes: '5% + 2.9% + 0.5% subscription + 0.5% payout ≈ 8.9% + $0.30.',
         sourceUrl:
           'https://help.buymeacoffee.com/en/articles/8105744-how-to-calculate-charges-on-your-payment',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
     ],
@@ -789,7 +826,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: '10% + $0.50 Gumroad fee plus approximate card processing (~2.9% + $0.30).',
         sourceUrl: 'https://gumroad.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'estimated',
       },
       {
@@ -800,7 +837,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Platform fee without card processing — useful if comparing platform cut alone.',
         sourceUrl: 'https://gumroad.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -811,7 +848,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Sales via Discover marketplace: 30% (Merchant of Record style). Confirm on Gumroad pricing.',
         sourceUrl: 'https://gumroad.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
     ],
@@ -831,7 +868,7 @@ export const processors: ProcessorSchedule[] = [
         fixed: 0.3,
         currency: 'USD',
         sourceUrl: 'https://www.shopify.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -842,7 +879,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Formerly marketed as the “Shopify” plan; now Grow.',
         sourceUrl: 'https://www.shopify.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -852,7 +889,7 @@ export const processors: ProcessorSchedule[] = [
         fixed: 0.3,
         currency: 'USD',
         sourceUrl: 'https://www.shopify.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -862,7 +899,7 @@ export const processors: ProcessorSchedule[] = [
         fixed: 0.3,
         currency: 'USD',
         sourceUrl: 'https://www.shopify.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
       {
@@ -873,7 +910,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'Additional Shopify fee when not using Shopify Payments (plan-dependent).',
         sourceUrl: 'https://www.shopify.com/pricing',
-        lastVerified: '2026-10-24',
+        lastVerified: '2026-11-07',
         verificationStatus: 'verified',
       },
     ],
@@ -897,7 +934,7 @@ export const processors: ProcessorSchedule[] = [
         notes:
           'UNVERIFIED: Wise pricing is JS-rendered. Approximate low-variable fee corridor — verify in the Wise app or wise.com/pricing.',
         sourceUrl: 'https://wise.com/pricing',
-        lastVerified: '2026-10-15',
+        lastVerified: '2026-11-07',
         verificationStatus: 'unverified',
       },
       {
@@ -908,7 +945,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'USD',
         notes: 'UNVERIFIED — confirm live quote in Wise.',
         sourceUrl: 'https://wise.com/pricing',
-        lastVerified: '2026-10-15',
+        lastVerified: '2026-11-07',
         verificationStatus: 'unverified',
       },
       {
@@ -919,7 +956,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'GBP',
         notes: 'UNVERIFIED — confirm live quote in Wise.',
         sourceUrl: 'https://wise.com/gb/pricing/',
-        lastVerified: '2026-10-15',
+        lastVerified: '2026-11-07',
         verificationStatus: 'unverified',
       },
       {
@@ -930,7 +967,7 @@ export const processors: ProcessorSchedule[] = [
         currency: 'AUD',
         notes: 'UNVERIFIED — confirm live quote in Wise.',
         sourceUrl: 'https://wise.com/au/pricing/',
-        lastVerified: '2026-10-15',
+        lastVerified: '2026-11-07',
         verificationStatus: 'unverified',
       },
     ],

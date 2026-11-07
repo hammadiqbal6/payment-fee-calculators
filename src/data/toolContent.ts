@@ -67,7 +67,7 @@ export const toolContent: Record<string, ToolContent> = {
     answerFirst:
       'PayPal US Send/Receive Money for Goods & Services is 2.99% with no fixed fee ($2.99 on $100, net $97.01). PayPal Checkout is a separate product at 3.49% + $0.49 (~$3.98 on $100). Friends & Family from balance/bank is often free—confirm your live rate before invoicing.',
     howItWorks: [
-      'Select G&S, Checkout, Friends & Family, international, UK, AUD, India, or micropayments.',
+      'Select G&S, Checkout, Friends & Family, international, UK, AUD, India international, or micropayments.',
       'Enter the payment amount or the net you need.',
       'Compare the fee and effective rate before you invoice a customer.',
     ],
@@ -100,7 +100,7 @@ export const toolContent: Record<string, ToolContent> = {
       },
       {
         q: 'What about PayPal fees in India, UK, or Australia?',
-        a: 'Use the regional schedules in this calculator, then verify on the PayPal business fees page for that country.',
+        a: 'UK and Australia publish domestic commercial rates (often near 2.9% + a fixed fee). PayPal India supports international receiving only — currently 4.40% + a currency-specific fixed fee (₹3.00 for INR). Use the matching schedule here, then confirm on that country’s PayPal business fees page.',
       },
     ],
   },

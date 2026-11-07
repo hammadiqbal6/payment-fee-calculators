@@ -16,31 +16,70 @@ const jsonLd = [breadcrumbList(crumbs)];
   title="Terms of Use for FeeCalc Payment Calculators"
   description={`Terms of use for ${siteConfig.siteName} fee calculators: educational estimates only, not financial advice. Always verify live provider rates before pricing decisions.`}
   canonicalPath="/terms/"
+  modified="2026-11-07"
   jsonLd={jsonLd}
 >
   <Breadcrumbs items={crumbs} />
   <h1>Terms of Use</h1>
-  <p><em>Last updated: 2026-10-19</em></p>
+  <p><em>Last updated: 2026-11-07</em></p>
   <p class="answer-first">
     By using {siteConfig.siteName}, you agree that calculators are educational estimates only — not financial, tax, or
     legal advice — and that you will verify fees on each provider’s official site before making decisions.
   </p>
+
+  <h2>Acceptance</h2>
+  <p>
+    These terms apply to the public website, embeddable calculator snippets, and related pages (guides, hubs, examples,
+    methodology, changelog). If you do not agree, do not use the site. Continued use after we post updates constitutes
+    acceptance of the revised terms; the “Last updated” date above is the effective date.
+  </p>
+
   <h2>License</h2>
   <p>
     You may use the calculators for personal or internal business planning. You may embed widgets if you keep the credit
-    link. You may not scrape the site to build a competing thin copy, misrepresent affiliation with payment brands, or
-    use the service for unlawful activity.
+    link back to {siteConfig.siteName}. You may not scrape the site to build a competing thin copy, misrepresent
+    affiliation with payment brands (Stripe, PayPal, Square, Venmo, Cash App, Patreon, Ko-fi, Gumroad, Shopify, Zelle,
+    Wise, or others named on tool pages), remove attribution from embeds, or use the service for unlawful activity.
   </p>
+
+  <h2>No financial advice</h2>
+  <p>
+    Outputs are estimates from published list rates with last-verified dates. Providers may offer custom or negotiated
+    pricing, promotions, or region-specific schedules that differ from public pages. Currency conversion, chargebacks,
+    instant-transfer fees, platform commissions, and tax are often separate from the card-processing line item. Nothing
+    on this site is a recommendation to choose a particular processor or to pass fees to customers.
+  </p>
+
   <h2>No warranties</h2>
   <p>
-    Fee schedules change. We provide data “as is” with last-verified dates but no guarantee of completeness or fitness
-    for a particular purpose. Providers may offer custom pricing that differs from public list rates.
+    Fee schedules change without notice. We provide data “as is” and “as available,” with methodology and source links,
+    but no warranty of completeness, accuracy, merchantability, or fitness for a particular purpose. Automated rate
+    watching and manual checks reduce staleness; they do not guarantee a match to your live merchant dashboard.
   </p>
+
   <h2>Limitation of liability</h2>
   <p>
-    To the fullest extent permitted by law, {siteConfig.siteName} is not liable for lost profits, pricing mistakes, or
-    damages arising from reliance on calculator outputs.
+    To the fullest extent permitted by law, {siteConfig.siteName} and its maintainer are not liable for lost profits,
+    pricing mistakes, missed payouts, chargebacks, tax outcomes, or other damages arising from reliance on calculator
+    outputs or site content. Your sole remedy for dissatisfaction is to stop using the site.
   </p>
+
+  <h2>Privacy and advertising</h2>
+  <p>
+    Calculator amounts are processed in your browser. Analytics and advertising cookies (if enabled) follow the rules in
+    our <a href="/privacy/">Privacy Policy</a>, including AdSense disclosures and consent defaults. Do not submit
+    sensitive payment-card numbers or government IDs through the contact form.
+  </p>
+
+  <h2>Third-party brands</h2>
+  <p>
+    Product names and logos belong to their owners. References are for identification and fee-education only. This site
+    is independent and is not endorsed by those brands unless a page explicitly says otherwise.
+  </p>
+
   <h2>Contact</h2>
-  <p><a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a></p>
+  <p>
+    Questions about these terms: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a> or{' '}
+    <a href="/contact/">Contact</a>.
+  </p>
 </BaseLayout>

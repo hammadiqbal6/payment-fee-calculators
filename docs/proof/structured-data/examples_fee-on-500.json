@@ -2,10 +2,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Payment Fees on $500: Stripe, PayPal, Square & More",
-    "description": "Estimated fees and net on a $500 charge across Stripe, PayPal, Square, Venmo, Cash App and more. Dated default schedules plus reverse pricing to receive $500.",
+    "headline": "Payment Fees on $500 Deposits & Bundles",
+    "description": "Estimated fees on a $500 project deposit or product bundle across Stripe, PayPal, Square, Shopify, and creator platforms — with reverse pricing to receive $500.",
     "datePublished": "2026-10-20T00:00:00+05:00",
-    "dateModified": "2026-10-24T00:00:00+05:00",
+    "dateModified": "2026-11-07T00:00:00+05:00",
     "author": [
       {
         "@type": "Person",
@@ -35,6 +35,36 @@
         "position": 2,
         "name": "Fees on $500",
         "item": "https://payment-fee-calculators.hammadiqbal117.workers.dev/examples/fee-on-500/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much should I invoice to receive $500 after Stripe fees?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Using Stripe US 2.9% + $0.30: charge = (500 + 0.30) ÷ (1 − 0.029) ≈ $515.24. Confirm in the Stripe calculator if your account uses a different country or Connect fee."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do Shopify plan rates matter on a $500 order?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Online standard card rates fall as you move Basic → Grow → Advanced → Plus. On $500 the gap between Basic (2.9% + $0.30) and Advanced (2.5% + $0.30) is about $2 before you count subscription cost."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I pass fees through on deposits?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Some contracts list a card-processing surcharge; others bake fees into the quote. Either way, reverse-price so the net deposit still covers your kickoff costs. See the passing-fees guide for policy notes — not legal advice."
+        }
       }
     ]
   }

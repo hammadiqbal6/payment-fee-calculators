@@ -17,7 +17,7 @@
           "priceCurrency": "USD"
         },
         "description": "Calculate PayPal Goods & Services, Friends & Family and international fees. See what you keep, or find how much to invoice to receive an exact amount.",
-        "dateModified": "2026-10-24",
+        "dateModified": "2026-11-07",
         "author": {
           "@type": "Person",
           "@id": "https://github.com/hammadiqbal6#person",
@@ -40,8 +40,8 @@
           "@id": "https://payment-fee-calculators.hammadiqbal117.workers.dev/tools/paypal-fee-calculator/#app"
         },
         "datePublished": "2026-10-19T00:00:00+05:00",
-        "dateModified": "2026-10-24T00:00:00+05:00",
-        "lastReviewed": "2026-10-24",
+        "dateModified": "2026-11-07T00:00:00+05:00",
+        "lastReviewed": "2026-11-07",
         "author": {
           "@id": "https://github.com/hammadiqbal6#person"
         },
@@ -56,7 +56,7 @@
           "https://www.paypal.com/us/webapps/mpp/paypal-fees",
           "https://www.paypal.com/uk/business/paypal-business-fees",
           "https://www.paypal.com/au/business/paypal-business-fees",
-          "https://www.paypal.com/in/webapps/mpp/merchant-fees"
+          "https://www.paypal.com/in/business/paypal-business-fees"
         ]
       }
     ]
@@ -110,7 +110,7 @@
         "name": "What about PayPal fees in India, UK, or Australia?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Use the regional schedules in this calculator, then verify on the PayPal business fees page for that country."
+          "text": "UK and Australia publish domestic commercial rates (often near 2.9% + a fixed fee). PayPal India supports international receiving only — currently 4.40% + a currency-specific fixed fee (₹3.00 for INR). Use the matching schedule here, then confirm on that country’s PayPal business fees page."
         }
       }
     ]

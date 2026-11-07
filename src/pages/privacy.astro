@@ -16,16 +16,16 @@ const jsonLd = [breadcrumbList(crumbs)];
   title="Privacy Policy for FeeCalc Tools & Calculators"
   description={`Privacy Policy for ${siteConfig.siteName}: client-side calculators, cookies, Google AdSense, Consent Mode, and analytics disclosures.`}
   canonicalPath="/privacy/"
-  modified="2026-10-20"
+  modified="2026-11-07"
   jsonLd={jsonLd}
 >
   <Breadcrumbs items={crumbs} />
   <h1>Privacy Policy</h1>
-  <p><em>Last updated: 2026-10-20</em></p>
+  <p><em>Last updated: 2026-11-07</em></p>
   <p class="answer-first">
     Calculator inputs stay in your browser. We do not upload payment amounts to our servers. Google Analytics loads only
     after you Accept analytics cookies (Consent Mode v2 defaults deny storage until then). AdSense, if enabled later,
-    follows the rules below.
+    follows the advertising-cookie rules below, including opt-out links.
   </p>
   <h2>Information we process</h2>
   <ul>
@@ -34,9 +34,16 @@ const jsonLd = [breadcrumbList(crumbs)];
       <strong>Consent preference:</strong> Accept / Reject for analytics is stored in <code>localStorage</code> (
       <code>feecalc-consent-v2</code>).
     </li>
-    <li><strong>Contact email:</strong> if you email us, we receive the content of your message.</li>
-    <li><strong>Hosting logs:</strong> standard request logs (IP, user agent) may be collected by the hosting provider.</li>
+    <li><strong>Contact email:</strong> if you email us or use the contact form, we receive the content of your message and reply address.</li>
+    <li><strong>Hosting logs:</strong> standard request logs (IP, user agent, URL) may be collected by the hosting provider (Cloudflare Workers) for security and reliability.</li>
   </ul>
+  <h2>Cookies and similar storage</h2>
+  <p>
+    Essential operation of the calculators does not require third-party cookies. Optional analytics cookies/storage are
+    gated behind the cookie banner. If you Reject, we keep Consent Mode defaults that deny analytics storage. Clearing
+    site data removes the stored preference and shows the banner again. Browser controls and extensions can also block
+    cookies independently of our banner.
+  </p>
   <h2>Google AdSense and advertising cookies</h2>
   <p>
     When AdSense is enabled, Google and third-party vendors use cookies to serve ads based on prior visits to this and
@@ -48,7 +55,8 @@ const jsonLd = [breadcrumbList(crumbs)];
   <p>
     Third-party vendors, including Google, use cookies such as the DoubleClick cookie to serve ads. Personalized ads in
     the EEA, UK, and Switzerland require a Google-certified consent management platform (CMP) integrated with the IAB
-    TCF. The site owner must configure a CMP before enabling personalized ads in those regions.
+    TCF. The site owner must configure a CMP before enabling personalized ads in those regions. Until a publisher ID is
+    configured, ad slots remain inactive and <code>ads.txt</code> keeps a commented template.
   </p>
   <h2>Google Analytics (GA4)</h2>
   <p>
@@ -56,12 +64,20 @@ const jsonLd = [breadcrumbList(crumbs)];
     denied. After you click Accept, analytics storage is granted and the gtag.js library is loaded on idle or first
     interaction (not render-blocking). IP anonymization remains enabled. We may send events such as calculation runs,
     compare-tool use, outbound reference clicks, and embed-code copies. Reject keeps analytics storage denied. You can
-    also block analytics with browser controls or opt-out extensions.
+    also block analytics with browser controls or opt-out extensions. We do not intentionally send the dollar amounts you
+    type as analytics event parameters.
+  </p>
+  <h2>Data retention and requests</h2>
+  <p>
+    Browser-local calculator state and consent preferences remain on your device until you clear them. Emails you send
+    are retained as needed to respond and keep a correction trail for fee updates. To ask about deletion of an email
+    thread you sent, contact us using the address below.
   </p>
   <h2>Children</h2>
   <p>This site is not directed at children under 13, and we do not knowingly collect personal information from them.</p>
   <h2>Contact</h2>
   <p>
-    Privacy questions: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
+    Privacy questions: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a> ·{' '}
+    <a href="/contact/">Contact page</a>
   </p>
 </BaseLayout>

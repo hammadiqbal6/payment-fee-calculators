@@ -52,6 +52,18 @@
       }
     },
     {
+      "rateId": "paypal-in",
+      "sourceUrl": "https://www.paypal.com/in/business/paypal-business-fees",
+      "strategy": "fetch",
+      "extract": {
+        "type": "regex",
+        "pattern": "Outside of India \\(IN\\)[\\s\\S]{0,120}?([0-9.]+)%\\s*\\+\\s*Fixed Fee",
+        "percentGroup": 1,
+        "fixed": 3
+      },
+      "note": "India international receiving only (no domestic). Fixed fee is currency-specific; fees.ts uses ₹3.00 for INR receipts."
+    },
+    {
       "rateId": "stripe-us",
       "sourceUrl": "https://stripe.com/pricing",
       "strategy": "playwright",
